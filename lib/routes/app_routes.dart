@@ -5,6 +5,8 @@ import 'package:riddimafrica/features/onboarding/presentation/screens/onboarding
 import 'package:riddimafrica/features/authentication/bindings/auth_binding.dart';
 import 'package:riddimafrica/features/bottom_nav/presentation/UI/artist_bottom_nav.dart';
 import 'package:riddimafrica/features/bottom_nav/presentation/UI/seller_bottom_nav.dart';
+import 'package:riddimafrica/features/roles/user/features/home/presentation/screens/home_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/home/bindings/home_binding.dart';
 import 'package:riddimafrica/features/splash/bindings/splash_binding.dart';
 import 'package:riddimafrica/features/bottom_nav/presentation/UI/user_bottom_nav.dart';
 import 'package:riddimafrica/features/splash/presentation/ui/splash_screen.dart';
@@ -39,6 +41,13 @@ class AppRoute {
   static String getArtistBottomNavScreen() => artistbottomNav;
   static String getSellerBottomNavScreen() => sellerbottomNav;
 
+  //USER
+  static String getUserhomescreen() => userhomescreen;
+
+  //USER
+
+  static const String userhomescreen = "/userhomescreen";
+
   static List<GetPage> routes = [
     GetPage(
       name: welcomescreen,
@@ -55,13 +64,44 @@ class AppRoute {
       page: () => const OnboardingScreen(),
       binding: OnboardingBinding(),
     ),
-    GetPage(name: userbottomNav, page: () => const UserBottomNav()),
+    GetPage(
+      name: userbottomNav,
+      page: () => const UserBottomNav(),
+      binding: HomeBinding(),
+    ),
     GetPage(name: artistbottomNav, page: () => const ArtistBottomNav()),
     GetPage(name: sellerbottomNav, page: () => const SellerBottomNav()),
-    GetPage(name: loginScreen, page: () => const LoginScreen(), binding: AuthBinding()),
-    GetPage(name: signupScreen, page: () => const ProfileSetupScreen(), binding: AuthBinding()),
-    GetPage(name: forgotPasswordScreen, page: () => const ForgotPasswordScreen(), binding: AuthBinding()),
-    GetPage(name: forgotPasswordOtpScreen, page: () => const ForgotPasswordOtpScreen(), binding: AuthBinding()),
-    GetPage(name: createNewPasswordScreen, page: () => const CreateNewPasswordScreen(), binding: AuthBinding()),
+    GetPage(
+      name: loginScreen,
+      page: () => const LoginScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: signupScreen,
+      page: () => const ProfileSetupScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: forgotPasswordScreen,
+      page: () => const ForgotPasswordScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: forgotPasswordOtpScreen,
+      page: () => const ForgotPasswordOtpScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: createNewPasswordScreen,
+      page: () => const CreateNewPasswordScreen(),
+      binding: AuthBinding(),
+    ),
+
+    //USER
+    GetPage(
+      name: userhomescreen,
+      page: () => const UserHomeScreen(),
+      binding: HomeBinding(),
+    ),
   ];
 }
