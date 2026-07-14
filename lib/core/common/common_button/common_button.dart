@@ -27,6 +27,10 @@ class ProElevatedButton extends StatelessWidget {
   final Gradient? gradient;
   final BorderSide? border;
 
+  // EFFECTS
+  final bool showGlow;
+  final Color? glowColor;
+
   // SIZE
   final double? width;
   final double height;
@@ -55,6 +59,8 @@ class ProElevatedButton extends StatelessWidget {
     this.iconColor,
     this.gradient,
     this.border,
+    this.showGlow = false,
+    this.glowColor,
     this.width,
     this.height = 55,
     this.borderRadius = 12,
@@ -70,6 +76,8 @@ class ProElevatedButton extends StatelessWidget {
     final Color fgColor = textColor ?? AppColors.white;
     final Color icColor = iconColor ?? fgColor;
     final double icSize = iconSize ?? 20;
+
+    final Color shadowColor = glowColor ?? bgColor.withValues(alpha: 0.4);
 
     Widget content;
 
@@ -112,14 +120,29 @@ class ProElevatedButton extends StatelessWidget {
       );
     }
 
-    return SizedBox(
+    return Container(
       width: width ?? double.infinity,
       height: height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(borderRadius),
+        boxShadow: showGlow
+            ? [
+                BoxShadow(
+                  color: shadowColor,
+                  blurRadius: 15,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 4),
+                )
+              ]
+            : null,
+      ),
       child: ElevatedButton(
         onPressed: disabled ? null : (onPressed ?? () {}),
         style: ElevatedButton.styleFrom(
-          backgroundColor: gradient == null ? bgColor : AppColors.primary,
+          backgroundColor: gradient == null ? bgColor : Colors.transparent,
           foregroundColor: foregroundColor ?? fgColor,
+          elevation: 0,
+          shadowColor: Colors.transparent,
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
@@ -131,6 +154,7 @@ class ProElevatedButton extends StatelessWidget {
             gradient: gradient,
             borderRadius: BorderRadius.circular(borderRadius),
             color: gradient == null ? bgColor : null,
+            border: border != null ? Border.fromBorderSide(border!) : null,
           ),
           child: Padding(
             padding: padding,

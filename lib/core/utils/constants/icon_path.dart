@@ -2,6 +2,7 @@ class IconPath {
   IconPath._();
 
   static const String appLogo = 'assets/icons/app_logo.png';
+  static const String logo = 'assets/images/logo.png';
   static const String apple = 'assets/icons/apple.svg';
   static const String box = 'assets/icons/box.svg';
   static const String cart = 'assets/icons/cart.svg';
