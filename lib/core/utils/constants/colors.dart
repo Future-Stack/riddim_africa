@@ -6,10 +6,13 @@ class AppColors {
   // ─── Brand ─────────────────────────────────────────────
   static const Color primary = Color(0xFF1A0D07);
 
-  static const Color secondary = Color(0xFFB75432);
+  static const Color secondary = Color(0xFFBB483D);
+  static const Color secondary2 = Color(0xFFBB483D);
   static const Color accent = Color(0xFF89A7FF);
   static const Color multicolor = Color(0xFFF4D242);
   static const Color primarytext = Color(0xFFA08070);
+  static const Color onboardingtext = Color(0xFFB1A290);
+  static const Color onboardingbutton = Color(0xFFE6B650);
 
   //border color
   static const Color bordercolor = Color(0xFF377A7D);

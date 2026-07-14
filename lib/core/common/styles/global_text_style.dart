@@ -17,7 +17,7 @@ class AppTextStyle {
   static const double xxl = 20;
   static const double title = 24;
   static const double heading = 28;
-  static const double display = 32;
+  static const double display = 24;
 
   Color get _color => _context != null
       ? AppColors.textPrimary(_context)

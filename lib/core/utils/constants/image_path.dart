@@ -11,4 +11,6 @@ class ImagePath {
   static const String onboard5 = 'assets/images/onboard5.png';
   static const String onboard6 = 'assets/images/onboard6.png';
   static const String onlogo2 = 'assets/images/onlogo2.png';
+  static const String onlogo3 = 'assets/images/onlogo_3.png';
+  static const String logo1 = 'assets/images/logo1.png';
 }
