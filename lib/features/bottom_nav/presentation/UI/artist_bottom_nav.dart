@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:riddimafrica/core/utils/constants/sizer.dart';
 import 'package:riddimafrica/features/bottom_nav/presentation/controllers/artist_bottom_nav_controller.dart';
 import 'package:riddimafrica/core/utils/constants/colors.dart';
 import 'package:riddimafrica/core/common/styles/global_text_style.dart';
@@ -97,12 +98,12 @@ class _NavBarItem extends StatelessWidget {
               AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeInOut,
-                padding: const EdgeInsets.all(12),
+                padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 8),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.primarytext.withValues(alpha: 0.2)
                       : Colors.transparent,
-                  shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(24),
                 ),
                 child: SvgPicture.asset(
                   isSelected ? item.activeIconPath : item.iconPath,
@@ -119,7 +120,7 @@ class _NavBarItem extends StatelessWidget {
               AnimatedDefaultTextStyle(
                 duration: const Duration(milliseconds: 250),
                 style: AppTextStyle(context).mediumTextStyle(
-                  fontSize: 12,
+                  fontSize: 14,
                   color: isSelected ? selectedColor : unselectedColor,
                 ),
                 child: Text(
