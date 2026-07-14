@@ -37,7 +37,8 @@ class AppTextStyle {
     double? decorationThickness,
     TextBaseline? textBaseline,
   }) {
-    return GoogleFonts.nunito(
+    return TextStyle(
+      fontFamily: 'Satoshi',
       fontSize: fontSize.sp,
       color: color ?? _color,
       fontWeight: fontWeight,

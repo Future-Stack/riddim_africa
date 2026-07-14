@@ -120,7 +120,7 @@ class _NavBarItem extends StatelessWidget {
               AnimatedDefaultTextStyle(
                 duration: const Duration(milliseconds: 250),
                 style: AppTextStyle(context).mediumTextStyle(
-                  fontSize: 12,
+                  fontSize: 14,
                   color: isSelected ? selectedColor : unselectedColor,
                 ),
                 child: Text(

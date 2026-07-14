@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/core/utils/constants/icon_path.dart';
 
 import '../../domain/entities/nav_model.dart';
@@ -45,7 +46,7 @@ class _PlaceholderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     body: Center(
-      child: Text(label, style: Theme.of(context).textTheme.headlineMedium),
+      child: Text(label, style: AppTextStyle(context).mediumTextStyle()),
     ),
   );
 }
