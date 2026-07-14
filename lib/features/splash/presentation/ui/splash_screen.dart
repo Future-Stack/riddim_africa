@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:riddimafrica/core/controllers/theme_controller.dart';
 import 'package:riddimafrica/core/core.dart';
-import 'package:get/get.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final themeController = Get.find<ThemeController>();
-
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -22,8 +18,20 @@ class SplashScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Center(
-          child: Image.asset("assets/images/logo.png"),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Center(child: Image.asset("assets/images/logo.png")),
+            Positioned(
+              bottom: 40,
+              child: Lottie.asset(
+                'assets/jsons/Sound On.json',
+                width: 40.h,
+                height: 40.h,
+                fit: BoxFit.fill,
+              ),
+            ),
+          ],
         ),
       ),
     );
