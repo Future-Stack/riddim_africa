@@ -13,4 +13,6 @@ class ImagePath {
   static const String onlogo2 = 'assets/images/onlogo2.png';
   static const String onlogo3 = 'assets/images/onlogo_3.png';
   static const String logo1 = 'assets/images/logo1.png';
+  static const String mail = 'assets/images/mail-open.png';
+  static const String lock = 'assets/images/locked.png';
 }

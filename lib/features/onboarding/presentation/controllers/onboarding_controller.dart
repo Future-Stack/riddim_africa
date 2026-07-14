@@ -134,6 +134,6 @@ class OnboardingController extends GetxController {
 
   void _goToNextFeature() {
     // Final Get Started button action (e.g. go to Login or Dashboard)
-    Get.offAllNamed(AppRoute.getLoginScreen());
+    Get.offAllNamed(AppRoute.getwelcomescreen());
   }
 }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/core/common/common_button/common_button.dart';
+import 'package:riddimafrica/core/common/common_text_field/pro_text_field.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:riddimafrica/routes/app_routes.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -8,106 +12,161 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primary,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(ImagePath.onboard2),
+            image: const AssetImage(ImagePath.backgrund),
             fit: BoxFit.cover,
-          ),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                AppColors.black.withValues(alpha: 0.1),
-                AppColors.black.withValues(alpha: 0.6),
-                AppColors.black.withValues(alpha: 0.9),
-              ],
-              stops: const [0.0, 0.5, 1.0],
+            colorFilter: ColorFilter.mode(
+              AppColors.primary.withValues(alpha: 0.8),
+              BlendMode.darken,
             ),
           ),
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-              child: Stack(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.25),
+                const ProTextField(
+                  labelText: 'Email / Phone Number',
+                  hintText: 'Enter email or phone',
+                ),
+                SizedBox(height: 16.h),
+                const ProTextField(
+                  labelText: 'Password',
+                  hintText: 'Enter password',
+                  obscureText: true,
+                  suffixIcon: Icon(Icons.visibility_outlined, color: AppColors.bordercolor),
+                ),
+                SizedBox(height: 16.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 24.h,
+                          width: 24.w,
+                          child: Checkbox(
+                            value: false,
+                            onChanged: (val) {},
+                            side: const BorderSide(color: AppColors.onboardingtext),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                          ),
+                        ),
+                        SizedBox(width: 8.w),
+                        Text(
+                          'Remember me',
+                          style: AppTextStyle(context).regularTextStyle(
+                            fontSize: AppTextStyle.md,
+                            color: AppColors.onboardingtext,
+                          ),
+                        ),
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () => Get.toNamed(AppRoute.forgotPasswordScreen),
+                      child: Text(
+                        'Forgot Password?',
+                        style: AppTextStyle(context).mediumTextStyle(
+                          fontSize: AppTextStyle.md,
+                          color: AppColors.secondary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 24.h),
+                ProElevatedButton(
+                  text: 'Log In',
+                  gradient: const LinearGradient(
+                    colors: [AppColors.secondary, AppColors.secondary],
+                  ),
+                  onPressed: () {
+                    // Navigate to user bottom nav logic
+                  },
+                ),
+                SizedBox(height: 32.h),
+                Row(
+                  children: [
+                    const Expanded(child: Divider(color: AppColors.textfieldcolor)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Text(
+                        'or continue with',
+                        style: AppTextStyle(context).regularTextStyle(
+                          fontSize: AppTextStyle.sm,
+                          color: AppColors.onboardingtext,
+                        ),
+                      ),
+                    ),
+                    const Expanded(child: Divider(color: AppColors.textfieldcolor)),
+                  ],
+                ),
+                SizedBox(height: 24.h),
+                ProElevatedButton(
+                  text: 'Continue with Google',
+                  backgroundColor: Colors.transparent,
+                  border: const BorderSide(color: AppColors.textfieldcolor),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Spacer(),
-                      Center(
-                        child: Image.asset(
-                          ImagePath.onlogo3,
-                          height: 100.h,
-                          width: 250.w,
-                          fit: BoxFit.contain,
-                        ),
+                      SvgPicture.asset(IconPath.google, height: 24.h),
+                      SizedBox(width: 12.w),
+                      Text(
+                        'Continue with Google',
+                        style: AppTextStyle(context).mediumTextStyle(fontSize: AppTextStyle.md),
                       ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              'Welcome to Riddim Africa',
-                              style: AppTextStyle(context).boldTextStyle(
-                                fontSize: 22,
-                                color: AppColors.white,
-                              ),
-                            ),
-                            Text(
-                              'Your gateway to African music & culture',
-                              style: AppTextStyle(context).regularTextStyle(
-                                fontSize: AppTextStyle.lg,
-                                color: AppColors.onboardingtext.withValues(
-                                  alpha: 0.8,
-                                ),
-                                lineHeight: 24,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 40.h),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 16.h),
-                        child: ProElevatedButton(
-                          text: 'Log In',
-                          gradient: const LinearGradient(
-                            colors: [AppColors.secondary, AppColors.secondary],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                          textColor: AppColors.white,
-                          showGlow: true,
-                          glowColor: AppColors.secondary.withValues(alpha: 0.5),
-                          onPressed: () {
-                            debugPrint("Navigate to actual login form/logic");
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 16.h),
-                        child: ProElevatedButton(
-                          text: 'Create Account',
-                          backgroundColor: Colors.transparent,
-                          textColor: AppColors.white,
-                          border: const BorderSide(
-                            color: AppColors.secondary,
-                            width: 1,
-                          ),
-                          onPressed: () {
-                            debugPrint("Navigate to register form/logic");
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
                     ],
                   ),
-                ],
-              ),
+                  onPressed: () {},
+                ),
+                SizedBox(height: 16.h),
+                ProElevatedButton(
+                  text: 'Continue with Apple',
+                  backgroundColor: Colors.transparent,
+                  border: const BorderSide(color: AppColors.textfieldcolor),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(IconPath.apple, height: 24.h, colorFilter: const ColorFilter.mode(AppColors.white, BlendMode.srcIn)),
+                      SizedBox(width: 12.w),
+                      Text(
+                        'Continue with Apple',
+                        style: AppTextStyle(context).mediumTextStyle(fontSize: AppTextStyle.md),
+                      ),
+                    ],
+                  ),
+                  onPressed: () {},
+                ),
+                SizedBox(height: 32.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have an account? ",
+                      style: AppTextStyle(context).regularTextStyle(
+                        fontSize: AppTextStyle.md,
+                        color: AppColors.onboardingtext,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Get.toNamed(AppRoute.signupScreen),
+                      child: Text(
+                        "Create Account",
+                        style: AppTextStyle(context).mediumTextStyle(
+                          fontSize: AppTextStyle.md,
+                          color: AppColors.secondary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
