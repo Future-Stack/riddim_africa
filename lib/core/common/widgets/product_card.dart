@@ -156,11 +156,15 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      '( $categoryText )',
-                      style: AppTextStyle(context).mediumTextStyle(
-                        color: AppColors.secondary,
-                        fontSize: 12,
+                    Expanded(
+                      child: Text(
+                        '( $categoryText )',
+                        style: AppTextStyle(context).mediumTextStyle(
+                          color: AppColors.secondary,
+                          fontSize: 12,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
@@ -169,13 +173,18 @@ class ProductCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      price,
-                      style: AppTextStyle(context).boldTextStyle(
-                        color: AppColors.onboardingbutton,
-                        fontSize: 16,
+                    Expanded(
+                      child: Text(
+                        price,
+                        style: AppTextStyle(context).boldTextStyle(
+                          color: AppColors.onboardingbutton,
+                          fontSize: 16,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
+                    const SizedBox(width: 4),
                     Container(
                       padding: const EdgeInsets.all(8.0),
                       decoration: const BoxDecoration(
