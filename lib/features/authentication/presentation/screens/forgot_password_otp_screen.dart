@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/core/common/common_button/common_button.dart';
-import 'package:riddimafrica/routes/app_routes.dart';
+import 'package:riddimafrica/features/authentication/presentation/controllers/auth_controller.dart';
 
 class ForgotPasswordOtpScreen extends StatelessWidget {
   const ForgotPasswordOtpScreen({super.key});
@@ -20,116 +21,142 @@ class ForgotPasswordOtpScreen extends StatelessWidget {
         ),
         title: Text(
           'Forgot Password',
-          style: AppTextStyle(context).boldTextStyle(fontSize: AppTextStyle.xl),
+          style: AppTextStyle(context).boldTextStyle(
+            fontSize: AppTextStyle.xl,
+            color: AppColors.textfieldelementcolor,
+          ),
         ),
         centerTitle: false,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-              Center(
-                child: Container(
-                  padding: EdgeInsets.all(14.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.textfieldcolor.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Image.asset(
-                    ImagePath.lock,
-                    height: 40.h,
-                    width: 40.w,
-                    color: AppColors.white,
-                  ),
-                ),
-              ),
-              SizedBox(height: 32.h),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text:
-                      "We've sent a verification code to your email address. This code will expire in ",
-                  style: AppTextStyle(context).regularTextStyle(
-                    fontSize: AppTextStyle.md,
-                    color: AppColors.onboardingtext,
-                    lineHeight: 24,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '01:56 s',
-                      style: AppTextStyle(context).mediumTextStyle(
-                        fontSize: AppTextStyle.md,
-                        color: AppColors.onboardingbutton,
+        child: GetBuilder<AuthController>(
+          builder: (controller) {
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.all(14.h),
+                      decoration: BoxDecoration(
+                        color: AppColors.textfieldcolor.withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Image.asset(
+                        ImagePath.lock,
+                        height: 40.h,
+                        width: 40.w,
+                        color: AppColors.white,
                       ),
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 32.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(
-                  4,
-                  (index) => _buildOtpBox(context, ['8', '9', '4', '2'][index]),
-                ),
-              ),
-              const Spacer(),
-              ProElevatedButton(
-                text: 'Verify',
-                gradient: const LinearGradient(
-                  colors: [AppColors.secondary, AppColors.secondary],
-                ),
-                onPressed: () => Get.toNamed(AppRoute.createNewPasswordScreen),
-              ),
-              SizedBox(height: 24.h),
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                    text: "Didn't Receive Any Code? ",
-                    style: AppTextStyle(context).regularTextStyle(
-                      fontSize: AppTextStyle.sm,
-                      color: AppColors.onboardingtext,
+                  ),
+                  SizedBox(height: 32.h),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      text:
+                          "We've sent a verification code to your email address. This code will expire in ",
+                      style: AppTextStyle(context).regularTextStyle(
+                        fontSize: AppTextStyle.md,
+                        color: AppColors.onboardingtext,
+                        lineHeight: 24,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: '01:56 s',
+                          style: AppTextStyle(context).mediumTextStyle(
+                            fontSize: AppTextStyle.md,
+                            color: AppColors.onboardingbutton,
+                          ),
+                        ),
+                      ],
                     ),
-                    children: [
-                      TextSpan(
-                        text: 'Resend Code',
-                        style: AppTextStyle(context).mediumTextStyle(
+                  ),
+                  SizedBox(height: 32.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(
+                      4,
+                      (index) => _buildOtpBox(context, controller, index),
+                    ),
+                  ),
+                  const Spacer(),
+                  ProElevatedButton(
+                    text: 'Verify',
+                    gradient: const LinearGradient(
+                      colors: [AppColors.secondary, AppColors.secondary],
+                    ),
+                    onPressed: controller.verifyOtp,
+                  ),
+                  SizedBox(height: 24.h),
+                  Center(
+                    child: RichText(
+                      text: TextSpan(
+                        text: "Didn't Receive Any Code? ",
+                        style: AppTextStyle(context).regularTextStyle(
                           fontSize: AppTextStyle.sm,
                           color: AppColors.onboardingtext,
                         ),
+                        children: [
+                          TextSpan(
+                            text: 'Resend Code',
+                            style: AppTextStyle(context).mediumTextStyle(
+                              fontSize: AppTextStyle.sm,
+                              color: AppColors.onboardingtext,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  SizedBox(height: 16.h),
+                ],
               ),
-              SizedBox(height: 16.h),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildOtpBox(BuildContext context, String digit) {
+  Widget _buildOtpBox(
+    BuildContext context,
+    AuthController controller,
+    int index,
+  ) {
     return Container(
       width: 60.w,
       height: 70.h,
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: AppColors.textfieldcolor.withValues(alpha: 0.3),
         border: Border.all(
-          color: AppColors.onboardingbutton.withValues(alpha: 0.5),
+          color: controller.otpFocusNodes[index].hasFocus
+              ? AppColors.bordercolor
+              : AppColors.onboardingbutton.withValues(alpha: 0.5),
         ),
         borderRadius: BorderRadius.circular(12),
       ),
       alignment: Alignment.center,
-      child: Text(
-        digit,
+      child: TextField(
+        controller: controller.otpControllers[index],
+        focusNode: controller.otpFocusNodes[index],
+        keyboardType: TextInputType.number,
+        textAlign: TextAlign.center,
+        maxLength: 1,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         style: AppTextStyle(
           context,
         ).boldTextStyle(fontSize: 28, color: AppColors.white),
+        decoration: const InputDecoration(
+          counterText: '',
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+        ),
+        onChanged: (value) => controller.onOtpChanged(value, index),
+        onTap: () => controller.update(), // trigger rebuild to show focus color
       ),
     );
   }

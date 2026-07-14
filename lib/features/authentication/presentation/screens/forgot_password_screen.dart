@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/core/common/common_button/common_button.dart';
 import 'package:riddimafrica/core/common/common_text_field/pro_text_field.dart';
-import 'package:riddimafrica/routes/app_routes.dart';
+import 'package:riddimafrica/features/authentication/presentation/controllers/auth_controller.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
@@ -29,54 +29,59 @@ class ForgotPasswordScreen extends StatelessWidget {
         centerTitle: false,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-              Center(
-                child: Container(
-                  padding: EdgeInsets.all(14.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.textfieldcolor.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(20),
+        child: GetBuilder<AuthController>(
+          builder: (controller) {
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.all(14.h),
+                      decoration: BoxDecoration(
+                        color: AppColors.textfieldcolor.withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Image.asset(
+                        ImagePath.mail,
+                        height: 40.h,
+                        width: 40.w,
+                        color: AppColors.white,
+                      ),
+                    ),
                   ),
-                  child: Image.asset(
-                    ImagePath.mail,
-                    height: 40.h,
-                    width: 40.w,
-                    color: AppColors.white,
+                  SizedBox(height: 32.h),
+                  Text(
+                    'We will send you a verification code to reset your password. Enter the email address associated with your account.',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyle(context).regularTextStyle(
+                      fontSize: AppTextStyle.md,
+                      color: AppColors.textfieldelementcolor,
+                      lineHeight: 24,
+                    ),
                   ),
-                ),
+                  SizedBox(height: 32.h),
+                  ProTextField(
+                    controller: controller.forgotEmailController,
+                    labelText: 'Email',
+                    hintText: 'Enter your email address',
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  const Spacer(),
+                  ProElevatedButton(
+                    text: 'Send',
+                    gradient: const LinearGradient(
+                      colors: [AppColors.secondary, AppColors.secondary],
+                    ),
+                    onPressed: controller.onForgotPasswordSend,
+                  ),
+                  SizedBox(height: 24.h),
+                ],
               ),
-              SizedBox(height: 32.h),
-              Text(
-                'We will send you a verification code to reset your password. Enter the email address associated with your account.',
-                textAlign: TextAlign.center,
-                style: AppTextStyle(context).regularTextStyle(
-                  fontSize: AppTextStyle.md,
-                  color: AppColors.textfieldelementcolor,
-                  lineHeight: 24,
-                ),
-              ),
-              SizedBox(height: 32.h),
-              const ProTextField(
-                labelText: 'Email',
-                hintText: 'Enter your email address',
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const Spacer(),
-              ProElevatedButton(
-                text: 'Send',
-                gradient: const LinearGradient(
-                  colors: [AppColors.secondary, AppColors.secondary],
-                ),
-                onPressed: () => Get.toNamed(AppRoute.forgotPasswordOtpScreen),
-              ),
-              SizedBox(height: 24.h),
-            ],
-          ),
+            );
+          }
         ),
       ),
     );

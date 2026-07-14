@@ -58,10 +58,10 @@ class AppRoute {
     GetPage(name: userbottomNav, page: () => const UserBottomNav()),
     GetPage(name: artistbottomNav, page: () => const ArtistBottomNav()),
     GetPage(name: sellerbottomNav, page: () => const SellerBottomNav()),
-    GetPage(name: loginScreen, page: () => const LoginScreen()),
-    GetPage(name: signupScreen, page: () => const ProfileSetupScreen()),
-    GetPage(name: forgotPasswordScreen, page: () => const ForgotPasswordScreen()),
-    GetPage(name: forgotPasswordOtpScreen, page: () => const ForgotPasswordOtpScreen()),
-    GetPage(name: createNewPasswordScreen, page: () => const CreateNewPasswordScreen()),
+    GetPage(name: loginScreen, page: () => const LoginScreen(), binding: AuthBinding()),
+    GetPage(name: signupScreen, page: () => const ProfileSetupScreen(), binding: AuthBinding()),
+    GetPage(name: forgotPasswordScreen, page: () => const ForgotPasswordScreen(), binding: AuthBinding()),
+    GetPage(name: forgotPasswordOtpScreen, page: () => const ForgotPasswordOtpScreen(), binding: AuthBinding()),
+    GetPage(name: createNewPasswordScreen, page: () => const CreateNewPasswordScreen(), binding: AuthBinding()),
   ];
 }

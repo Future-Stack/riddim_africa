@@ -15,4 +15,5 @@ class ImagePath {
   static const String logo1 = 'assets/images/logo1.png';
   static const String mail = 'assets/images/mail-open.png';
   static const String lock = 'assets/images/locked.png';
+  static const String lockKey = 'assets/images/lock-key.png';
 }
