@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
-import 'package:riddimafrica/core/utils/constants/icon_path.dart';
-
+import 'package:riddimafrica/features/roles/user/features/home/presentation/screens/home_screen.dart';
 import '../../domain/entities/nav_model.dart';
 
 // ─── Placeholder screens ───────────────────────────────────────────────────
 // Replace these with your actual screen widgets.
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-  @override
-  Widget build(BuildContext context) => const _PlaceholderPage(label: 'Home');
-}
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({super.key});
@@ -67,7 +61,7 @@ class UserBottomNavController extends GetxController {
 
   // ── Screens — keep in the same order as items ──────────────────────────
   final List<Widget> screens = const [
-    HomeScreen(),
+    UserHomeScreen(),
     ProductsScreen(),
     OrdersScreen(),
     RevenueScreen(),
