@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
+import 'package:riddimafrica/routes/app_routes.dart';
 import '../controllers/product_detail_controller.dart';
 import '../widgets/product_image_gallery.dart';
 import '../widgets/rating_row.dart';
@@ -28,7 +29,9 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
           return Center(
             child: Text(
               'Product not found',
-              style: AppTextStyle(context).boldTextStyle(color: AppColors.white),
+              style: AppTextStyle(
+                context,
+              ).boldTextStyle(color: AppColors.white),
             ),
           );
         }
@@ -208,47 +211,29 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
                   children: [
                     // Add To Cart Button
                     Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: controller.addToCart,
-                        icon: const Icon(Iconsax.shopping_cart, size: 20),
-                        label: const Text('Add to Cart'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.onboardingbutton,
-                          foregroundColor: AppColors.primary,
-                          elevation: 0,
-                          minimumSize: const Size.fromHeight(50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          textStyle: AppTextStyle(context).boldTextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
+                      child: ProElevatedButton(
+                        leadingIcon: Iconsax.shopping_cart,
+
+                        backgroundColor: AppColors.onboardingbutton,
+                        text: "Add to Cart",
+                        textColor: AppColors.black,
+                        showGlow: true,
                       ),
                     ),
                     const SizedBox(width: 12),
 
                     // Buy Now Button
                     Expanded(
-                      child: ElevatedButton.icon(
+                      child: ProElevatedButton(
+                        leadingIcon: Iconsax.flash,
                         onPressed: () {
-                          // Navigate to cart screen or checkout
-                          Get.toNamed('/marketCart');
+                          Get.toNamed(AppRoute.marketCart);
                         },
-                        icon: const Icon(Iconsax.flash, size: 20),
-                        label: const Text('Buy Now'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.secondary,
-                          foregroundColor: AppColors.white,
-                          elevation: 0,
-                          minimumSize: const Size.fromHeight(50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          textStyle: AppTextStyle(context).boldTextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
+
+                        backgroundColor: AppColors.secondary,
+                        text: "Buy Now",
+                        textColor: AppColors.white,
+                        showGlow: true,
                       ),
                     ),
                   ],

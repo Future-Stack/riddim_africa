@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
+import 'package:riddimafrica/routes/app_routes.dart';
 import '../controllers/cart_controller.dart';
 import '../widgets/cart_item_card.dart';
 import '../widgets/cart_summary_section.dart';
@@ -22,10 +23,9 @@ class CartScreen extends GetView<CartController> {
         ),
         title: Text(
           'My Cart',
-          style: AppTextStyle(context).boldTextStyle(
-            color: AppColors.white,
-            fontSize: 20,
-          ),
+          style: AppTextStyle(
+            context,
+          ).boldTextStyle(color: AppColors.white, fontSize: 20),
         ),
         centerTitle: false,
       ),
@@ -49,10 +49,9 @@ class CartScreen extends GetView<CartController> {
                 const SizedBox(height: 16),
                 Text(
                   'Your cart is empty',
-                  style: AppTextStyle(context).boldTextStyle(
-                    color: AppColors.white,
-                    fontSize: 18,
-                  ),
+                  style: AppTextStyle(
+                    context,
+                  ).boldTextStyle(color: AppColors.white, fontSize: 18),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -73,22 +72,28 @@ class CartScreen extends GetView<CartController> {
             children: [
               // Item Count Header
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 child: Text(
                   '${controller.totalItems} ${controller.totalItems == 1 ? 'item' : 'items'}',
-                  style: AppTextStyle(context).mediumTextStyle(
-                    color: AppColors.primarytext,
-                    fontSize: 16,
-                  ),
+                  style: AppTextStyle(
+                    context,
+                  ).mediumTextStyle(color: AppColors.primarytext, fontSize: 16),
                 ),
               ),
 
               // Scrollable List of Cart Items
               Expanded(
                 child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
                   itemCount: controller.cartItems.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: 16),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 16),
                   itemBuilder: (context, index) {
                     final item = controller.cartItems[index];
                     return CartItemCard(
@@ -131,31 +136,12 @@ class CartScreen extends GetView<CartController> {
                     const SizedBox(height: 16),
 
                     // Proceed to Checkout button
-                    ElevatedButton(
-                      onPressed: controller.proceedToCheckout,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.secondary,
-                        foregroundColor: AppColors.white,
-                        elevation: 0,
-                        minimumSize: const Size.fromHeight(55),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Proceed to Checkout',
-                            style: AppTextStyle(context).boldTextStyle(
-                              color: AppColors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Icon(Icons.arrow_forward, size: 20),
-                        ],
-                      ),
+                    ProElevatedButton(
+                      onPressed: () => Get.toNamed(AppRoute.marketCheckout),
+                      text: "Proceed to Checkout",
+                      showGlow: true,
+                      backgroundColor: AppColors.secondary,
+                      trailingIcon: Icons.arrow_forward_ios,
                     ),
                   ],
                 ),

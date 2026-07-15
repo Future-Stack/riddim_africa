@@ -1080,29 +1080,10 @@ class CheckoutScreen extends GetView<CheckoutController> {
         const SizedBox(height: 24),
         // Riddim Africa Brand Logo
         Center(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFF22140A),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF382111), width: 1.5),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.adjust, color: AppColors.secondary, size: 28),
-                const SizedBox(width: 8),
-                Text(
-                  'RIDDIM\nAFRICA',
-                  style: AppTextStyle(context).boldTextStyle(
-                    color: AppColors.onboardingbutton,
-                    fontSize: 18,
-                    lineHeight: 18,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: Image(
+            height: 70.h,
+            
+            image: AssetImage(ImagePath.onlogo3))
         ),
         const SizedBox(height: 32),
 
