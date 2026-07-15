@@ -11,6 +11,7 @@ class ProductCard extends StatelessWidget {
   final String categoryText;
   final String price;
   final bool isHot;
+  final VoidCallback? onTap;
 
   const ProductCard({
     super.key,
@@ -21,11 +22,14 @@ class ProductCard extends StatelessWidget {
     required this.categoryText,
     required this.price,
     this.isHot = false,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       decoration: BoxDecoration(
         color: AppColors.primaryappbrownsecond,
         borderRadius: BorderRadius.circular(16.0),
@@ -204,6 +208,6 @@ class ProductCard extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ),);
   }
 }

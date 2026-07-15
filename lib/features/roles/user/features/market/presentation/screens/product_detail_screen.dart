@@ -1,0 +1,263 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:riddimafrica/core/core.dart';
+import '../controllers/product_detail_controller.dart';
+import '../widgets/product_image_gallery.dart';
+import '../widgets/rating_row.dart';
+import '../widgets/related_product_card.dart';
+import '../widgets/seller_info_row.dart';
+import '../widgets/stock_badge.dart';
+
+class ProductDetailScreen extends GetView<ProductDetailController> {
+  const ProductDetailScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.primary,
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.onboardingbutton),
+          );
+        }
+
+        final product = controller.product.value;
+        if (product == null) {
+          return Center(
+            child: Text(
+              'Product not found',
+              style: AppTextStyle(context).boldTextStyle(color: AppColors.white),
+            ),
+          );
+        }
+
+        return SafeArea(
+          child: Column(
+            children: [
+              // Scrollable Content
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Image Gallery Section
+                      ProductImageGallery(
+                        mainImageUrl: product.imageUrl,
+                        galleryImages: product.galleryImages,
+                        selectedIndex: controller.selectedImageIndex.value,
+                        onImageSelected: controller.selectGalleryImage,
+                        onBackPressed: () => Get.back(),
+                        onFavoritePressed: controller.toggleFavorite,
+                        isFavorite: controller.isFavorite.value,
+                      ),
+
+                      // Details Section
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Title & Stock Status
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    product.title,
+                                    style: AppTextStyle(context).boldTextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 22,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                StockBadge(inStock: product.inStock),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Price (UGX 78,000)
+                            Text(
+                              product.price,
+                              style: AppTextStyle(context).boldTextStyle(
+                                color: AppColors.onboardingbutton,
+                                fontSize: 24,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Rating Row
+                            RatingRow(
+                              rating: product.rating,
+                              reviewCount: product.reviewCount,
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Category
+                            Row(
+                              children: [
+                                Text(
+                                  'Category: ',
+                                  style: AppTextStyle(context).mediumTextStyle(
+                                    color: AppColors.primarytext,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Text(
+                                  product.category,
+                                  style: AppTextStyle(context).boldTextStyle(
+                                    color: AppColors.white,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+
+                            // Seller Info
+                            SellerInfoRow(
+                              sellerName: product.sellerName,
+                              avatarUrl: product.sellerAvatarUrl,
+                              isVerified: product.isVerifiedSeller,
+                              rating: product.sellerRating,
+                              salesCount: product.sellerSales,
+                            ),
+                            const SizedBox(height: 20),
+
+                            // Description (Optional)
+                            if (product.description != null) ...[
+                              Text(
+                                'Description',
+                                style: AppTextStyle(context).boldTextStyle(
+                                  color: AppColors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                product.description!,
+                                style: AppTextStyle(context).regularTextStyle(
+                                  color: AppColors.primarytext,
+                                  fontSize: 14,
+                                  lineHeight: 20,
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                            ],
+
+                            // Related Products Header
+                            Text(
+                              'Related Products',
+                              style: AppTextStyle(context).boldTextStyle(
+                                color: AppColors.white,
+                                fontSize: 18,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Related Products List
+                            SizedBox(
+                              height: 170,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: controller.relatedProducts.length,
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(width: 16),
+                                itemBuilder: (context, index) {
+                                  final related =
+                                      controller.relatedProducts[index];
+                                  return RelatedProductCard(
+                                    imageUrl: related.imageUrl,
+                                    title: related.title,
+                                    price: related.price,
+                                    onTap: () {
+                                      // Reload product details for this related product
+                                      Get.offNamed(
+                                        '/marketProductDetail',
+                                        arguments: related.id,
+                                        preventDuplicates: false,
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Bottom Action Buttons Row
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryappbrown,
+                  border: Border(
+                    top: BorderSide(
+                      color: AppColors.primaryappbrownsecond,
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    // Add To Cart Button
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: controller.addToCart,
+                        icon: const Icon(Iconsax.shopping_cart, size: 20),
+                        label: const Text('Add to Cart'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.onboardingbutton,
+                          foregroundColor: AppColors.primary,
+                          elevation: 0,
+                          minimumSize: const Size.fromHeight(50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          textStyle: AppTextStyle(context).boldTextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+
+                    // Buy Now Button
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          // Navigate to cart screen or checkout
+                          Get.toNamed('/marketCart');
+                        },
+                        icon: const Icon(Iconsax.flash, size: 20),
+                        label: const Text('Buy Now'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.secondary,
+                          foregroundColor: AppColors.white,
+                          elevation: 0,
+                          minimumSize: const Size.fromHeight(50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          textStyle: AppTextStyle(context).boldTextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+}
