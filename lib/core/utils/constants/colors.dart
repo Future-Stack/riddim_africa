@@ -14,6 +14,7 @@ class AppColors {
   static const Color multicolor = Color(0xFFF4D242);
   static const Color primarytext = Color(0xFFA08070);
   static const Color onboardingtext = Color(0xFFB1A290);
+
   static const Color onboardingbutton = Color(0xFFE6B650);
   static const Color textfieldelementcolor = Color(0xFFF0E8D8);
 

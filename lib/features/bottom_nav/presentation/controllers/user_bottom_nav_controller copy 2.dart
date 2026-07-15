@@ -55,7 +55,7 @@ class UserBottomNavController extends GetxController {
     NavItem(title: 'Home', iconPath: IconPath.home),
     NavItem(title: 'Market', iconPath: IconPath.market),
     NavItem(title: 'Radio', iconPath: IconPath.radio),
-    NavItem(title: 'Cart', iconPath: IconPath.cart),
+    NavItem(title: 'Cart', iconPath: IconPath.cartNew),
     NavItem(title: 'Profile', iconPath: IconPath.profile),
   ];
 

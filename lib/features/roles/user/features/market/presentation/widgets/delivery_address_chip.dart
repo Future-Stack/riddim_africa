@@ -57,7 +57,7 @@ class DeliveryAddressChip extends StatelessWidget {
                 Icon(
                   _labelIcon,
                   color: isSelected
-                      ? AppColors.bordercolor
+                      ? AppColors.onboardingbutton
                       : AppColors.primarytext,
                   size: 16,
                 ),
