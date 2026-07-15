@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
 
@@ -34,10 +35,15 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                         color: AppColors.white,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Iconsax.notification,
-                        color: AppColors.primary,
-                        size: 24,
+                      child: SvgPicture.asset(
+                        IconPath.notification, // path to your svg
+                        width: 20,
+                        height: 20,
+                        colorFilter: const ColorFilter.mode(
+                          AppColors
+                              .primarytext, // tint the icon if it's a single-color svg
+                          BlendMode.srcIn,
+                        ),
                       ),
                     ),
                     Positioned(
@@ -83,11 +89,16 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                     shape: BoxShape.circle,
                     border: Border.all(color: AppColors.white, width: 1.5),
                   ),
-                  child: const Icon(
-                    Iconsax.shopping_cart,
-                    color: AppColors.white,
-                    size: 24,
-                  ),
+                  child: SvgPicture.asset(
+                        IconPath.cartNew, // path to your svg
+                        width: 20,
+                        height: 20,
+                        colorFilter: const ColorFilter.mode(
+                          AppColors
+                              .white, // tint the icon if it's a single-color svg
+                          BlendMode.srcIn,
+                        ),
+                      ),
                 ),
               ],
             ),

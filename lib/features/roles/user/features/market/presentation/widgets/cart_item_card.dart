@@ -34,7 +34,7 @@ class CartItemCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: AppColors.primaryappbrownsecond,
+        color: AppColors.primaryappbrown,
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Row(
@@ -110,7 +110,7 @@ class CartItemCard extends StatelessWidget {
                     _buildQuantityButton(
                       icon: Icons.remove,
                       onTap: onDecrement,
-                      color: AppColors.bordercolor,
+                      color: AppColors.secondary,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14.0),
@@ -125,7 +125,7 @@ class CartItemCard extends StatelessWidget {
                     _buildQuantityButton(
                       icon: Icons.add,
                       onTap: onIncrement,
-                      color: AppColors.accent,
+                      color: AppColors.onboardingbutton,
                     ),
                     const Spacer(),
                     GestureDetector(
@@ -166,7 +166,7 @@ class CartItemCard extends StatelessWidget {
           color: color,
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, color: AppColors.white, size: 18),
+        child: Icon(icon, color: AppColors.primary, size: 18),
       ),
     );
   }

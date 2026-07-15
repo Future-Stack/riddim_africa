@@ -16,4 +16,6 @@ class ImagePath {
   static const String mail = 'assets/images/mail-open.png';
   static const String lock = 'assets/images/locked.png';
   static const String lockKey = 'assets/images/lock-key.png';
+  static const String momo = 'assets/images/momo.png';
+  static const String airtel = 'assets/images/airtel.png';
 }

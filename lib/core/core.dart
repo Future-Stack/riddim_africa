@@ -18,6 +18,7 @@ export 'utils/helpers/app_helper.dart';
 export 'utils/logging/logger.dart';
 export 'models/response_data.dart';
 export 'common/styles/global_text_style.dart';
+export 'common/common_button/common_button.dart';
 export 'bindings/controller_binder.dart';
 export 'services/firebase/fcm_handler.dart';
 export 'services/firebase/firebase_service.dart';
