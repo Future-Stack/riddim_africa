@@ -15,6 +15,10 @@ import 'package:riddimafrica/features/authentication/presentation/screens/profil
 import 'package:riddimafrica/features/authentication/presentation/screens/forgot_password_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/forgot_password_otp_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/create_new_password_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/market/binding/market_binding.dart';
+import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/product_detail_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/cart_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/checkout_screen.dart';
 
 class AppRoute {
   static const String welcomescreen = "/welcomeScreen";
@@ -47,6 +51,9 @@ class AppRoute {
   //USER
 
   static const String userhomescreen = "/userhomescreen";
+  static const String marketProductDetail = "/marketProductDetail";
+  static const String marketCart = "/marketCart";
+  static const String marketCheckout = "/marketCheckout";
 
   static List<GetPage> routes = [
     GetPage(
@@ -102,6 +109,21 @@ class AppRoute {
       name: userhomescreen,
       page: () => const UserHomeScreen(),
       binding: HomeBinding(),
+    ),
+    GetPage(
+      name: marketProductDetail,
+      page: () => const ProductDetailScreen(),
+      binding: MarketBinding(),
+    ),
+    GetPage(
+      name: marketCart,
+      page: () => const CartScreen(),
+      binding: MarketBinding(),
+    ),
+    GetPage(
+      name: marketCheckout,
+      page: () => const CheckoutScreen(),
+      binding: MarketBinding(),
     ),
   ];
 }

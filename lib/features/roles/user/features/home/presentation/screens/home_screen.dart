@@ -83,6 +83,9 @@ class UserHomeScreen extends GetView<UserHomeController> {
                     categoryText: product.categoryText,
                     price: product.price,
                     isHot: product.isHot,
+                    onTap: () {
+                      Get.toNamed('/marketProductDetail', arguments: product.id);
+                    },
                   );
                 },
               );
