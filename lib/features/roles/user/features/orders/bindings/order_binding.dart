@@ -7,6 +7,8 @@ import '../domain/usecases/get_orders_usecase.dart';
 import '../domain/usecases/get_order_detail_usecase.dart';
 import '../domain/usecases/get_tracking_events_usecase.dart';
 import '../domain/usecases/get_order_stats_usecase.dart';
+import '../domain/usecases/cancel_order_usecase.dart';
+import '../domain/usecases/confirm_delivery_usecase.dart';
 import '../presentation/controllers/order_list_controller.dart';
 import '../presentation/controllers/order_detail_controller.dart';
 
@@ -25,6 +27,8 @@ class OrderBinding extends Bindings {
       () => GetTrackingEventsUseCase(Get.find<OrderRepository>()),
     );
     Get.lazyPut(() => GetOrderStatsUseCase(Get.find<OrderRepository>()));
+    Get.lazyPut(() => CancelOrderUseCase(Get.find<OrderRepository>()));
+    Get.lazyPut(() => ConfirmDeliveryUseCase(Get.find<OrderRepository>()));
 
     Get.lazyPut(
       () => OrderListController(
@@ -36,6 +40,8 @@ class OrderBinding extends Bindings {
       () => OrderDetailController(
         Get.find<GetOrderDetailUseCase>(),
         Get.find<GetTrackingEventsUseCase>(),
+        Get.find<CancelOrderUseCase>(),
+        Get.find<ConfirmDeliveryUseCase>(),
       ),
     );
   }

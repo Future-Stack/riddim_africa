@@ -7,6 +7,8 @@ abstract class OrderLocalDataSource {
   Future<OrderDetailData> getMockOrderDetail(String orderId);
   Future<List<TrackingEventModel>> getMockTrackingEvents(String orderId);
   Future<OrderStatsEntity> getMockOrderStats();
+  Future<void> cancelOrder(String orderId);
+  Future<void> confirmDelivery(String orderId);
 }
 
 class OrderDetailData {

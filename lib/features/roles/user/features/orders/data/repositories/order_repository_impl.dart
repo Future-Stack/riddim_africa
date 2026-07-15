@@ -31,4 +31,14 @@ class OrderRepositoryImpl implements OrderRepository {
   Future<OrderStatsEntity> getOrderStats() async {
     return await _dataSource.getMockOrderStats();
   }
+
+  @override
+  Future<void> cancelOrder(String orderId) async {
+    await _dataSource.cancelOrder(orderId);
+  }
+
+  @override
+  Future<void> confirmDelivery(String orderId) async {
+    await _dataSource.confirmDelivery(orderId);
+  }
 }

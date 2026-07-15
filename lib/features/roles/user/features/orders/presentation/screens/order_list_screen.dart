@@ -31,6 +31,24 @@ class _OrderListScreenState extends State<OrderListScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         elevation: 0,
+        leadingWidth: 60,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
+          child: GestureDetector(
+            onTap: () => Get.back(),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: AppColors.primaryappbrownsecond,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.arrow_back,
+                color: AppColors.white,
+                size: 20,
+              ),
+            ),
+          ),
+        ),
         title: Text(
           'My Orders',
           style: AppTextStyle(context).boldTextStyle(
@@ -63,18 +81,19 @@ class _OrderListScreenState extends State<OrderListScreen> {
                   onTap: () => ctrl.setFilter(filter),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
+                      horizontal: 24,
                       vertical: 10,
                     ),
                     decoration: BoxDecoration(
                       color: ctrl.selectedFilter.value == filter
-                          ? AppColors.secondary
-                          : AppColors.primaryappbrown,
+                          ? const Color(0xFF5B224E)
+                          : Colors.transparent,
                       borderRadius: BorderRadius.circular(30),
                       border: Border.all(
                         color: ctrl.selectedFilter.value == filter
                             ? Colors.transparent
                             : AppColors.primaryappbrownsecond,
+                        width: 1.5,
                       ),
                     ),
                     child: Text(

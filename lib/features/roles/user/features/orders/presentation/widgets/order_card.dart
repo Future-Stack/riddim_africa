@@ -14,22 +14,49 @@ class OrderCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
           color: AppColors.primaryappbrown,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.primaryappbrownsecond, width: 1),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.primaryappbrownsecond, width: 1.5),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Header: Icon + Order Number + Status Badge
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Icon(
+                      Iconsax.box,
+                      color: AppColors.onboardingbutton,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      order.orderNumber,
+                      style: AppTextStyle(context).boldTextStyle(
+                        color: AppColors.white,
+                        fontSize: AppTextStyle.md,
+                      ),
+                    ),
+                  ],
+                ),
+                _buildStatusBadge(context),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Body: Circular product image next to Title x Qty
+            Row(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(40),
                   child: SizedBox(
-                    width: 72,
-                    height: 72,
+                    width: 56,
+                    height: 56,
                     child: Image.network(
                       order.imageUrl,
                       fit: BoxFit.cover,
@@ -45,46 +72,45 @@ class OrderCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        order.title,
-                        style: AppTextStyle(context).semiBoldTextStyle(
-                          color: AppColors.white,
-                          fontSize: AppTextStyle.lg,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        order.sellerName,
-                        style: AppTextStyle(context).regularTextStyle(
-                          color: AppColors.primarytext,
-                          fontSize: AppTextStyle.sm,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Qty: ${order.quantity}',
-                        style: AppTextStyle(context).regularTextStyle(
-                          color: AppColors.primarytext,
-                          fontSize: AppTextStyle.sm,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        order.price,
-                        style: AppTextStyle(context).boldTextStyle(
-                          color: AppColors.onboardingbutton,
-                          fontSize: AppTextStyle.md,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    '${order.title} × ${order.quantity}',
+                    style: AppTextStyle(context).mediumTextStyle(
+                      color: AppColors.primarytext,
+                      fontSize: AppTextStyle.md,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                _buildStatusBadge(context),
+              ],
+            ),
+            const SizedBox(height: 12),
+
+            const Divider(
+              color: AppColors.primaryappbrownsecond,
+              height: 1,
+              thickness: 1,
+            ),
+            const SizedBox(height: 12),
+
+            // Footer: Date on left, Total Price on right
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  _formatDate(order.orderDate),
+                  style: AppTextStyle(context).regularTextStyle(
+                    color: AppColors.primarytext,
+                    fontSize: AppTextStyle.sm,
+                  ),
+                ),
+                Text(
+                  order.totalPrice.isNotEmpty ? order.totalPrice : order.price,
+                  style: AppTextStyle(context).boldTextStyle(
+                    color: AppColors.onboardingbutton,
+                    fontSize: AppTextStyle.lg,
+                  ),
+                ),
               ],
             ),
           ],
@@ -96,44 +122,43 @@ class OrderCard extends StatelessWidget {
   Widget _buildStatusBadge(BuildContext context) {
     Color bgColor;
     Color textColor;
-    IconData icon;
+    final status = order.statusLabel.toLowerCase();
 
-    switch (order.statusLabel.toLowerCase()) {
-      case 'delivered':
-        bgColor = AppColors.success.withValues(alpha: 0.15);
-        textColor = AppColors.success;
-        icon = Iconsax.tick_circle;
-      case 'shipped':
-        bgColor = AppColors.info.withValues(alpha: 0.15);
-        textColor = AppColors.info;
-        icon = Iconsax.truck;
-      case 'processing':
-      default:
-        bgColor = AppColors.warning.withValues(alpha: 0.15);
-        textColor = AppColors.warning;
-        icon = Iconsax.clock;
+    if (status == 'delivered') {
+      bgColor = AppColors.success;
+      textColor = AppColors.white;
+    } else if (status == 'cancelled' || status == 'canceled') {
+      bgColor = AppColors.error.withValues(alpha: 0.15);
+      textColor = AppColors.error;
+    } else if (status == 'out for delivery') {
+      bgColor = AppColors.onboardingbutton.withValues(alpha: 0.15);
+      textColor = AppColors.onboardingbutton;
+    } else {
+      bgColor = AppColors.warning.withValues(alpha: 0.15);
+      textColor = AppColors.warning;
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 12, color: textColor),
-          const SizedBox(width: 4),
-          Text(
-            order.statusLabel,
-            style: AppTextStyle(context).boldTextStyle(
-              color: textColor,
-              fontSize: AppTextStyle.sm,
-            ), 
-          ),
-        ],
+      child: Text(
+        order.statusLabel,
+        style: AppTextStyle(context).boldTextStyle(
+          color: textColor,
+          fontSize: AppTextStyle.xs,
+        ),
       ),
     );
+  }
+
+  String _formatDate(DateTime date) {
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
 }

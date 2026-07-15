@@ -19,6 +19,8 @@ class OrderModel extends OrderEntity {
     super.shippingAddress,
     super.paymentMethod,
     super.isPaid,
+    super.deliveryFee,
+    super.totalPrice,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +41,8 @@ class OrderModel extends OrderEntity {
       shippingAddress: json['shippingAddress'] as String? ?? '',
       paymentMethod: json['paymentMethod'] as String? ?? '',
       isPaid: json['isPaid'] as bool? ?? false,
+      deliveryFee: json['deliveryFee'] as String? ?? 'UGX 0',
+      totalPrice: json['totalPrice'] as String? ?? json['price'] as String,
     );
   }
 
@@ -60,6 +64,50 @@ class OrderModel extends OrderEntity {
       'shippingAddress': shippingAddress,
       'paymentMethod': paymentMethod,
       'isPaid': isPaid,
+      'deliveryFee': deliveryFee,
+      'totalPrice': totalPrice,
     };
+  }
+
+  OrderModel copyWith({
+    String? id,
+    String? orderNumber,
+    String? imageUrl,
+    String? title,
+    String? sellerName,
+    String? price,
+    int? quantity,
+    String? selectedColor,
+    String? selectedSize,
+    String? statusLabel,
+    String? expectedDelivery,
+    String? estimatedDate,
+    DateTime? orderDate,
+    String? shippingAddress,
+    String? paymentMethod,
+    bool? isPaid,
+    String? deliveryFee,
+    String? totalPrice,
+  }) {
+    return OrderModel(
+      id: id ?? this.id,
+      orderNumber: orderNumber ?? this.orderNumber,
+      imageUrl: imageUrl ?? this.imageUrl,
+      title: title ?? this.title,
+      sellerName: sellerName ?? this.sellerName,
+      price: price ?? this.price,
+      quantity: quantity ?? this.quantity,
+      selectedColor: selectedColor ?? this.selectedColor,
+      selectedSize: selectedSize ?? this.selectedSize,
+      statusLabel: statusLabel ?? this.statusLabel,
+      expectedDelivery: expectedDelivery ?? this.expectedDelivery,
+      estimatedDate: estimatedDate ?? this.estimatedDate,
+      orderDate: orderDate ?? this.orderDate,
+      shippingAddress: shippingAddress ?? this.shippingAddress,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      isPaid: isPaid ?? this.isPaid,
+      deliveryFee: deliveryFee ?? this.deliveryFee,
+      totalPrice: totalPrice ?? this.totalPrice,
+    );
   }
 }

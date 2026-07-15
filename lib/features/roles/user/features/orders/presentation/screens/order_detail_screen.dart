@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
 import '../controllers/order_detail_controller.dart';
-import '../widgets/order_info_row.dart';
 import '../widgets/tracking_timeline.dart';
 
 class OrderDetailScreen extends GetView<OrderDetailController> {
@@ -16,33 +15,61 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.white),
-          onPressed: () => Get.back(),
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Order Details',
-              style: AppTextStyle(context).boldTextStyle(
+        leadingWidth: 60,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
+          child: GestureDetector(
+            onTap: () => Get.back(),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: AppColors.primaryappbrownsecond,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.arrow_back,
                 color: AppColors.white,
-                fontSize: AppTextStyle.xl,
+                size: 20,
               ),
             ),
-            Obx(() {
-              if (controller.order.value == null) return const SizedBox.shrink();
-              return Text(
-                controller.order.value!.orderNumber,
+          ),
+        ),
+        title: Obx(() {
+          final order = controller.order.value;
+          if (order == null) return const SizedBox.shrink();
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Order ${order.orderNumber}',
+                style: AppTextStyle(context).boldTextStyle(
+                  color: AppColors.white,
+                  fontSize: AppTextStyle.md,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                _formatDate(order.orderDate),
                 style: AppTextStyle(context).regularTextStyle(
                   color: AppColors.primarytext,
-                  fontSize: AppTextStyle.sm,
+                  fontSize: AppTextStyle.xs,
                 ),
-              );
-            }),
-          ],
-        ),
+              ),
+            ],
+          );
+        }),
         centerTitle: false,
+        actions: [
+          Obx(() {
+            final order = controller.order.value;
+            if (order == null) return const SizedBox.shrink();
+            return Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Center(
+                child: _buildStatusBadge(context, order),
+              ),
+            );
+          }),
+        ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -59,17 +86,17 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
         }
 
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildProductInfo(context, order),
-              const SizedBox(height: 20),
+              _buildProductCard(context, order),
+              const SizedBox(height: 16),
+              _buildDeliveryDetailsCard(context, order),
+              const SizedBox(height: 16),
               _buildTrackingCard(context),
-              const SizedBox(height: 20),
-              _buildOrderInfo(context, order),
-              const SizedBox(height: 20),
-              _buildActions(context),
+              const SizedBox(height: 24),
+              _buildActionButtons(context, order),
               const SizedBox(height: 32),
             ],
           ),
@@ -78,18 +105,54 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
     );
   }
 
-  Widget _buildProductInfo(BuildContext context, dynamic order) {
+  Widget _buildStatusBadge(BuildContext context, dynamic order) {
+    Color bgColor;
+    Color textColor;
+    final status = order.statusLabel.toLowerCase();
+
+    if (status == 'delivered') {
+      bgColor = AppColors.success.withValues(alpha: 0.15);
+      textColor = AppColors.success;
+    } else if (status == 'cancelled' || status == 'canceled') {
+      bgColor = AppColors.error.withValues(alpha: 0.15);
+      textColor = AppColors.error;
+    } else if (status == 'out for delivery') {
+      bgColor = AppColors.onboardingbutton.withValues(alpha: 0.15);
+      textColor = AppColors.onboardingbutton;
+    } else {
+      bgColor = AppColors.warning.withValues(alpha: 0.15);
+      textColor = AppColors.warning;
+    }
+
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        order.statusLabel,
+        style: AppTextStyle(context).boldTextStyle(
+          color: textColor,
+          fontSize: AppTextStyle.xs,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductCard(BuildContext context, dynamic order) {
+    return Container(
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.primaryappbrown,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.primaryappbrownsecond, width: 1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.primaryappbrownsecond, width: 1.5),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
             child: SizedBox(
               width: 80,
               height: 80,
@@ -103,29 +166,47 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 16),
           Expanded(
-            child: Column(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  order.title,
-                  style: AppTextStyle(context).semiBoldTextStyle(
-                    color: AppColors.white,
-                    fontSize: AppTextStyle.lg,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        order.title,
+                        style: AppTextStyle(context).boldTextStyle(
+                          color: AppColors.white,
+                          fontSize: AppTextStyle.md,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Qty: ${order.quantity}',
+                        style: AppTextStyle(context).regularTextStyle(
+                          color: AppColors.primarytext,
+                          fontSize: AppTextStyle.sm,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      if (order.selectedColor != null ||
+                          order.selectedSize != null)
+                        Text(
+                          'Color: ${order.selectedColor ?? 'N/A'}    Size: ${order.selectedSize ?? 'N/A'}',
+                          style: AppTextStyle(context).regularTextStyle(
+                            color: AppColors.primarytext,
+                            fontSize: AppTextStyle.sm,
+                          ),
+                        ),
+                    ],
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  order.sellerName,
-                  style: AppTextStyle(context).regularTextStyle(
-                    color: AppColors.primarytext,
-                    fontSize: AppTextStyle.sm,
-                  ),
-                ),
-                const SizedBox(height: 6),
+                const SizedBox(width: 8),
                 Text(
                   order.price,
                   style: AppTextStyle(context).boldTextStyle(
@@ -133,17 +214,6 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                     fontSize: AppTextStyle.md,
                   ),
                 ),
-                if (order.selectedColor != null ||
-                    order.selectedSize != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    _variantText(order),
-                    style: AppTextStyle(context).regularTextStyle(
-                      color: AppColors.primarytext,
-                      fontSize: AppTextStyle.sm,
-                    ),
-                  ),
-                ],
               ],
             ),
           ),
@@ -152,191 +222,257 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
     );
   }
 
-  String _variantText(dynamic order) {
-    final parts = <String>[];
-    if (order.selectedColor != null) parts.add('Color: ${order.selectedColor}');
-    if (order.selectedSize != null) parts.add('Size: ${order.selectedSize}');
-    return parts.join(', ');
-  }
-
-  Widget _buildTrackingCard(BuildContext context) {
+  Widget _buildDeliveryDetailsCard(BuildContext context, dynamic order) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.primaryappbrown,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.primaryappbrownsecond, width: 1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.primaryappbrownsecond, width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'DELIVERY DETAILS',
+            style: AppTextStyle(context).boldTextStyle(
+              color: AppColors.primarytext,
+              fontSize: AppTextStyle.sm,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            order.shippingAddress.isNotEmpty
+                ? order.shippingAddress
+                : 'Plot 12, Buganda Road, Kampala',
+            style: AppTextStyle(context).boldTextStyle(
+              color: AppColors.white,
+              fontSize: AppTextStyle.md,
+            ),
+          ),
+          const SizedBox(height: 16),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(Iconsax.location, color: AppColors.onboardingbutton, size: 20),
-              const SizedBox(width: 8),
               Text(
-                'Tracking',
-                style: AppTextStyle(context).semiBoldTextStyle(
+                'Delivery fee',
+                style: AppTextStyle(context).regularTextStyle(
+                  color: AppColors.primarytext,
+                  fontSize: AppTextStyle.md,
+                ),
+              ),
+              Text(
+                order.deliveryFee,
+                style: AppTextStyle(context).boldTextStyle(
+                  color: AppColors.onboardingbutton,
+                  fontSize: AppTextStyle.md,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Order total',
+                style: AppTextStyle(context).boldTextStyle(
                   color: AppColors.white,
+                  fontSize: AppTextStyle.md,
+                ),
+              ),
+              Text(
+                order.totalPrice.isNotEmpty ? order.totalPrice : order.price,
+                style: AppTextStyle(context).boldTextStyle(
+                  color: AppColors.onboardingbutton,
                   fontSize: AppTextStyle.lg,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTrackingCard(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.primaryappbrown,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.primaryappbrownsecond, width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Tracking Timeline',
+            style: AppTextStyle(context).boldTextStyle(
+              color: AppColors.white,
+              fontSize: AppTextStyle.md,
+            ),
+          ),
+          const SizedBox(height: 16),
           TrackingTimeline(events: controller.trackingEvents),
         ],
       ),
     );
   }
 
-  Widget _buildOrderInfo(BuildContext context, dynamic order) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.primaryappbrown,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.primaryappbrownsecond, width: 1),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Iconsax.info_circle, color: AppColors.onboardingbutton, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                'Order Information',
-                style: AppTextStyle(context).semiBoldTextStyle(
-                  color: AppColors.white,
-                  fontSize: AppTextStyle.lg,
-                ),
+  Widget _buildActionButtons(BuildContext context, dynamic order) {
+    final status = order.statusLabel.toLowerCase();
+
+    if (status == 'cancelled' || status == 'canceled') {
+      return const SizedBox.shrink();
+    }
+
+    if (status == 'delivered') {
+      // If delivered, show Add Review directly
+      return ProElevatedButton(
+        text: 'Add Review',
+        backgroundColor: const Color(0xFFA13C33), // red/brown
+        textColor: AppColors.white,
+        borderRadius: 16,
+        onPressed: () {
+          Get.toNamed('/orderReview', arguments: order);
+        },
+      );
+    }
+
+    return Row(
+      children: [
+        Expanded(
+          child: ProElevatedButton(
+            text: 'Mark as Received',
+            backgroundColor: const Color(0xFFCCA13E), // Gold
+            textColor: AppColors.white,
+            borderRadius: 16,
+            onPressed: () {
+              _showConfirmReceiptPopup(context);
+            },
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: ProElevatedButton(
+            text: 'Cancel Order',
+            backgroundColor: const Color(0xFFA13C33), // Red
+            textColor: AppColors.white,
+            borderRadius: 16,
+            onPressed: () {
+              _showCancelOrderPopup(context);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showConfirmReceiptPopup(BuildContext context) {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: AppColors.primaryappbrown,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: AppColors.primaryappbrownsecond, width: 1.5),
+        ),
+        title: Text(
+          'Confirm Receipt',
+          style: AppTextStyle(context).boldTextStyle(
+            color: AppColors.white,
+            fontSize: AppTextStyle.lg,
+          ),
+        ),
+        content: Text(
+          'Are you sure you have received your order?',
+          style: AppTextStyle(context).regularTextStyle(
+            color: AppColors.primarytext,
+            fontSize: AppTextStyle.md,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'Cancel',
+              style: AppTextStyle(context).semiBoldTextStyle(
+                color: AppColors.primarytext,
               ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          OrderInfoRow(
-            label: 'Order ID',
-            value: order.orderNumber,
-            icon: Iconsax.box,
-          ),
-          const Divider(color: AppColors.primaryappbrown, height: 24),
-          OrderInfoRow(
-            label: 'Order Date',
-            value: _formatDate(order.orderDate),
-            icon: Iconsax.calendar,
-          ),
-          const Divider(color: AppColors.primaryappbrown, height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Payment Status',
-                  style: AppTextStyle(context).mediumTextStyle(
-                    color: AppColors.primarytext,
-                    fontSize: AppTextStyle.md,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: order.isPaid ? AppColors.success : AppColors.warning,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        order.isPaid ? Icons.check : Icons.access_time,
-                        color: AppColors.white,
-                        size: 12,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        order.isPaid ? 'Paid' : 'Unpaid',
-                        style: AppTextStyle(context).boldTextStyle(
-                          color: AppColors.white,
-                          fontSize: AppTextStyle.sm,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
             ),
           ),
-          if (order.paymentMethod.isNotEmpty) ...[
-            const Divider(color: AppColors.primaryappbrown, height: 24),
-            OrderInfoRow(
-              label: 'Payment Method',
-              value: order.paymentMethod,
-              icon: Iconsax.card,
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              await controller.confirmDelivery();
+              Get.toNamed('/orderConfirmed', arguments: controller.order.value);
+            },
+            child: Text(
+              'Confirm',
+              style: AppTextStyle(context).semiBoldTextStyle(
+                color: AppColors.success,
+              ),
             ),
-          ],
-          if (order.shippingAddress.isNotEmpty) ...[
-            const Divider(color: AppColors.primaryappbrown, height: 24),
-            OrderInfoRow(
-              label: 'Shipping To',
-              value: order.shippingAddress,
-              icon: Iconsax.location,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showCancelOrderPopup(BuildContext context) {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: AppColors.primaryappbrown,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: AppColors.primaryappbrownsecond, width: 1.5),
+        ),
+        title: Text(
+          'Cancel Order',
+          style: AppTextStyle(context).boldTextStyle(
+            color: AppColors.white,
+            fontSize: AppTextStyle.lg,
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to cancel this order?',
+          style: AppTextStyle(context).regularTextStyle(
+            color: AppColors.primarytext,
+            fontSize: AppTextStyle.md,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'No',
+              style: AppTextStyle(context).semiBoldTextStyle(
+                color: AppColors.primarytext,
+              ),
             ),
-          ],
-          if (order.expectedDelivery.isNotEmpty) ...[
-            const Divider(color: AppColors.primaryappbrown, height: 24),
-            OrderInfoRow(
-              label: 'Expected Delivery',
-              value: order.expectedDelivery,
-              icon: Iconsax.timer,
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              controller.cancelOrder();
+            },
+            child: Text(
+              'Yes, Cancel',
+              style: AppTextStyle(context).semiBoldTextStyle(
+                color: AppColors.error,
+              ),
             ),
-          ],
+          ),
         ],
       ),
     );
   }
 
   String _formatDate(DateTime date) {
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    const allMonths = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
+      'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
-    return '${months[date.month - 1]} ${date.day}, ${date.year}';
-  }
-
-  Widget _buildActions(BuildContext context) {
-    return Column(
-      children: [
-        ProElevatedButton(
-          onPressed: () {},
-          text: 'Track Order',
-          leadingIcon: Iconsax.location,
-          backgroundColor: AppColors.secondary,
-          textColor: AppColors.white,
-          fontSize: AppTextStyle.lg,
-          borderRadius: 16,
-          showGlow: true,
-          glowColor: AppColors.secondary.withValues(alpha: 0.4),
-        ),
-        const SizedBox(height: 12),
-        ProElevatedButton(
-          onPressed: () {
-            Get.back();
-          },
-          text: 'Back to Orders',
-          leadingIcon: Iconsax.arrow_left,
-          backgroundColor: Colors.transparent,
-          textColor: AppColors.white,
-          fontSize: AppTextStyle.lg,
-          borderRadius: 16,
-          border: const BorderSide(
-            color: AppColors.primaryappbrownsecond,
-            width: 1.5,
-          ),
-        ),
-      ],
-    );
+    return '${allMonths[date.month - 1]} ${date.day}, ${date.year}';
   }
 }

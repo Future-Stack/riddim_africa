@@ -16,7 +16,7 @@ class OrderListController extends GetxController {
   final Rx<OrderStatsEntity> stats = OrderStatsEntity().obs;
   final RxString selectedFilter = 'All'.obs;
 
-  final List<String> filterOptions = ['All', 'Active','Processing', 'Shipped', 'Delivered','canceled'];
+  final List<String> filterOptions = ['All', 'Active', 'Delivered', 'Cancelled'];
 
   @override
   void onInit() {
@@ -43,12 +43,25 @@ class OrderListController extends GetxController {
   }
 
   void applyFilter() {
-    if (selectedFilter.value == 'All') {
+    final filter = selectedFilter.value.toLowerCase();
+    if (filter == 'all') {
       filteredOrders.value = orders;
-    } else {
+    } else if (filter == 'active') {
       filteredOrders.value = orders
           .where((o) =>
-              o.statusLabel.toLowerCase() == selectedFilter.value.toLowerCase())
+              o.statusLabel.toLowerCase() != 'delivered' &&
+              o.statusLabel.toLowerCase() != 'cancelled' &&
+              o.statusLabel.toLowerCase() != 'canceled')
+          .toList();
+    } else if (filter == 'cancelled') {
+      filteredOrders.value = orders
+          .where((o) =>
+              o.statusLabel.toLowerCase() == 'cancelled' ||
+              o.statusLabel.toLowerCase() == 'canceled')
+          .toList();
+    } else {
+      filteredOrders.value = orders
+          .where((o) => o.statusLabel.toLowerCase() == filter)
           .toList();
     }
   }
