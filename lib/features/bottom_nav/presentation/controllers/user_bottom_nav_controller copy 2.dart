@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/features/roles/user/features/home/presentation/screens/home_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_list_screen.dart';
 import '../../domain/entities/nav_model.dart';
 
 // ─── Placeholder screens ───────────────────────────────────────────────────
@@ -12,12 +13,6 @@ class ProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       const _PlaceholderPage(label: 'Products');
-}
-
-class OrdersScreen extends StatelessWidget {
-  const OrdersScreen({super.key});
-  @override
-  Widget build(BuildContext context) => const _PlaceholderPage(label: 'Orders');
 }
 
 class RevenueScreen extends StatelessWidget {
@@ -60,12 +55,12 @@ class UserBottomNavController extends GetxController {
   ];
 
   // ── Screens — keep in the same order as items ──────────────────────────
-  final List<Widget> screens = const [
-    UserHomeScreen(),
-    ProductsScreen(),
-    OrdersScreen(),
-    RevenueScreen(),
-    ProfileScreen(),
+  final List<Widget> screens = [
+    const UserHomeScreen(),
+    const ProductsScreen(),
+    OrderListScreen(),
+    const RevenueScreen(),
+    const ProfileScreen(),
   ];
 
   // ── Actions ────────────────────────────────────────────────────────────

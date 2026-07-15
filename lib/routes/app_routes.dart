@@ -19,6 +19,9 @@ import 'package:riddimafrica/features/roles/user/features/market/binding/market_
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/product_detail_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/cart_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/checkout_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/orders/bindings/order_binding.dart';
+import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_list_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_detail_screen.dart';
 
 class AppRoute {
   static const String welcomescreen = "/welcomeScreen";
@@ -54,6 +57,10 @@ class AppRoute {
   static const String marketProductDetail = "/marketProductDetail";
   static const String marketCart = "/marketCart";
   static const String marketCheckout = "/marketCheckout";
+
+  //ORDERS
+  static const String orderList = "/orderList";
+  static const String orderDetail = "/orderDetail";
 
   static List<GetPage> routes = [
     GetPage(
@@ -124,6 +131,18 @@ class AppRoute {
       name: marketCheckout,
       page: () => const CheckoutScreen(),
       binding: MarketBinding(),
+    ),
+
+    //ORDERS
+    GetPage(
+      name: orderList,
+      page: () => const OrderListScreen(),
+      binding: OrderBinding(),
+    ),
+    GetPage(
+      name: orderDetail,
+      page: () => const OrderDetailScreen(),
+      binding: OrderBinding(),
     ),
   ];
 }
