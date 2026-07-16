@@ -133,16 +133,18 @@ class ProductCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: AppTextStyle(context).mediumTextStyle(
-                    color: AppColors.primarytext,
-                    fontSize: 12,
+                if (subtitle.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: AppTextStyle(context).mediumTextStyle(
+                      color: AppColors.primarytext,
+                      fontSize: 12,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                ],
                 const SizedBox(height: 8),
                 Row(
                   children: [
@@ -159,18 +161,20 @@ class ProductCard extends StatelessWidget {
                         fontSize: 12,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        '( $categoryText )',
-                        style: AppTextStyle(context).mediumTextStyle(
-                          color: AppColors.secondary,
-                          fontSize: 12,
+                    if (categoryText.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          '( $categoryText )',
+                          style: AppTextStyle(context).mediumTextStyle(
+                            color: AppColors.secondary,
+                            fontSize: 12,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 12),

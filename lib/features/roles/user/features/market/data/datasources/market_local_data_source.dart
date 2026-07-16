@@ -7,6 +7,7 @@ abstract class MarketLocalDataSource {
   Future<List<MarketProductModel>> getMockRelatedProducts(String productId);
   Future<List<CartItemModel>> getMockCartItems();
   Future<List<DeliveryAddressModel>> getMockDeliveryAddresses();
+  Future<List<MarketProductModel>> getMockArtistProducts(String artistName);
 }
 
 class MarketLocalDataSourceImpl implements MarketLocalDataSource {
@@ -117,6 +118,55 @@ class MarketLocalDataSourceImpl implements MarketLocalDataSource {
         id: 'addr_2',
         label: 'Work',
         address: 'Bea Town, Kampala',
+      ),
+    ];
+  }
+
+  @override
+  Future<List<MarketProductModel>> getMockArtistProducts(
+    String artistName,
+  ) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    return const [
+      MarketProductModel(
+        id: 'artist_p1',
+        imageUrl:
+            'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=500&auto=format&fit=crop',
+        title: 'Presidential T-Shirt',
+        sellerName: 'Bobi Wine',
+        rating: 4.9,
+        category: '',
+        price: 'UGX 55,000',
+      ),
+      MarketProductModel(
+        id: 'artist_p2',
+        imageUrl:
+            'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?q=80&w=500&auto=format&fit=crop',
+        title: 'People Power Cap',
+        sellerName: 'Bobi Wine',
+        rating: 4.7,
+        category: '',
+        price: 'UGX 38,000',
+      ),
+      MarketProductModel(
+        id: 'artist_p3',
+        imageUrl:
+            'https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=500&auto=format&fit=crop',
+        title: 'Bobi Wine Hoodie',
+        sellerName: 'Bobi Wine',
+        rating: 4.8,
+        category: '',
+        price: 'UGX 85,000',
+      ),
+      MarketProductModel(
+        id: 'artist_p4',
+        imageUrl:
+            'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=500&auto=format&fit=crop',
+        title: 'Freedom Bracelet',
+        sellerName: 'Bobi Wine',
+        rating: 4.6,
+        category: '',
+        price: 'UGX 22,000',
       ),
     ];
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
+import 'package:riddimafrica/routes/app_routes.dart';
 import '../controllers/product_detail_controller.dart';
 import '../widgets/product_image_gallery.dart';
 import '../widgets/rating_row.dart';
@@ -128,6 +129,17 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
                               isVerified: product.isVerifiedSeller,
                               rating: product.sellerRating,
                               salesCount: product.sellerSales,
+                              onTap: () {
+                                Get.toNamed(
+                                  AppRoute.artistProfile,
+                                  arguments: {
+                                    'name': product.sellerName,
+                                    'avatarUrl': product.sellerAvatarUrl,
+                                    'rating': product.sellerRating,
+                                    'isVerified': product.isVerifiedSeller,
+                                  },
+                                );
+                              },
                             ),
                             const SizedBox(height: 20),
 
