@@ -85,7 +85,7 @@ class ArtistProfileScreen extends GetView<ArtistProfileController> {
                             ),
                           ),
                           child: CircleAvatar(
-                            radius: 40,
+                            radius: 30,
                             backgroundColor: AppColors.primaryappbrown,
                             backgroundImage:
                                 controller.avatarUrl.value.isNotEmpty
@@ -95,12 +95,12 @@ class ArtistProfileScreen extends GetView<ArtistProfileController> {
                                 ? const Icon(
                                     Icons.person,
                                     color: AppColors.primarytext,
-                                    size: 40,
+                                    size: 30,
                                   )
                                 : null,
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 12),
                         // Info column
                         Expanded(
                           child: Column(
@@ -112,7 +112,7 @@ class ArtistProfileScreen extends GetView<ArtistProfileController> {
                                     controller.name.value,
                                     style: AppTextStyle(context).boldTextStyle(
                                       color: AppColors.white,
-                                      fontSize: 22,
+                                      fontSize: 20,
                                     ),
                                   ),
                                   if (controller.isVerified.value) ...[
@@ -120,7 +120,7 @@ class ArtistProfileScreen extends GetView<ArtistProfileController> {
                                     const Icon(
                                       Icons.verified,
                                       color: AppColors.bordercolor,
-                                      size: 18,
+                                      size: 16,
                                     ),
                                   ],
                                 ],
@@ -132,8 +132,34 @@ class ArtistProfileScreen extends GetView<ArtistProfileController> {
                                     : 'Musical Artist  •  Uganda',
                                 style: AppTextStyle(context).regularTextStyle(
                                   color: AppColors.primarytext,
-                                  fontSize: 13,
+                                  fontSize: 12,
                                 ),
+                              ),
+                              const SizedBox(height: 8),
+                              // Stats wrapped in a Wrap to support all screen widths
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 4,
+                                children: [
+                                  _buildStatItem(
+                                    context,
+                                    Icons.people_outline,
+                                    '2.4M',
+                                    'Followers',
+                                  ),
+                                  _buildStatItem(
+                                    context,
+                                    Icons.shopping_bag_outlined,
+                                    '${products.length}',
+                                    'Products',
+                                  ),
+                                  _buildStatItem(
+                                    context,
+                                    Icons.star_border,
+                                    '${controller.rating.value}',
+                                    'Rating',
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -141,30 +167,6 @@ class ArtistProfileScreen extends GetView<ArtistProfileController> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    // Stats Row underneath the avatar row, taking full width
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _buildStatItem(
-                          context,
-                          Icons.people_outline,
-                          '2.4M',
-                          'Followers',
-                        ),
-                        _buildStatItem(
-                          context,
-                          Icons.shopping_bag_outlined,
-                          '${products.length}',
-                          'Products',
-                        ),
-                        _buildStatItem(
-                          context,
-                          Icons.star_border,
-                          '${controller.rating.value}',
-                          'Rating',
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -211,20 +213,20 @@ class ArtistProfileScreen extends GetView<ArtistProfileController> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, color: AppColors.onboardingbutton, size: 16),
-        const SizedBox(width: 4),
+        Icon(icon, color: AppColors.onboardingbutton, size: 14),
+        const SizedBox(width: 3),
         Text(
           value,
           style: AppTextStyle(
             context,
-          ).boldTextStyle(color: AppColors.white, fontSize: 12),
+          ).boldTextStyle(color: AppColors.white, fontSize: 11),
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: 3),
         Text(
           label,
           style: AppTextStyle(
             context,
-          ).regularTextStyle(color: AppColors.primarytext, fontSize: 12),
+          ).regularTextStyle(color: AppColors.primarytext, fontSize: 11),
         ),
       ],
     );
@@ -294,7 +296,6 @@ class ArtistProfileScreen extends GetView<ArtistProfileController> {
       itemBuilder: (context, index) {
         final product = products[index];
         return ProductCard(
-          
           imageUrl: product.imageUrl,
           title: product.title,
           subtitle: '', // empty hides subtitle
