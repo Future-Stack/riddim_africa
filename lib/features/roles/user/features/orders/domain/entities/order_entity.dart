@@ -18,6 +18,8 @@ class OrderEntity {
   final String shippingAddress;
   final String paymentMethod;
   final bool isPaid;
+  final String deliveryFee;
+  final String totalPrice;
 
   const OrderEntity({
     required this.id,
@@ -37,5 +39,7 @@ class OrderEntity {
     this.shippingAddress = '',
     this.paymentMethod = '',
     this.isPaid = false,
+    this.deliveryFee = 'UGX 0',
+    this.totalPrice = '',
   });
 }

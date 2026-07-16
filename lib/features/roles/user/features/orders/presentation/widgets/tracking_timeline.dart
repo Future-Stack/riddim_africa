@@ -10,6 +10,7 @@ class TrackingTimeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: List.generate(events.length, (index) {
         final event = events[index];
         final isLast = index == events.length - 1;
@@ -31,89 +32,132 @@ class TrackingTimeline extends StatelessWidget {
     final isCurrent = event.isCurrent as bool;
     final title = event.title as String;
     final description = event.description as String;
-    final date = event.date as String;
 
+    Color circleColor;
     Color lineColor;
-    Color textColor;
+    Color titleColor;
+    Color descColor;
 
     if (isCompleted) {
-      lineColor = AppColors.success;
-      textColor = AppColors.white;
+      circleColor = const Color(0xFF377A7D);
+      lineColor = const Color(0xFF377A7D);
+      titleColor = AppColors.white;
+      descColor = AppColors.primarytext;
     } else if (isCurrent) {
-      lineColor = AppColors.onboardingbutton;
-      textColor = AppColors.onboardingbutton;
-    } else {
+      circleColor = const Color(0xFF377A7D);
       lineColor = AppColors.primaryappbrownsecond;
-      textColor = AppColors.primarytext;
+      titleColor = AppColors.white;
+      descColor = AppColors.primarytext;
+    } else {
+      circleColor = AppColors.primaryappbrownsecond;
+      lineColor = AppColors.primaryappbrownsecond;
+      titleColor = AppColors.primarytext.withValues(alpha: 0.6);
+      descColor = AppColors.primarytext.withValues(alpha: 0.4);
     }
 
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Timeline indicator (circle and line)
           SizedBox(
             width: 32,
             child: Column(
               children: [
                 Container(
-                  width: isCurrent ? 24 : 20,
-                  height: isCurrent ? 24 : 20,
+                  width: 24,
+                  height: 24,
                   decoration: BoxDecoration(
-                    color: isCompleted
-                        ? AppColors.success
-                        : isCurrent
-                            ? AppColors.onboardingbutton
-                            : AppColors.primaryappbrownsecond,
+                    color: isCompleted || isCurrent
+                        ? circleColor
+                        : Colors.transparent,
                     shape: BoxShape.circle,
-                    border: isCurrent
-                        ? Border.all(color: AppColors.onboardingbutton, width: 3)
-                        : null,
+                    border: Border.all(
+                      color: isCompleted || isCurrent
+                          ? Colors.transparent
+                          : AppColors.primaryappbrownsecond,
+                      width: 2,
+                    ),
                   ),
                   child: isCompleted
-                      ? const Icon(Icons.check, size: 12, color: Colors.white)
+                      ? const Icon(
+                          Icons.check,
+                          size: 14,
+                          color: Colors.white,
+                        )
                       : isCurrent
-                          ? const Icon(Iconsax.location,
-                              size: 12, color: Colors.black)
-                          : null,
+                          ? Center(
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            )
+                          : const Icon(
+                              Iconsax.clock,
+                              size: 12,
+                              color: AppColors.primarytext,
+                            ),
                 ),
                 if (!isLast)
                   Expanded(
                     child: Container(
                       width: 2,
-                      color: lineColor.withValues(alpha: 0.3),
+                      color: lineColor,
                     ),
                   ),
               ],
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 16),
+
+          // Event Description
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(bottom: isLast ? 0 : 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: AppTextStyle(context).semiBoldTextStyle(
-                      color: textColor,
-                      fontSize: AppTextStyle.md,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        title,
+                        style: AppTextStyle(context).boldTextStyle(
+                          color: titleColor,
+                          fontSize: AppTextStyle.md,
+                        ),
+                      ),
+                      if (isCurrent) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFC84C3E), // red/orange badge
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            'CURRENT',
+                            style: AppTextStyle(context).boldTextStyle(
+                              color: AppColors.white,
+                              fontSize: 9,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                   const SizedBox(height: 2),
                   Text(
                     description,
                     style: AppTextStyle(context).regularTextStyle(
-                      color: AppColors.primarytext,
+                      color: descColor,
                       fontSize: AppTextStyle.sm,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    date,
-                    style: AppTextStyle(context).regularTextStyle(
-                      color: AppColors.textDisabled(context),
-                      fontSize: AppTextStyle.xs,
                     ),
                   ),
                 ],

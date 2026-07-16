@@ -4,45 +4,52 @@ import '../../domain/entities/order_stats_entity.dart';
 import 'order_local_data_source.dart';
 
 class OrderLocalDataSourceImpl implements OrderLocalDataSource {
-  @override
-  Future<List<OrderModel>> getMockOrders() async {
-    await Future.delayed(const Duration(milliseconds: 400));
+  static List<OrderModel>? _cachedOrders;
 
-    return [
+  List<OrderModel> _initOrders() {
+    if (_cachedOrders != null) return _cachedOrders!;
+    _cachedOrders = [
       OrderModel(
         id: 'ord_1',
-        orderNumber: 'RA-2026-62619',
+        orderNumber: 'RA-2026-47281',
         imageUrl:
             'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=500&auto=format&fit=crop',
         title: 'Ankara Print Hoodie',
         sellerName: 'AfroStyle KLA',
         price: 'UGX 78,000',
         quantity: 1,
-        selectedColor: 'Red',
+        selectedColor: 'Green',
         selectedSize: 'XL',
-        statusLabel: 'Shipped',
+        statusLabel: 'Out for Delivery',
         expectedDelivery: '3-5 Business Days',
-        estimatedDate: 'June 16-18, 2026',
+        estimatedDate: 'June 12, 2026',
         orderDate: DateTime(2026, 6, 10),
-        shippingAddress: 'Buganda Rd, Kampala',
+        shippingAddress: 'Plot 12, Buganda Road, Kampala',
         paymentMethod: 'Airtel Money',
         isPaid: true,
+        deliveryFee: 'UGX 8,500',
+        totalPrice: 'UGX 86,500',
       ),
       OrderModel(
         id: 'ord_2',
-        orderNumber: 'RA-2026-62540',
+        orderNumber: 'RA-2026-35192',
         imageUrl:
             'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=500&auto=format&fit=crop',
-        title: 'Masai Bracelet Set',
-        orderDate: DateTime(2026, 6, 8),
+        title: 'Beaded Necklace Set',
         sellerName: 'Heritage Jewels',
-        price: 'UGX 145,000',
-        statusLabel: 'Shipped',
+        price: 'UGX 35,000',
+        quantity: 2,
+        selectedColor: 'Blue',
+        selectedSize: 'One Size',
+        statusLabel: 'Delivered',
         expectedDelivery: '2-4 Business Days',
-        estimatedDate: 'June 14-16, 2026',
+        estimatedDate: 'May 28, 2026',
+        orderDate: DateTime(2026, 5, 26),
         shippingAddress: 'Kampala Road, Kampala',
         paymentMethod: 'MTN Mobile Money',
         isPaid: true,
+        deliveryFee: 'UGX 9,000',
+        totalPrice: 'UGX 79,000',
       ),
       OrderModel(
         id: 'ord_3',
@@ -56,50 +63,17 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
         quantity: 2,
         selectedColor: 'Gold',
         selectedSize: 'M',
-        statusLabel: 'Processing',
+        statusLabel: 'Active',
         expectedDelivery: '5-7 Business Days',
         estimatedDate: 'June 20-22, 2026',
         shippingAddress: 'Buganda Rd, Kampala',
         paymentMethod: 'Airtel Money',
         isPaid: true,
+        deliveryFee: 'UGX 5,000',
+        totalPrice: 'UGX 81,000',
       ),
       OrderModel(
         id: 'ord_4',
-        orderNumber: 'RA-2026-62200',
-        imageUrl:
-            'https://images.unsplash.com/photo-1503342217505-b0a15ec515c7?q=80&w=500&auto=format&fit=crop',
-        title: 'Dashiki Shirt Classic',
-        quantity: 1,
-        selectedSize: 'L',
-        orderDate: DateTime(2026, 5, 28),
-        statusLabel: 'Delivered',
-        sellerName: 'Craft Studio UG',
-        price: 'UGX 65,000',
-        expectedDelivery: '3-5 Business Days',
-        estimatedDate: 'June 5-7, 2026',
-        shippingAddress: 'Bea Town, Kampala',
-        paymentMethod: 'MTN Mobile Money',
-        isPaid: true,
-      ),
-      OrderModel(
-        id: 'ord_5',
-        orderNumber: 'RA-2026-61800',
-        imageUrl:
-            'https://images.unsplash.com/photo-1576566588028-09e027f7f1d2?q=80&w=500&auto=format&fit=crop',
-        title: 'African Print Trousers',
-        sellerName: 'AfroStyle KLA',
-        price: 'UGX 55,000',
-        orderDate: DateTime(2026, 5, 15),
-        selectedColor: 'Blue',
-        selectedSize: '32',
-        statusLabel: 'Delivered',
-        expectedDelivery: '3-5 Business Days',
-        estimatedDate: 'May 20-22, 2026',
-        paymentMethod: 'Cash on Delivery',
-        isPaid: false,
-      ),
-      OrderModel(
-        id: 'ord_5',
         orderNumber: 'RA-2026-61assad800',
         imageUrl:
             'https://images.unsplash.com/photo-1576566588028-09e027f7f1d2?q=80&w=500&auto=format&fit=crop',
@@ -109,72 +83,109 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
         orderDate: DateTime(2026, 5, 15),
         selectedColor: 'Blue',
         selectedSize: '32',
-        statusLabel: 'Canceled',
+        statusLabel: 'Cancelled',
         expectedDelivery: '3-5 Business Days',
         estimatedDate: 'May 20-22, 2026',
         paymentMethod: 'Cash on Delivery',
         isPaid: false,
+        deliveryFee: 'UGX 5,000',
+        totalPrice: 'UGX 63,000',
       ),
     ];
+    return _cachedOrders!;
+  }
+
+  @override
+  Future<List<OrderModel>> getMockOrders() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    return _initOrders();
   }
 
   @override
   Future<OrderDetailData> getMockOrderDetail(String orderId) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    final orders = await getMockOrders();
+    await Future.delayed(const Duration(milliseconds: 100));
+    final orders = _initOrders();
     final order = orders.firstWhere(
       (o) => o.id == orderId,
       orElse: () => orders.first,
     );
 
-    final isDelivered = order.statusLabel == 'Delivered';
-    final isShipped = order.statusLabel == 'Shipped';
-    final isProcessing = order.statusLabel == 'Processing';
-    final isactive = order.statusLabel == 'Active';
+    final status = order.statusLabel.toLowerCase();
+    final isCancelled = status == 'cancelled';
+    final isDelivered = status == 'delivered';
+    final isOutForDelivery = status == 'out for delivery';
+    final isShipped = status == 'shipped';
+    final isPreparing = status == 'preparing';
 
-    return OrderDetailData(
-      order: order,
-      tracking: [
+    final List<TrackingEventModel> trackingEvents;
+
+    if (isCancelled) {
+      trackingEvents = [
         const TrackingEventModel(
           title: 'Order Placed',
-          description: 'Your order has been placed successfully',
-          date: 'Jun 10, 2026 - 02:30 PM',
+          description: 'June 10, 10:30 AM',
+          date: '',
           isCompleted: true,
           isCurrent: false,
         ),
         const TrackingEventModel(
-          title: 'Payment Confirmed',
-          description: 'Payment has been confirmed',
-          date: 'Jun 10, 2026 - 02:35 PM',
+          title: 'Cancelled',
+          description: 'Your order was cancelled',
+          date: 'June 10, 11:30 AM',
+          isCompleted: true,
+          isCurrent: true,
+        ),
+      ];
+    } else {
+      trackingEvents = [
+        const TrackingEventModel(
+          title: 'Order Placed',
+          description: 'June 10, 10:30 AM',
+          date: '',
           isCompleted: true,
           isCurrent: false,
         ),
         TrackingEventModel(
-          title: 'Processing',
-          description: 'Seller is preparing your order',
-          date: 'Jun 11, 2026 - 09:00 AM',
-          isCompleted: !isProcessing,
-          isCurrent: isProcessing,
+          title: 'Order Confirmed',
+          description: 'June 10, 11:15 AM',
+          date: '',
+          isCompleted: isOutForDelivery || isShipped || isPreparing || isDelivered,
+          isCurrent: false,
+        ),
+        TrackingEventModel(
+          title: 'Preparing',
+          description: 'June 10, 2:00 PM',
+          date: '',
+          isCompleted: isOutForDelivery || isShipped || isDelivered,
+          isCurrent: isPreparing,
         ),
         TrackingEventModel(
           title: 'Shipped',
-          description: 'Your order has been shipped',
-          date: 'Jun 12, 2026 - 11:20 AM',
-          isCompleted: isDelivered,
+          description: 'June 11, 9:00 AM',
+          date: '',
+          isCompleted: isOutForDelivery || isDelivered,
           isCurrent: isShipped,
         ),
         TrackingEventModel(
+          title: 'Out for Delivery',
+          description: 'June 12, 8:00 AM',
+          date: '',
+          isCompleted: isDelivered,
+          isCurrent: isOutForDelivery,
+        ),
+        TrackingEventModel(
           title: 'Delivered',
-          description: isDelivered
-              ? 'Package delivered successfully'
-              : 'Package delivery pending',
-          date: isDelivered
-              ? 'Jun 14, 2026 - 03:10 PM'
-              : 'Estimated Jun 16-18',
+          description: isDelivered ? 'June 12, 12:30 PM' : 'Expected June 13',
+          date: '',
           isCompleted: isDelivered,
           isCurrent: false,
         ),
-      ],
+      ];
+    }
+
+    return OrderDetailData(
+      order: order,
+      tracking: trackingEvents,
     );
   }
 
@@ -182,18 +193,46 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
   Future<List<TrackingEventModel>> getMockTrackingEvents(
     String orderId,
   ) async {
-    await Future.delayed(const Duration(milliseconds: 200));
     return (await getMockOrderDetail(orderId)).tracking;
   }
 
   @override
   Future<OrderStatsEntity> getMockOrderStats() async {
-    await Future.delayed(const Duration(milliseconds: 200));
-    return const OrderStatsEntity(
-      total: 5,
-      processing: 1,
-      shipped: 2,
-      delivered: 2,
+    final orders = _initOrders();
+    int active = 0;
+    int delivered = 0;
+    for (var o in orders) {
+      final s = o.statusLabel.toLowerCase();
+      if (s == 'delivered') {
+        delivered++;
+      } else if (s != 'cancelled' && s != 'canceled') {
+        active++;
+      }
+    }
+
+    return OrderStatsEntity(
+      total: orders.length,
+      processing: active,
+      shipped: 0,
+      delivered: delivered,
     );
+  }
+
+  @override
+  Future<void> cancelOrder(String orderId) async {
+    final orders = _initOrders();
+    final index = orders.indexWhere((o) => o.id == orderId);
+    if (index != -1) {
+      orders[index] = orders[index].copyWith(statusLabel: 'Cancelled');
+    }
+  }
+
+  @override
+  Future<void> confirmDelivery(String orderId) async {
+    final orders = _initOrders();
+    final index = orders.indexWhere((o) => o.id == orderId);
+    if (index != -1) {
+      orders[index] = orders[index].copyWith(statusLabel: 'Delivered');
+    }
   }
 }

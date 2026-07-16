@@ -7,4 +7,6 @@ abstract class OrderRepository {
   Future<OrderEntity> getOrderDetail(String orderId);
   Future<List<TrackingEventEntity>> getTrackingEvents(String orderId);
   Future<OrderStatsEntity> getOrderStats();
+  Future<void> cancelOrder(String orderId);
+  Future<void> confirmDelivery(String orderId);
 }

@@ -5,6 +5,7 @@ import 'package:riddimafrica/core/core.dart';
 import '../../bindings/order_binding.dart';
 import '../controllers/order_list_controller.dart';
 import '../widgets/order_card.dart';
+import '../widgets/orders_app_bar.dart';
 
 class OrderListScreen extends StatefulWidget {
   const OrderListScreen({super.key});
@@ -28,17 +29,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        title: Text(
-          'My Orders',
-          style: AppTextStyle(context).boldTextStyle(
-            color: AppColors.white,
-            fontSize: AppTextStyle.title,
-          ),
-        ),
-        centerTitle: false,
+      appBar: const OrdersAppBar(
+        title: 'My Orders',
       ),
       body: Column(
         children: [
@@ -63,18 +55,19 @@ class _OrderListScreenState extends State<OrderListScreen> {
                   onTap: () => ctrl.setFilter(filter),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
+                      horizontal: 24,
                       vertical: 10,
                     ),
                     decoration: BoxDecoration(
                       color: ctrl.selectedFilter.value == filter
-                          ? AppColors.secondary
-                          : AppColors.primaryappbrown,
+                          ? AppColors.purple
+                          : Colors.transparent,
                       borderRadius: BorderRadius.circular(30),
                       border: Border.all(
                         color: ctrl.selectedFilter.value == filter
                             ? Colors.transparent
-                            : AppColors.primaryappbrownsecond,
+                            : AppColors.bordercolor,
+                        width: 1.5,
                       ),
                     ),
                     child: Text(
@@ -82,7 +75,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                       style: AppTextStyle(context).mediumTextStyle(
                         color: ctrl.selectedFilter.value == filter
                             ? AppColors.white
-                            : AppColors.primarytext,
+                            : AppColors.white,
                         fontSize: AppTextStyle.sm,
                       ),
                     ),
@@ -100,9 +93,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
     return Obx(() {
       if (ctrl.isLoading.value) {
         return const Center(
-          child: CircularProgressIndicator(
-            color: AppColors.onboardingbutton,
-          ),
+          child: CircularProgressIndicator(color: AppColors.onboardingbutton),
         );
       }
 
@@ -111,11 +102,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Iconsax.box,
-                size: 64,
-                color: AppColors.primarytext,
-              ),
+              const Icon(Iconsax.box, size: 64, color: AppColors.primarytext),
               const SizedBox(height: 16),
               Text(
                 'No orders found',

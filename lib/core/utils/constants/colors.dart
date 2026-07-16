@@ -17,13 +17,14 @@ class AppColors {
 
   static const Color onboardingbutton = Color(0xFFE6B650);
   static const Color textfieldelementcolor = Color(0xFFF0E8D8);
+  static const Color purple = Color(0xFF6F2C57);
 
   //border color
   static const Color bordercolor = Color(0xFF377A7D);
   static const Color textfieldcolor = Color(0xFF212B36);
 
   // ─── Status ────────────────────────────────────────────
-  static const Color success = Color(0xFF22C55E);
+  static const Color success = Color(0xFF3BB515);
   static const Color warning = Color(0xFFF59E0B);
   static const Color error = Color(0xFFDB321C);
   static const Color info = Color(0xFF3B82F6);

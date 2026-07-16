@@ -22,6 +22,8 @@ import 'package:riddimafrica/features/roles/user/features/market/presentation/sc
 import 'package:riddimafrica/features/roles/user/features/orders/bindings/order_binding.dart';
 import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_list_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_detail_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_confirmed_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_review_screen.dart';
 
 class AppRoute {
   static const String welcomescreen = "/welcomeScreen";
@@ -61,6 +63,8 @@ class AppRoute {
   //ORDERS
   static const String orderList = "/orderList";
   static const String orderDetail = "/orderDetail";
+  static const String orderConfirmed = "/orderConfirmed";
+  static const String orderReview = "/orderReview";
 
   static List<GetPage> routes = [
     GetPage(
@@ -142,6 +146,16 @@ class AppRoute {
     GetPage(
       name: orderDetail,
       page: () => const OrderDetailScreen(),
+      binding: OrderBinding(),
+    ),
+    GetPage(
+      name: orderConfirmed,
+      page: () => const OrderConfirmedScreen(),
+      binding: OrderBinding(),
+    ),
+    GetPage(
+      name: orderReview,
+      page: () => const OrderReviewScreen(),
       binding: OrderBinding(),
     ),
   ];
