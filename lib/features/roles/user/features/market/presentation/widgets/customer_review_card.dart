@@ -26,58 +26,65 @@ class CustomerReviewCard extends StatelessWidget {
         color: AppColors.primaryappbrown,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: AppColors.primaryappbrownsecond,
-            backgroundImage: NetworkImage(avatarUrl),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: AppColors.primaryappbrownsecond,
+                backgroundImage: NetworkImage(avatarUrl),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      name,
-                      style: AppTextStyle(
-                        context,
-                      ).boldTextStyle(color: AppColors.white, fontSize: 14),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          name,
+                          style: AppTextStyle(
+                            context,
+                          ).boldTextStyle(color: AppColors.white, fontSize: 14),
+                        ),
+                        Text(
+                          timeAgo,
+                          style: AppTextStyle(context).regularTextStyle(
+                            color: AppColors.primarytext,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      timeAgo,
-                      style: AppTextStyle(context).regularTextStyle(
-                        color: AppColors.primarytext,
-                        fontSize: 12,
-                      ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: List.generate(5, (index) {
+                        final isFilled = index < rating;
+                        return Icon(
+                          isFilled ? Icons.star : Icons.star_border,
+                          color: AppColors.onboardingbutton,
+                          size: 14,
+                        );
+                      }),
                     ),
+                    const SizedBox(height: 8),
                   ],
                 ),
-                const SizedBox(height: 4),
-                Row(
-                  children: List.generate(5, (index) {
-                    final isFilled = index < rating;
-                    return Icon(
-                      isFilled ? Icons.star : Icons.star_border,
-                      color: AppColors.onboardingbutton,
-                      size: 14,
-                    );
-                  }),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  comment,
-                  style: AppTextStyle(context).regularTextStyle(
-                    color: AppColors.onboardingtext.withValues(alpha: 0.9),
-                    fontSize: 13,
-                    lineHeight: 18,
-                  ),
-                ),
-              ],
+              ),
+            ],
+          ),
+          Text(
+            comment,
+            textAlign: TextAlign.start,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyle(context).regularTextStyle(
+              color: AppColors.onboardingtext.withValues(alpha: 0.9),
+              fontSize: 13,
+              lineHeight: 18,
             ),
           ),
         ],

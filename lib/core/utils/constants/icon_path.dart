@@ -15,4 +15,5 @@ class IconPath {
   static const String cartNew = 'assets/icons/cartnew.svg';
   static const String notification = 'assets/icons/notification.svg';
   static const String search = 'assets/icons/search.svg';
+  static const String microphone = 'assets/icons/microphone.svg';
 }

@@ -6,6 +6,7 @@ import 'package:riddimafrica/core/common/widgets/custom_search_bar.dart';
 import 'package:riddimafrica/core/common/widgets/product_card.dart';
 import '../widgets/category_chips_row.dart';
 import 'package:get/get.dart';
+import 'package:riddimafrica/routes/app_routes.dart';
 import '../controllers/user_home_controller.dart';
 
 class UserHomeScreen extends GetView<UserHomeController> {
@@ -26,7 +27,8 @@ class UserHomeScreen extends GetView<UserHomeController> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: CustomSearchBar(
-                onChanged: controller.onSearchChanged,
+                readOnly: true,
+                onTap: () => Get.toNamed(AppRoute.globalSearch),
               ),
             ),
             const SizedBox(height: 24),
