@@ -45,10 +45,9 @@ class _RadioChatViewState extends State<RadioChatView> {
                     SizedBox(width: 10.w),
                     Text(
                       'Live Chat',
-                      style: AppTextStyle(context).boldTextStyle(
-                        color: AppColors.white,
-                        fontSize: 20,
-                      ),
+                      style: AppTextStyle(
+                        context,
+                      ).boldTextStyle(color: AppColors.white, fontSize: 20),
                     ),
                   ],
                 ),
@@ -127,17 +126,23 @@ class _RadioChatViewState extends State<RadioChatView> {
 
               // 4. Chat Messages List
               Obx(() {
-                if (controller.isChatLoading.value && controller.chatMessages.isEmpty) {
+                if (controller.isChatLoading.value &&
+                    controller.chatMessages.isEmpty) {
                   return const Center(
                     child: Padding(
                       padding: EdgeInsets.all(24.0),
-                      child: CircularProgressIndicator(color: AppColors.bordercolor),
+                      child: CircularProgressIndicator(
+                        color: AppColors.bordercolor,
+                      ),
                     ),
                   );
                 }
 
                 return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 8.h,
+                  ),
                   child: Column(
                     children: controller.chatMessages
                         .map((message) => _ChatBubble(message: message))
@@ -155,10 +160,7 @@ class _RadioChatViewState extends State<RadioChatView> {
           decoration: const BoxDecoration(
             color: AppColors.primary,
             border: Border(
-              top: BorderSide(
-                color: AppColors.primaryappbrownsecond,
-                width: 1,
-              ),
+              top: BorderSide(color: AppColors.primaryappbrownsecond, width: 1),
             ),
           ),
           child: Row(
@@ -181,6 +183,7 @@ class _RadioChatViewState extends State<RadioChatView> {
                             fontSize: 16.sp,
                           ),
                           decoration: InputDecoration(
+                            focusedBorder: InputBorder.none,
                             hintText: 'Type a message...',
                             hintStyle: GoogleFonts.outfit(
                               color: Colors.grey.shade600,
@@ -212,11 +215,7 @@ class _RadioChatViewState extends State<RadioChatView> {
                     shape: BoxShape.circle,
                   ),
                   child: const Center(
-                    child: Icon(
-                      Icons.send,
-                      color: AppColors.white,
-                      size: 20,
-                    ),
+                    child: Icon(Icons.send, color: AppColors.white, size: 20),
                   ),
                 ),
               ),
