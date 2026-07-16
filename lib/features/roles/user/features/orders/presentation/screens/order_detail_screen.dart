@@ -64,9 +64,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
             if (order == null) return const SizedBox.shrink();
             return Padding(
               padding: const EdgeInsets.only(right: 16),
-              child: Center(
-                child: _buildStatusBadge(context, order),
-              ),
+              child: Center(child: _buildStatusBadge(context, order)),
             );
           }),
         ],
@@ -74,9 +72,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(
-            child: CircularProgressIndicator(
-              color: AppColors.onboardingbutton,
-            ),
+            child: CircularProgressIndicator(color: AppColors.onboardingbutton),
           );
         }
 
@@ -132,10 +128,9 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
       ),
       child: Text(
         order.statusLabel,
-        style: AppTextStyle(context).boldTextStyle(
-          color: textColor,
-          fontSize: AppTextStyle.xs,
-        ),
+        style: AppTextStyle(
+          context,
+        ).boldTextStyle(color: textColor, fontSize: AppTextStyle.xs),
       ),
     );
   }
@@ -161,7 +156,10 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                 fit: BoxFit.cover,
                 errorBuilder: (_, _, _) => Container(
                   color: AppColors.primaryappbrownsecond,
-                  child: const Icon(Iconsax.image, color: AppColors.primarytext),
+                  child: const Icon(
+                    Iconsax.image,
+                    color: AppColors.primarytext,
+                  ),
                 ),
               ),
             ),
@@ -245,10 +243,9 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
             order.shippingAddress.isNotEmpty
                 ? order.shippingAddress
                 : 'Plot 12, Buganda Road, Kampala',
-            style: AppTextStyle(context).boldTextStyle(
-              color: AppColors.white,
-              fontSize: AppTextStyle.md,
-            ),
+            style: AppTextStyle(
+              context,
+            ).boldTextStyle(color: AppColors.white, fontSize: AppTextStyle.md),
           ),
           const SizedBox(height: 16),
           Row(
@@ -308,10 +305,9 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
         children: [
           Text(
             'Tracking Timeline',
-            style: AppTextStyle(context).boldTextStyle(
-              color: AppColors.white,
-              fontSize: AppTextStyle.md,
-            ),
+            style: AppTextStyle(
+              context,
+            ).boldTextStyle(color: AppColors.white, fontSize: AppTextStyle.md),
           ),
           const SizedBox(height: 16),
           TrackingTimeline(events: controller.trackingEvents),
@@ -375,14 +371,16 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
         backgroundColor: AppColors.primaryappbrown,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: AppColors.primaryappbrownsecond, width: 1.5),
+          side: const BorderSide(
+            color: AppColors.primaryappbrownsecond,
+            width: 1.5,
+          ),
         ),
         title: Text(
           'Confirm Receipt',
-          style: AppTextStyle(context).boldTextStyle(
-            color: AppColors.white,
-            fontSize: AppTextStyle.lg,
-          ),
+          style: AppTextStyle(
+            context,
+          ).boldTextStyle(color: AppColors.white, fontSize: AppTextStyle.lg),
         ),
         content: Text(
           'Are you sure you have received your order?',
@@ -396,9 +394,9 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
             onPressed: () => Get.back(),
             child: Text(
               'Cancel',
-              style: AppTextStyle(context).semiBoldTextStyle(
-                color: AppColors.primarytext,
-              ),
+              style: AppTextStyle(
+                context,
+              ).semiBoldTextStyle(color: AppColors.primarytext),
             ),
           ),
           TextButton(
@@ -409,9 +407,9 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
             },
             child: Text(
               'Confirm',
-              style: AppTextStyle(context).semiBoldTextStyle(
-                color: AppColors.success,
-              ),
+              style: AppTextStyle(
+                context,
+              ).semiBoldTextStyle(color: AppColors.success),
             ),
           ),
         ],
@@ -425,14 +423,16 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
         backgroundColor: AppColors.primaryappbrown,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: AppColors.primaryappbrownsecond, width: 1.5),
+          side: const BorderSide(
+            color: AppColors.primaryappbrownsecond,
+            width: 1.5,
+          ),
         ),
         title: Text(
           'Cancel Order',
-          style: AppTextStyle(context).boldTextStyle(
-            color: AppColors.white,
-            fontSize: AppTextStyle.lg,
-          ),
+          style: AppTextStyle(
+            context,
+          ).boldTextStyle(color: AppColors.white, fontSize: AppTextStyle.lg),
         ),
         content: Text(
           'Are you sure you want to cancel this order?',
@@ -446,9 +446,9 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
             onPressed: () => Get.back(),
             child: Text(
               'No',
-              style: AppTextStyle(context).semiBoldTextStyle(
-                color: AppColors.primarytext,
-              ),
+              style: AppTextStyle(
+                context,
+              ).semiBoldTextStyle(color: AppColors.primarytext),
             ),
           ),
           TextButton(
@@ -458,9 +458,9 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
             },
             child: Text(
               'Yes, Cancel',
-              style: AppTextStyle(context).semiBoldTextStyle(
-                color: AppColors.error,
-              ),
+              style: AppTextStyle(
+                context,
+              ).semiBoldTextStyle(color: AppColors.error),
             ),
           ),
         ],
@@ -470,8 +470,18 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
 
   String _formatDate(DateTime date) {
     const allMonths = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
-      'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'June',
+      'July',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${allMonths[date.month - 1]} ${date.day}, ${date.year}';
   }

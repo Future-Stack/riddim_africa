@@ -11,6 +11,11 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final status = order.statusLabel.toLowerCase();
+    final isCancelled = status == 'cancelled' || status == 'canceled';
+    final isDelivered = status == 'delivered';
+    final isActive = !isCancelled && !isDelivered;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -31,7 +36,7 @@ class OrderCard extends StatelessWidget {
                   children: [
                     const Icon(
                       Iconsax.box,
-                      color: AppColors.onboardingbutton,
+                      color: AppColors.secondary,
                       size: 20,
                     ),
                     const SizedBox(width: 8),
@@ -75,7 +80,7 @@ class OrderCard extends StatelessWidget {
                   child: Text(
                     '${order.title} × ${order.quantity}',
                     style: AppTextStyle(context).mediumTextStyle(
-                      color: AppColors.primarytext,
+                      color: AppColors.white,
                       fontSize: AppTextStyle.md,
                     ),
                     maxLines: 1,
@@ -84,6 +89,47 @@ class OrderCard extends StatelessWidget {
                 ),
               ],
             ),
+
+            if (isActive || isCancelled) ...[
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                decoration: BoxDecoration(
+                  color: AppColors.secondary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: AppColors.secondary.withValues(alpha: 0.2),
+                    width: 1.2,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      isActive ? Icons.rotate_left : Icons.check,
+                      color: AppColors.secondary,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        isActive
+                            ? 'In progress — ${order.totalPrice.isNotEmpty ? order.totalPrice : order.price}'
+                            : 'Refund Completed — ${order.totalPrice.isNotEmpty ? order.totalPrice : order.price}',
+                        style: AppTextStyle(context).mediumTextStyle(
+                          color: AppColors.white,
+                          fontSize: AppTextStyle.sm,
+                        ),
+                      ),
+                    ),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: AppColors.secondary,
+                      size: 16,
+                    ),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: 12),
 
             const Divider(
@@ -125,17 +171,23 @@ class OrderCard extends StatelessWidget {
     final status = order.statusLabel.toLowerCase();
 
     if (status == 'delivered') {
-      bgColor = AppColors.success;
-      textColor = AppColors.white;
+      bgColor = AppColors.success.withValues(alpha: 0.15);
+      textColor = AppColors.success;
     } else if (status == 'cancelled' || status == 'canceled') {
-      bgColor = AppColors.error.withValues(alpha: 0.15);
-      textColor = AppColors.error;
-    } else if (status == 'out for delivery') {
-      bgColor = AppColors.onboardingbutton.withValues(alpha: 0.15);
-      textColor = AppColors.onboardingbutton;
+      bgColor = AppColors.secondary.withValues(alpha: 0.15);
+      textColor = AppColors.secondary;
     } else {
-      bgColor = AppColors.warning.withValues(alpha: 0.15);
-      textColor = AppColors.warning;
+      bgColor = AppColors.secondary.withValues(alpha: 0.15);
+      textColor = AppColors.secondary;
+    }
+
+    String labelText;
+    if (status == 'cancelled' || status == 'canceled') {
+      labelText = 'Cancelled';
+    } else if (status == 'delivered') {
+      labelText = 'Delivered';
+    } else {
+      labelText = 'Open';
     }
 
     return Container(
@@ -145,7 +197,7 @@ class OrderCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        order.statusLabel,
+        labelText,
         style: AppTextStyle(context).boldTextStyle(
           color: textColor,
           fontSize: AppTextStyle.xs,

@@ -51,10 +51,9 @@ class _OrderListScreenState extends State<OrderListScreen> {
         ),
         title: Text(
           'My Orders',
-          style: AppTextStyle(context).boldTextStyle(
-            color: AppColors.white,
-            fontSize: AppTextStyle.title,
-          ),
+          style: AppTextStyle(
+            context,
+          ).boldTextStyle(color: AppColors.white, fontSize: AppTextStyle.title),
         ),
         centerTitle: false,
       ),
@@ -86,13 +85,13 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     ),
                     decoration: BoxDecoration(
                       color: ctrl.selectedFilter.value == filter
-                          ? const Color(0xFF5B224E)
+                          ? AppColors.purple
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(30),
                       border: Border.all(
                         color: ctrl.selectedFilter.value == filter
                             ? Colors.transparent
-                            : AppColors.primaryappbrownsecond,
+                            : AppColors.bordercolor,
                         width: 1.5,
                       ),
                     ),
@@ -101,7 +100,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                       style: AppTextStyle(context).mediumTextStyle(
                         color: ctrl.selectedFilter.value == filter
                             ? AppColors.white
-                            : AppColors.primarytext,
+                            : AppColors.white,
                         fontSize: AppTextStyle.sm,
                       ),
                     ),
@@ -119,9 +118,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
     return Obx(() {
       if (ctrl.isLoading.value) {
         return const Center(
-          child: CircularProgressIndicator(
-            color: AppColors.onboardingbutton,
-          ),
+          child: CircularProgressIndicator(color: AppColors.onboardingbutton),
         );
       }
 
@@ -130,11 +127,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Iconsax.box,
-                size: 64,
-                color: AppColors.primarytext,
-              ),
+              const Icon(Iconsax.box, size: 64, color: AppColors.primarytext),
               const SizedBox(height: 16),
               Text(
                 'No orders found',
