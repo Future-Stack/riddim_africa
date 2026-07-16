@@ -294,6 +294,7 @@ class ArtistProfileScreen extends GetView<ArtistProfileController> {
       itemBuilder: (context, index) {
         final product = products[index];
         return ProductCard(
+          
           imageUrl: product.imageUrl,
           title: product.title,
           subtitle: '', // empty hides subtitle
