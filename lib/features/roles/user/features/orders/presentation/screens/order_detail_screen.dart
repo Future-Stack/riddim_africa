@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
 import '../controllers/order_detail_controller.dart';
 import '../widgets/tracking_timeline.dart';
+import '../widgets/orders_app_bar.dart';
 
 class OrderDetailScreen extends GetView<OrderDetailController> {
   const OrderDetailScreen({super.key});
@@ -12,28 +13,8 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        leadingWidth: 60,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
-          child: GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: AppColors.primaryappbrownsecond,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: AppColors.white,
-                size: 20,
-              ),
-            ),
-          ),
-        ),
-        title: Obx(() {
+      appBar: OrdersAppBar(
+        titleWidget: Obx(() {
           final order = controller.order.value;
           if (order == null) return const SizedBox.shrink();
           return Column(
@@ -43,7 +24,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                 'Order ${order.orderNumber}',
                 style: AppTextStyle(context).boldTextStyle(
                   color: AppColors.white,
-                  fontSize: AppTextStyle.md,
+                  fontSize: AppTextStyle.lg,
                 ),
               ),
               const SizedBox(height: 2),
@@ -57,7 +38,6 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
             ],
           );
         }),
-        centerTitle: false,
         actions: [
           Obx(() {
             final order = controller.order.value;

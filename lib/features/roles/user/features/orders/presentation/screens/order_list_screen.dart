@@ -5,6 +5,7 @@ import 'package:riddimafrica/core/core.dart';
 import '../../bindings/order_binding.dart';
 import '../controllers/order_list_controller.dart';
 import '../widgets/order_card.dart';
+import '../widgets/orders_app_bar.dart';
 
 class OrderListScreen extends StatefulWidget {
   const OrderListScreen({super.key});
@@ -28,34 +29,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        leadingWidth: 60,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
-          child: GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: AppColors.primaryappbrownsecond,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: AppColors.white,
-                size: 20,
-              ),
-            ),
-          ),
-        ),
-        title: Text(
-          'My Orders',
-          style: AppTextStyle(
-            context,
-          ).boldTextStyle(color: AppColors.white, fontSize: AppTextStyle.title),
-        ),
-        centerTitle: false,
+      appBar: const OrdersAppBar(
+        title: 'My Orders',
       ),
       body: Column(
         children: [

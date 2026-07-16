@@ -23,7 +23,10 @@ class OrderCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.primaryappbrown,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.primaryappbrownsecond, width: 1.5),
+          border: Border.all(
+            color: AppColors.primaryappbrownsecond,
+            width: 1.5,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +96,10 @@ class OrderCard extends StatelessWidget {
             if (isActive || isCancelled) ...[
               const SizedBox(height: 16),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.secondary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
@@ -171,8 +177,8 @@ class OrderCard extends StatelessWidget {
     final status = order.statusLabel.toLowerCase();
 
     if (status == 'delivered') {
-      bgColor = AppColors.success.withValues(alpha: 0.15);
-      textColor = AppColors.success;
+      bgColor = AppColors.success;
+      textColor = AppColors.white;
     } else if (status == 'cancelled' || status == 'canceled') {
       bgColor = AppColors.secondary.withValues(alpha: 0.15);
       textColor = AppColors.secondary;
@@ -198,18 +204,27 @@ class OrderCard extends StatelessWidget {
       ),
       child: Text(
         labelText,
-        style: AppTextStyle(context).boldTextStyle(
-          color: textColor,
-          fontSize: AppTextStyle.xs,
-        ),
+        style: AppTextStyle(
+          context,
+        ).boldTextStyle(color: textColor, fontSize: AppTextStyle.xs),
       ),
     );
   }
 
   String _formatDate(DateTime date) {
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
     return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }

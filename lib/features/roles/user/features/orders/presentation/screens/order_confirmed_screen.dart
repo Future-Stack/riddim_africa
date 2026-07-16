@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import '../../domain/entities/order_entity.dart';
+import '../widgets/orders_app_bar.dart';
 
 class OrderConfirmedScreen extends StatelessWidget {
   const OrderConfirmedScreen({super.key});
@@ -12,50 +13,9 @@ class OrderConfirmedScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        leadingWidth: 60,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
-          child: GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: AppColors.primaryappbrownsecond,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: AppColors.white,
-                size: 20,
-              ),
-            ),
-          ),
-        ),
-        title: order != null
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Order ${order.orderNumber}',
-                    style: AppTextStyle(context).boldTextStyle(
-                      color: AppColors.white,
-                      fontSize: AppTextStyle.md,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    _formatDate(order.orderDate),
-                    style: AppTextStyle(context).regularTextStyle(
-                      color: AppColors.primarytext,
-                      fontSize: AppTextStyle.xs,
-                    ),
-                  ),
-                ],
-              )
-            : const SizedBox.shrink(),
-        centerTitle: false,
+      appBar: OrdersAppBar(
+        orderNumber: order?.orderNumber,
+        orderDate: order?.orderDate,
       ),
       body: SafeArea(
         child: Padding(
@@ -160,13 +120,5 @@ class OrderConfirmedScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _formatDate(DateTime date) {
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
-      'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-    return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
 }
