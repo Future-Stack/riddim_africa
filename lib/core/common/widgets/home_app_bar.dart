@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/routes/app_routes.dart';
 import 'package:riddimafrica/features/notification/presentation/controllers/notification_controller.dart';
@@ -54,7 +53,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                         right: -4,
                         top: -4,
                         child: Obx(() {
-                          final unread = Get.find<NotificationController>().unreadCount;
+                          final unread =
+                              Get.find<NotificationController>().unreadCount;
                           if (unread == 0) return const SizedBox.shrink();
                           return Container(
                             padding: const EdgeInsets.all(4.0),
@@ -91,21 +91,26 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 const SizedBox(width: 12),
 
                 // Shopping Cart Icon
-                Container(
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    color: AppColors.secondary,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.white, width: 1.5),
-                  ),
-                  child: SvgPicture.asset(
-                    IconPath.cartNew, // path to your svg
-                    width: 20,
-                    height: 20,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors
-                          .white, // tint the icon if it's a single-color svg
-                      BlendMode.srcIn,
+                InkWell(
+                  onTap: () {
+                    Get.toNamed(AppRoute.marketCart);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.white, width: 1.5),
+                    ),
+                    child: SvgPicture.asset(
+                      IconPath.cartNew, // path to your svg
+                      width: 20,
+                      height: 20,
+                      colorFilter: const ColorFilter.mode(
+                        AppColors
+                            .white, // tint the icon if it's a single-color svg
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ),

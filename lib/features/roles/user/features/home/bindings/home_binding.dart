@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:riddimafrica/features/notification/presentation/controllers/notification_controller.dart';
+import 'package:riddimafrica/features/roles/user/features/radio/bindings/radio_binding.dart';
+import 'package:riddimafrica/features/roles/user/features/market/binding/market_binding.dart';
 import '../data/datasources/home_local_data_source.dart';
 import '../data/repositories/home_repository_impl.dart';
 import '../domain/repositories/home_repository.dart';
@@ -21,5 +23,9 @@ class HomeBinding extends Bindings {
           Get.find<GetHomeProductsUseCase>(),
           Get.find<GetSuggestedArtistsUseCase>(),
         ));
+        
+    // Inject Radio and Market dependencies
+    RadioBinding().dependencies();
+    MarketBinding().dependencies();
   }
 }
