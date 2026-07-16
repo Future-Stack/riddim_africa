@@ -37,8 +37,9 @@ class SellerInfoRow extends StatelessWidget {
             CircleAvatar(
               radius: 22,
               backgroundColor: AppColors.primaryappbrown,
-              backgroundImage:
-                  avatarUrl.isNotEmpty ? NetworkImage(avatarUrl) : null,
+              backgroundImage: avatarUrl.isNotEmpty
+                  ? NetworkImage(avatarUrl)
+                  : null,
               child: avatarUrl.isEmpty
                   ? const Icon(
                       Iconsax.user,

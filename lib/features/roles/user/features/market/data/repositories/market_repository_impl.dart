@@ -29,4 +29,11 @@ class MarketRepositoryImpl implements MarketRepository {
   Future<List<DeliveryAddressEntity>> getDeliveryAddresses() async {
     return localDataSource.getMockDeliveryAddresses();
   }
+
+  @override
+  Future<List<MarketProductEntity>> getArtistProducts(
+    String artistName,
+  ) async {
+    return localDataSource.getMockArtistProducts(artistName);
+  }
 }
