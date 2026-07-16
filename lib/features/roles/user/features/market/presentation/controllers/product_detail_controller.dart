@@ -18,6 +18,7 @@ class ProductDetailController extends GetxController {
   final RxInt selectedImageIndex = 0.obs;
   final RxInt selectedColorIndex = 0.obs;
   final RxInt selectedSizeIndex = 0.obs;
+  final RxInt quantity = 1.obs;
 
   // Data
   final Rx<MarketProductEntity?> product = Rx<MarketProductEntity?>(null);
@@ -64,11 +65,21 @@ class ProductDetailController extends GetxController {
     isFavorite.value = !isFavorite.value;
   }
 
+  void incrementQuantity() {
+    quantity.value++;
+  }
+
+  void decrementQuantity() {
+    if (quantity.value > 1) {
+      quantity.value--;
+    }
+  }
+
   void addToCart() {
     Get.snackbar('Success', '${product.value?.title} added to cart');
   }
 
   void buyNow() {
-    Get.toNamed('/marketCheckout');
+    Get.toNamed('/marketCart');
   }
 }

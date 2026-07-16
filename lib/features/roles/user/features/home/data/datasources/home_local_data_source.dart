@@ -1,7 +1,9 @@
 import '../models/product_model.dart';
+import '../models/artist_model.dart';
 
 abstract class HomeLocalDataSource {
   Future<List<ProductModel>> getMockProducts();
+  Future<List<ArtistModel>> getMockArtists();
 }
 
 class HomeLocalDataSourceImpl implements HomeLocalDataSource {
@@ -52,6 +54,27 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
         categoryText: 'Crafts',
         price: 'UGX 25,000',
         isHot: true,
+      ),
+    ];
+  }
+
+  @override
+  Future<List<ArtistModel>> getMockArtists() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return const [
+      ArtistModel(
+        id: 'a1',
+        name: 'Bobi Wine',
+        imageUrl:
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop',
+        genre: 'Afropop',
+      ),
+      ArtistModel(
+        id: 'a2',
+        name: 'Eddy Kenzo',
+        imageUrl:
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop',
+        genre: 'Afrobeats',
       ),
     ];
   }

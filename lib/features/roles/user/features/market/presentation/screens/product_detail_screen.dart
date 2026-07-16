@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
-import 'package:riddimafrica/routes/app_routes.dart';
 import '../controllers/product_detail_controller.dart';
 import '../widgets/product_image_gallery.dart';
 import '../widgets/rating_row.dart';
 import '../widgets/related_product_card.dart';
 import '../widgets/seller_info_row.dart';
 import '../widgets/stock_badge.dart';
+import '../widgets/customer_review_card.dart';
+import '../widgets/quantity_selector.dart';
+import '../widgets/product_spec_dropdown.dart';
 
 class ProductDetailScreen extends GetView<ProductDetailController> {
   const ProductDetailScreen({super.key});
@@ -150,6 +152,71 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
                               const SizedBox(height: 24),
                             ],
 
+                            // Quantity Selector Row
+                            Obx(
+                              () => QuantitySelector(
+                                quantity: controller.quantity.value,
+                                onIncrement: controller.incrementQuantity,
+                                onDecrement: controller.decrementQuantity,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+
+                            // Color & Size Selectors Row
+                            Row(
+                              children: [
+                                Obx(
+                                  () => ProductSpecDropdown(
+                                    label: 'Color:',
+                                    items: product.availableColors,
+                                    selectedIndex:
+                                        controller.selectedColorIndex.value,
+                                    onSelected: controller.selectColor,
+                                  ),
+                                ),
+                                const SizedBox(width: 24),
+                                Obx(
+                                  () => ProductSpecDropdown(
+                                    label: 'Size:',
+                                    items: product.availableSizes,
+                                    selectedIndex:
+                                        controller.selectedSizeIndex.value,
+                                    onSelected: controller.selectSize,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 24),
+
+                            // Customer Reviews Section
+                            Text(
+                              'Customer Reviews',
+                              style: AppTextStyle(context).boldTextStyle(
+                                color: AppColors.white,
+                                fontSize: 18,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            const CustomerReviewCard(
+                              name: 'Nakato Sarah',
+                              timeAgo: '2 days ago',
+                              avatarUrl:
+                                  'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop',
+                              rating: 5,
+                              comment:
+                                  'Beautiful quality! The fabric is amazing and delivery was fast.',
+                            ),
+                            const CustomerReviewCard(
+                              name: 'Mugisha Alex',
+                              timeAgo: '1 week ago',
+                              avatarUrl:
+                                  'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&auto=format&fit=crop',
+                              rating: 4,
+                              comment:
+                                  'Great product, exactly as described. Will buy again!',
+                            ),
+                            const SizedBox(height: 24),
+
                             // Related Products Header
                             Text(
                               'Related Products',
@@ -213,7 +280,7 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
                     Expanded(
                       child: ProElevatedButton(
                         leadingIcon: Iconsax.shopping_cart,
-
+                        onPressed: controller.addToCart,
                         backgroundColor: AppColors.onboardingbutton,
                         text: "Add to Cart",
                         textColor: AppColors.black,
@@ -226,10 +293,7 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
                     Expanded(
                       child: ProElevatedButton(
                         leadingIcon: Iconsax.flash,
-                        onPressed: () {
-                          Get.toNamed(AppRoute.marketCart);
-                        },
-
+                        onPressed: controller.buyNow,
                         backgroundColor: AppColors.secondary,
                         text: "Buy Now",
                         textColor: AppColors.white,

@@ -24,7 +24,8 @@ class ProductImageGallery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayImage = galleryImages.isNotEmpty && selectedIndex < galleryImages.length
+    final displayImage =
+        galleryImages.isNotEmpty && selectedIndex < galleryImages.length
         ? galleryImages[selectedIndex]
         : mainImageUrl;
 
@@ -100,42 +101,64 @@ class ProductImageGallery extends StatelessWidget {
               right: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  galleryImages.length,
-                  (index) => GestureDetector(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: List.generate(galleryImages.length, (index) {
+                  final isSelected = selectedIndex == index;
+                  final size = isSelected ? 54.0 : 40.0;
+
+                  return GestureDetector(
                     onTap: () => onImageSelected?.call(index),
-                    child: Container(
-                      width: 50,
-                      height: 50,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 220),
+                      curve: Curves.easeOut,
+                      width: size,
+                      height: size,
                       margin: const EdgeInsets.symmetric(horizontal: 6.0),
+                      padding: isSelected
+                          ? const EdgeInsets.all(3.0)
+                          : EdgeInsets.zero,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: selectedIndex == index
-                              ? AppColors.white
-                              : AppColors.transparent,
-                          width: 2.0,
+                        borderRadius: BorderRadius.circular(
+                          isSelected ? 10.0 : 8.0,
                         ),
+
+                        border: isSelected
+                            ? Border.all(
+                                color: const Color(0xFFE3A63E),
+                                width: 2.0,
+                              )
+                            : null,
+                        boxShadow: isSelected
+                            ? [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.35),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ]
+                            : null,
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(
+                          isSelected ? 7.0 : 8.0,
+                        ),
                         child: Image.network(
                           galleryImages[index],
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
                               Container(
-                            color: AppColors.primaryappbrown,
-                            child: const Icon(
-                              Iconsax.image,
-                              color: AppColors.primarytext,
-                              size: 16,
-                            ),
-                          ),
+                                color: AppColors.primaryappbrown,
+                                child: const Icon(
+                                  Iconsax.image,
+                                  color: AppColors.primarytext,
+                                  size: 14,
+                                ),
+                              ),
                         ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                }),
               ),
             ),
         ],

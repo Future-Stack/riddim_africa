@@ -6,6 +6,7 @@ import 'package:riddimafrica/features/authentication/bindings/auth_binding.dart'
 import 'package:riddimafrica/features/bottom_nav/presentation/UI/artist_bottom_nav.dart';
 import 'package:riddimafrica/features/bottom_nav/presentation/UI/seller_bottom_nav.dart';
 import 'package:riddimafrica/features/roles/user/features/home/presentation/screens/home_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/home/presentation/screens/global_search.dart';
 import 'package:riddimafrica/features/roles/user/features/home/bindings/home_binding.dart';
 import 'package:riddimafrica/features/splash/bindings/splash_binding.dart';
 import 'package:riddimafrica/features/bottom_nav/presentation/UI/user_bottom_nav.dart';
@@ -56,6 +57,7 @@ class AppRoute {
   //USER
 
   static const String userhomescreen = "/userhomescreen";
+  static const String globalSearch = "/globalSearch";
   static const String marketProductDetail = "/marketProductDetail";
   static const String marketCart = "/marketCart";
   static const String marketCheckout = "/marketCheckout";
@@ -119,6 +121,11 @@ class AppRoute {
     GetPage(
       name: userhomescreen,
       page: () => const UserHomeScreen(),
+      binding: HomeBinding(),
+    ),
+    GetPage(
+      name: globalSearch,
+      page: () => const GlobalSearchScreen(),
       binding: HomeBinding(),
     ),
     GetPage(

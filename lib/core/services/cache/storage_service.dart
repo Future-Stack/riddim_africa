@@ -38,6 +38,17 @@ class StorageService {
 
   // Getter for token
   static String? get token => _preferences?.getString(_tokenKey);
+
+  // Recent Searches cache methods
+  static const String _recentSearchesKey = 'recent_searches';
+
+  static List<String> getRecentSearches() {
+    return _preferences?.getStringList(_recentSearchesKey) ?? [];
+  }
+
+  static Future<void> saveRecentSearches(List<String> searches) async {
+    await _preferences?.setStringList(_recentSearchesKey, searches);
+  }
 }
 
 
