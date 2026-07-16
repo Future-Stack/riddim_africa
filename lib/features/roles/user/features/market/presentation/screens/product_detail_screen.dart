@@ -89,7 +89,7 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
                               product.price,
                               style: AppTextStyle(context).boldTextStyle(
                                 color: AppColors.onboardingbutton,
-                                fontSize: 24,
+                                fontSize: 24.sp,
                               ),
                             ),
                             const SizedBox(height: 12),

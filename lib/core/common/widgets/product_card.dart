@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/core/utils/constants/colors.dart';
 import 'package:riddimafrica/core/common/styles/global_text_style.dart';
 
@@ -185,7 +186,7 @@ class ProductCard extends StatelessWidget {
                           price,
                           style: AppTextStyle(context).boldTextStyle(
                             color: AppColors.onboardingbutton,
-                            fontSize: 16,
+                            fontSize: 12.sp,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

@@ -166,7 +166,6 @@ class ArtistProfileScreen extends GetView<ArtistProfileController> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
                   ],
                 ),
               ),
