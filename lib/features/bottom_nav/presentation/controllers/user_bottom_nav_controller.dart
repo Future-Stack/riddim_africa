@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/features/roles/user/features/home/presentation/screens/home_screen.dart';
-import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_list_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/radio/presentation/screens/radio_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/cart_screen.dart';
 import '../../domain/entities/nav_model.dart';
 
 // ─── Placeholder screens ───────────────────────────────────────────────────
@@ -58,8 +59,8 @@ class UserBottomNavController extends GetxController {
   final List<Widget> screens = [
     const UserHomeScreen(),
     const ProductsScreen(),
-    OrderListScreen(),
-    const RevenueScreen(),
+    const RadioScreen(),
+    const CartScreen(),
     const ProfileScreen(),
   ];
 

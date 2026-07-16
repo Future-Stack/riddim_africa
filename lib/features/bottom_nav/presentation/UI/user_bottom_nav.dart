@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:riddimafrica/core/utils/constants/sizer.dart';
-import '../controllers/user_bottom_nav_controller copy 2.dart';
+import '../controllers/user_bottom_nav_controller.dart';
 import 'package:riddimafrica/core/utils/constants/colors.dart';
 import 'package:riddimafrica/core/common/styles/global_text_style.dart';
 

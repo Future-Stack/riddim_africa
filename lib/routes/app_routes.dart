@@ -26,6 +26,8 @@ import 'package:riddimafrica/features/roles/user/features/orders/presentation/sc
 import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_detail_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_confirmed_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_review_screen.dart';
+import 'package:riddimafrica/features/notification/bindings/notification_binding.dart';
+import 'package:riddimafrica/features/notification/presentation/screens/notification_screen.dart';
 
 class AppRoute {
   static const String welcomescreen = "/welcomeScreen";
@@ -63,6 +65,7 @@ class AppRoute {
   static const String marketCart = "/marketCart";
   static const String marketCheckout = "/marketCheckout";
   static const String artistProfile = "/artistProfile";
+  static const String notifications = "/notifications";
 
   //ORDERS
   static const String orderList = "/orderList";
@@ -149,6 +152,11 @@ class AppRoute {
       name: artistProfile,
       page: () => const ArtistProfileScreen(),
       binding: MarketBinding(),
+    ),
+    GetPage(
+      name: notifications,
+      page: () => const NotificationScreen(),
+      binding: NotificationBinding(),
     ),
 
     //ORDERS
