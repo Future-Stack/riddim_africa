@@ -14,9 +14,7 @@ class SettingsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: const GlobalAppBar(
-        title: 'Settings',
-      ),
+      appBar: const GlobalAppBar(title: 'Settings'),
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -185,11 +183,11 @@ class SettingsScreen extends StatelessWidget {
                     Text(
                       'Riddim Africa v2.6.1',
                       style: AppTextStyle(context).mediumTextStyle(
-                        color: AppColors.primarytext,
+                        color: AppColors.textfieldelementcolor,
                         fontSize: 13,
                       ),
                     ),
-                    const Gap(4),
+
                     Text(
                       '© 2026 Riddim Africa Limited',
                       style: AppTextStyle(context).regularTextStyle(
@@ -250,7 +248,7 @@ class SettingsScreen extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       leading: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
         child: Icon(icon, color: iconColor, size: 20),
       ),
@@ -260,14 +258,17 @@ class SettingsScreen extends StatelessWidget {
           context,
         ).mediumTextStyle(color: AppColors.white, fontSize: 16),
       ),
-      trailing: Switch.adaptive(
-        
-        value: value,
-        onChanged: onChanged,
-        activeThumbColor: AppColors.white,
-        activeTrackColor: AppColors.purple,
-        inactiveThumbColor: AppColors.white.withValues(alpha: 0.6),
-        inactiveTrackColor: AppColors.primaryappbrownsecond,
+      trailing: Transform.scale(
+        scale: 0.8,
+        child: Switch.adaptive(
+          value: value,
+
+          onChanged: onChanged,
+          activeThumbColor: AppColors.white,
+          activeTrackColor: AppColors.purple,
+          inactiveThumbColor: AppColors.white.withValues(alpha: 0.6),
+          inactiveTrackColor: AppColors.primaryappbrownsecond,
+        ),
       ),
     );
   }
