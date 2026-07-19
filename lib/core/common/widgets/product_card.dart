@@ -203,10 +203,9 @@ class ProductCard extends StatelessWidget {
                       left: 54.w,
                       child: Text(
                         artistName!,
-                        style: AppTextStyle(context).boldTextStyle(
-                          color: AppColors.white,
-                          fontSize: 12,
-                        ),
+                        style: AppTextStyle(
+                          context,
+                        ).boldTextStyle(color: AppColors.white, fontSize: 12),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -303,7 +302,7 @@ class ProductCard extends StatelessWidget {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.bordercolor,
+                            color: AppColors.purple,
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                           child: Text(
@@ -316,9 +315,9 @@ class ProductCard extends StatelessWidget {
                         )
                       else if (showAddButton)
                         Container(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(6.0),
                           decoration: const BoxDecoration(
-                            color: AppColors.bordercolor,
+                            color: AppColors.purple,
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(

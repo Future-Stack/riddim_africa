@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import '../../domain/entities/order_entity.dart';
-import '../widgets/orders_app_bar.dart';
 
 class OrderConfirmedScreen extends StatelessWidget {
   const OrderConfirmedScreen({super.key});
@@ -13,9 +13,7 @@ class OrderConfirmedScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: const GlobalAppBar(
-        title: 'Order Confirmed',
-      ),
+      appBar: const GlobalAppBar(title: 'Order Confirmed'),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -31,37 +29,12 @@ class OrderConfirmedScreen extends StatelessWidget {
                     color: const Color(0xFF232D37),
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                      color: const Color(0xFF2C3946),
+                      color: AppColors.primarytext,
                       width: 1.5,
                     ),
                   ),
                   child: Center(
-                    child: Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color(0xFF384656),
-                          width: 2,
-                        ),
-                      ),
-                      child: Center(
-                        child: Container(
-                          width: 60,
-                          height: 60,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF3E5164),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.check,
-                            color: Colors.white,
-                            size: 32,
-                          ),
-                        ),
-                      ),
-                    ),
+                    child: SvgPicture.asset(IconPath.checkcircle, height: 50.h),
                   ),
                 ),
               ),

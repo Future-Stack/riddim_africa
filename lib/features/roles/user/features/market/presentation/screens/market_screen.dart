@@ -31,29 +31,32 @@ class UserMarketScreen extends GetView<MarketController> {
               ),
             ),
             const SizedBox(height: 24),
-            
+
             // Category Chips Row
-            Obx(() => CategoryChipsRow(
-              selectedMainCategory: controller.selectedMainCategory.value,
-              selectedSubCategory: controller.selectedSubCategory.value,
-              onMainCategorySelected: controller.selectMainCategory,
-              onSubCategorySelected: controller.selectSubCategory,
-            )),
+            Obx(
+              () => CategoryChipsRow(
+                selectedMainCategory: controller.selectedMainCategory.value,
+                selectedSubCategory: controller.selectedSubCategory.value,
+                onMainCategorySelected: controller.selectMainCategory,
+                onSubCategorySelected: controller.selectSubCategory,
+              ),
+            ),
             const SizedBox(height: 24),
-            
+
             // Products Found Text
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Obx(() => Text(
-                '${controller.productsList.length} products found',
-                style: AppTextStyle(context).mediumTextStyle(
-                  color: AppColors.primarytext,
-                  fontSize: 16,
+              child: Obx(
+                () => Text(
+                  '${controller.productsList.length} products found',
+                  style: AppTextStyle(
+                    context,
+                  ).mediumTextStyle(color: AppColors.primarytext, fontSize: 16),
                 ),
-              )),
+              ),
             ),
             const SizedBox(height: 16),
-            
+
             // Grid of Products
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -85,7 +88,10 @@ class UserMarketScreen extends GetView<MarketController> {
                       price: product.price,
                       isHot: product.id == '1' || product.id == '4',
                       onTap: () {
-                        Get.toNamed('/marketProductDetail', arguments: product.id);
+                        Get.toNamed(
+                          '/marketProductDetail',
+                          arguments: product.id,
+                        );
                       },
                     );
                   },
