@@ -18,4 +18,5 @@ class IconPath {
   static const String microphone = 'assets/icons/microphone.svg';
   static const String kid = 'assets/icons/kid.svg';
   static const String send = 'assets/icons/send.svg';
+  static const String checkcircle = 'assets/icons/checkcircle.svg';
 }

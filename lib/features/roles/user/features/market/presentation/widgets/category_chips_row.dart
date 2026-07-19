@@ -33,7 +33,7 @@ class CategoryChipsRow extends StatelessWidget {
                 label: 'Featured',
                 icon: Iconsax.magic_star,
                 isActive: selectedMainCategory == 'Featured',
-                activeColor: const Color(0xFF6B3A64), // Purple
+                activeColor: AppColors.bordercolor, // Purple
                 onTap: () => onMainCategorySelected?.call('Featured'),
               ),
               const SizedBox(width: 12),
@@ -149,23 +149,17 @@ class CategoryChipsRow extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              color: AppColors.white,
-              size: 16,
-            ),
+            Icon(icon, color: AppColors.white, size: 16),
             const SizedBox(width: 8),
             Text(
               label,
               style: isActive
-                  ? AppTextStyle(context).boldTextStyle(
-                      color: AppColors.white,
-                      fontSize: 14,
-                    )
-                  : AppTextStyle(context).mediumTextStyle(
-                      color: AppColors.white,
-                      fontSize: 14,
-                    ),
+                  ? AppTextStyle(
+                      context,
+                    ).boldTextStyle(color: AppColors.white, fontSize: 14)
+                  : AppTextStyle(
+                      context,
+                    ).mediumTextStyle(color: AppColors.white, fontSize: 14),
             ),
           ],
         ),
@@ -195,14 +189,12 @@ class CategoryChipsRow extends StatelessWidget {
         child: Text(
           label,
           style: isActive
-              ? AppTextStyle(context).boldTextStyle(
-                  color: AppColors.white,
-                  fontSize: 14,
-                )
-              : AppTextStyle(context).mediumTextStyle(
-                  color: AppColors.primarytext,
-                  fontSize: 14,
-                ),
+              ? AppTextStyle(
+                  context,
+                ).boldTextStyle(color: AppColors.white, fontSize: 14)
+              : AppTextStyle(
+                  context,
+                ).mediumTextStyle(color: AppColors.primarytext, fontSize: 14),
         ),
       ),
     );
