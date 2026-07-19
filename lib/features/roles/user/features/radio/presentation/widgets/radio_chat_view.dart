@@ -7,6 +7,7 @@ import 'package:riddimafrica/core/core.dart';
 import '../controllers/radio_controller.dart';
 import '../../domain/entities/chat_message_entity.dart';
 import 'radio_player_view.dart';
+import 'radio_user_action_popup.dart';
 
 class RadioChatView extends StatefulWidget {
   const RadioChatView({super.key});
@@ -211,8 +212,8 @@ class _RadioChatViewState extends State<RadioChatView> {
               GestureDetector(
                 onTap: controller.sendMessage,
                 child: Container(
-                  height: 52.h,
-                  width: 52.h,
+                  height: 45.h,
+                  width: 45.h,
                   decoration: const BoxDecoration(
                     color: AppColors.bordercolor,
                     shape: BoxShape.circle,
@@ -220,8 +221,8 @@ class _RadioChatViewState extends State<RadioChatView> {
                   child: Center(
                     child: SvgPicture.asset(
                       IconPath.send,
-                      width: 20.h,
-                      height: 20.h,
+                      width: 18.h,
+                      height: 18.h,
                     ),
                   ),
                 ),
@@ -243,96 +244,125 @@ class _ChatBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final timeStr = DateFormat('HH:mm').format(message.timestamp);
 
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 20.r,
-            backgroundImage: NetworkImage(message.senderAvatar),
-            backgroundColor: AppColors.primaryappbrownsecond,
+    return GestureDetector(
+      onLongPress: () {
+        showDialog(
+          context: context,
+          builder: (context) => RadioUserActionPopup(
+            username: message.senderName,
+            onPin: () {
+              AppHelperFunctions.showSnackBar('Message pinned');
+            },
+            onDelete: () {
+              AppHelperFunctions.showSnackBar('Message deleted');
+            },
+            onMute15Min: () {
+              AppHelperFunctions.showSnackBar('Muted for 15 minutes');
+            },
+            onMute1Hour: () {
+              AppHelperFunctions.showSnackBar('Muted for 1 hour');
+            },
+            onMutePermanently: () {
+              AppHelperFunctions.showSnackBar('Muted permanently');
+            },
+            onBan: () {
+              AppHelperFunctions.showSnackBar('User banned from chat');
+            },
           ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      message.senderName,
-                      style: AppTextStyle(context).boldTextStyle(
-                        color: message.isPresenter
-                            ? AppColors.onboardingbutton
-                            : AppColors.white,
-                        fontSize: 15,
-                      ),
-                    ),
-                    if (message.isPresenter) ...[
-                      SizedBox(width: 6.w),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 6.w,
-                          vertical: 2.h,
+        );
+      },
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.h),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 20.r,
+              backgroundImage: NetworkImage(message.senderAvatar),
+              backgroundColor: AppColors.primaryappbrownsecond,
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        message.senderName,
+                        style: AppTextStyle(context).boldTextStyle(
+                          color: message.isPresenter
+                              ? AppColors.onboardingbutton
+                              : AppColors.white,
+                          fontSize: 15,
                         ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4.r),
-                          border: Border.all(
-                            color: AppColors.onboardingbutton,
-                            width: 1.w,
+                      ),
+                      if (message.isPresenter) ...[
+                        SizedBox(width: 6.w),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 6.w,
+                            vertical: 2.h,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4.r),
+                            border: Border.all(
+                              color: AppColors.onboardingbutton,
+                              width: 1.w,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.mic,
+                                color: AppColors.onboardingbutton,
+                                size: 10,
+                              ),
+                              SizedBox(width: 2.w),
+                              Text(
+                                'PRESENTER',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 9.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.onboardingbutton,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.mic,
-                              color: AppColors.onboardingbutton,
-                              size: 10,
-                            ),
-                            SizedBox(width: 2.w),
-                            Text(
-                              'PRESENTER',
-                              style: GoogleFonts.outfit(
-                                fontSize: 9.sp,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.onboardingbutton,
-                              ),
-                            ),
-                          ],
+                        SizedBox(width: 4.w),
+                        const Icon(
+                          Icons.push_pin,
+                          color: AppColors.onboardingbutton,
+                          size: 12,
+                        ),
+                      ],
+                      const Spacer(),
+                      Text(
+                        timeStr,
+                        style: AppTextStyle(context).regularTextStyle(
+                          color: AppColors.primarytext,
+                          fontSize: 12,
                         ),
                       ),
-                      SizedBox(width: 4.w),
-                      const Icon(
-                        Icons.push_pin,
-                        color: AppColors.onboardingbutton,
-                        size: 12,
-                      ),
                     ],
-                    const Spacer(),
-                    Text(
-                      timeStr,
-                      style: AppTextStyle(context).regularTextStyle(
-                        color: AppColors.primarytext,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  message.message,
-                  style: AppTextStyle(context).regularTextStyle(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    fontSize: 14,
                   ),
-                ),
-              ],
+                  SizedBox(height: 4.h),
+                  Text(
+                    message.message,
+                    style: AppTextStyle(context).regularTextStyle(
+                      color: Colors.white.withValues(alpha: 0.9),
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
