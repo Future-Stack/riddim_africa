@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -170,9 +171,13 @@ class _RadioChatViewState extends State<RadioChatView> {
                   height: 52.h,
                   decoration: BoxDecoration(
                     color: const Color(0xFFEDF2F4),
-                    borderRadius: BorderRadius.circular(26.r),
+                    borderRadius: BorderRadius.circular(22.r),
+                    border: Border.all(
+                      color: AppColors.bordercolor,
+                      width: 1.5,
+                    ),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  padding: EdgeInsets.symmetric(horizontal: 16.r),
                   child: Row(
                     children: [
                       Expanded(
@@ -183,6 +188,8 @@ class _RadioChatViewState extends State<RadioChatView> {
                             fontSize: 16.sp,
                           ),
                           decoration: InputDecoration(
+                            enabledBorder: InputBorder.none,
+
                             focusedBorder: InputBorder.none,
                             hintText: 'Type a message...',
                             hintStyle: GoogleFonts.outfit(
@@ -195,11 +202,7 @@ class _RadioChatViewState extends State<RadioChatView> {
                           onSubmitted: (_) => controller.sendMessage(),
                         ),
                       ),
-                      const Icon(
-                        Icons.sentiment_satisfied_alt_outlined,
-                        color: Colors.grey,
-                        size: 24,
-                      ),
+                      SvgPicture.asset(IconPath.kid),
                     ],
                   ),
                 ),
@@ -214,8 +217,12 @@ class _RadioChatViewState extends State<RadioChatView> {
                     color: AppColors.bordercolor,
                     shape: BoxShape.circle,
                   ),
-                  child: const Center(
-                    child: Icon(Icons.send, color: AppColors.white, size: 20),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      IconPath.send,
+                      width: 20.h,
+                      height: 20.h,
+                    ),
                   ),
                 ),
               ),
