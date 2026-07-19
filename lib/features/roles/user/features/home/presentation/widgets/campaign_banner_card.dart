@@ -41,7 +41,7 @@ class CampaignBannerCard extends StatelessWidget {
                 context,
               ).mediumTextStyle(color: AppColors.onboardingtext, fontSize: 14),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 5.h),
             Text(
               'New African Fashion Collection',
               style: AppTextStyle(
@@ -49,25 +49,15 @@ class CampaignBannerCard extends StatelessWidget {
               ).boldTextStyle(color: AppColors.white, fontSize: 18),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.white,
-                foregroundColor: AppColors.primary,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 10,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.r),
-                ),
-              ),
-              child: Text(
-                'Shop Now',
-                style: AppTextStyle(
-                  context,
-                ).boldTextStyle(color: AppColors.secondary, fontSize: 14),
-              ),
+            ProElevatedButton(
+              backgroundColor: AppColors.white,
+              width: 100.w,
+              height: 33.h,
+              borderRadius: 40.r,
+              text: 'Shop Now',
+              fontSize: 14,
+              fontWeight: 500,
+              textColor: AppColors.secondary,
             ),
           ],
         ),

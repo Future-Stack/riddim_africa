@@ -24,7 +24,7 @@ class LiveRadioCard extends StatelessWidget {
               color: const Color(0xFF356E7A), // Teal circle
               borderRadius: BorderRadius.circular(16.r),
             ),
-            child: Image.asset(ImagePath.logo1),
+            child: Image.asset(ImagePath.logo3),
           ),
           const SizedBox(width: 16),
           // Radio details

@@ -127,8 +127,8 @@ class ForgotPasswordOtpScreen extends StatelessWidget {
     int index,
   ) {
     return Container(
-      width: 60.w,
-      height: 70.h,
+      width: 62,
+      height: 73,
       decoration: BoxDecoration(
         color: AppColors.textfieldcolor.withValues(alpha: 0.3),
         border: Border.all(

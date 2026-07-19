@@ -19,6 +19,111 @@ class RadioChatView extends StatefulWidget {
 class _RadioChatViewState extends State<RadioChatView> {
   final RxBool showPinned = true.obs;
 
+  final List<String> _popularEmojis = const [
+    '😀',
+    '😂',
+    '😍',
+    '🥰',
+    '😎',
+    '😊',
+    '😉',
+    '🥳',
+    '👍',
+    '🙌',
+    '👏',
+    '🔥',
+    '✨',
+    '🌟',
+    '🎉',
+    '❤️',
+    '🤔',
+    '😮',
+    '😢',
+    '😡',
+    '😱',
+    '🤫',
+    '💯',
+    '🙏',
+  ];
+
+  void _showEmojiPopup(BuildContext context, TextEditingController controller) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: Container(
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E1005),
+              borderRadius: BorderRadius.circular(16.r),
+              border: Border.all(
+                color: AppColors.onboardingbutton.withValues(alpha: 0.3),
+                width: 1.w,
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Choose Emoji',
+                  style: GoogleFonts.outfit(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.white,
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 6,
+                    crossAxisSpacing: 10.w,
+                    mainAxisSpacing: 10.h,
+                  ),
+                  itemCount: _popularEmojis.length,
+                  itemBuilder: (context, index) {
+                    final emoji = _popularEmojis[index];
+                    return GestureDetector(
+                      onTap: () {
+                        final text = controller.text;
+                        final selection = controller.selection;
+                        if (selection.isValid) {
+                          final newText = text.replaceRange(
+                            selection.start,
+                            selection.end,
+                            emoji,
+                          );
+                          controller.text = newText;
+                          controller.selection = TextSelection.collapsed(
+                            offset: selection.start + emoji.length,
+                          );
+                        } else {
+                          controller.text = text + emoji;
+                        }
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2E190B),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(emoji, style: TextStyle(fontSize: 20.sp)),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<RadioController>();
@@ -190,7 +295,6 @@ class _RadioChatViewState extends State<RadioChatView> {
                           ),
                           decoration: InputDecoration(
                             enabledBorder: InputBorder.none,
-
                             focusedBorder: InputBorder.none,
                             hintText: 'Type a message...',
                             hintStyle: GoogleFonts.outfit(
@@ -203,7 +307,11 @@ class _RadioChatViewState extends State<RadioChatView> {
                           onSubmitted: (_) => controller.sendMessage(),
                         ),
                       ),
-                      SvgPicture.asset(IconPath.kid),
+                      GestureDetector(
+                        onTap: () =>
+                            _showEmojiPopup(context, controller.textController),
+                        child: SvgPicture.asset(IconPath.kid),
+                      ),
                     ],
                   ),
                 ),
