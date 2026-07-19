@@ -10,6 +10,9 @@ class ProductModel extends ProductEntity {
     required super.categoryText,
     required super.price,
     super.isHot = false,
+    super.artistName,
+    super.artistAvatarUrl,
+    super.isVerifiedArtist = false,
   });
 
   // Example fromJson
@@ -23,6 +26,9 @@ class ProductModel extends ProductEntity {
       categoryText: json['categoryText'] as String,
       price: json['price'] as String,
       isHot: json['isHot'] as bool? ?? false,
+      artistName: json['artistName'] as String?,
+      artistAvatarUrl: json['artistAvatarUrl'] as String?,
+      isVerifiedArtist: json['isVerifiedArtist'] as bool? ?? false,
     );
   }
 
@@ -37,6 +43,9 @@ class ProductModel extends ProductEntity {
       'categoryText': categoryText,
       'price': price,
       'isHot': isHot,
+      'artistName': artistName,
+      'artistAvatarUrl': artistAvatarUrl,
+      'isVerifiedArtist': isVerifiedArtist,
     };
   }
 }

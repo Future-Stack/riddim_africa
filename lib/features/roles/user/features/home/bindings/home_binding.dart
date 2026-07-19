@@ -9,6 +9,10 @@ import '../data/repositories/home_repository_impl.dart';
 import '../domain/repositories/home_repository.dart';
 import '../domain/usecases/get_home_products_usecase.dart';
 import '../domain/usecases/get_suggested_artists_usecase.dart';
+import '../domain/usecases/get_trending_products_usecase.dart';
+import '../domain/usecases/get_featured_artists_usecase.dart';
+import '../domain/usecases/get_featured_products_usecase.dart';
+import '../domain/usecases/get_artist_merchandise_usecase.dart';
 import '../presentation/controllers/user_home_controller.dart';
 import '../presentation/controllers/global_search_controller.dart';
 
@@ -28,6 +32,11 @@ class HomeBinding extends Bindings {
     );
     Get.lazyPut(() => GetHomeProductsUseCase(Get.find<HomeRepository>()));
     Get.lazyPut(() => GetSuggestedArtistsUseCase(Get.find<HomeRepository>()));
+    Get.lazyPut(() => GetTrendingProductsUseCase(Get.find<HomeRepository>()));
+    Get.lazyPut(() => GetFeaturedArtistsUseCase(Get.find<HomeRepository>()));
+    Get.lazyPut(() => GetFeaturedProductsUseCase(Get.find<HomeRepository>()));
+    Get.lazyPut(() => GetArtistMerchandiseUseCase(Get.find<HomeRepository>()));
+
     Get.lazyPut(
       () => GlobalSearchController(
         Get.find<GetHomeProductsUseCase>(),
@@ -35,7 +44,12 @@ class HomeBinding extends Bindings {
       ),
     );
     Get.lazyPut(
-      () => UserHomeController(Get.find<GetHomeProductsUseCase>()),
+      () => UserHomeController(
+        Get.find<GetTrendingProductsUseCase>(),
+        Get.find<GetFeaturedArtistsUseCase>(),
+        Get.find<GetFeaturedProductsUseCase>(),
+        Get.find<GetArtistMerchandiseUseCase>(),
+      ),
     );
   }
 }
