@@ -27,12 +27,17 @@ class ArtistProfileController extends GetxController {
     super.onInit();
     
     // Read route arguments
-    final args = Get.arguments as Map<String, dynamic>?;
-    if (args != null) {
+    final dynamic args = Get.arguments;
+    if (args is Map<String, dynamic>) {
       name.value = args['name'] as String? ?? 'Bobi Wine';
       avatarUrl.value = args['avatarUrl'] as String? ?? '';
       rating.value = (args['rating'] as num?)?.toDouble() ?? 4.9;
       isVerified.value = args['isVerified'] as bool? ?? false;
+    } else if (args is String) {
+      name.value = args;
+      avatarUrl.value = '';
+      rating.value = 4.9;
+      isVerified.value = true;
     } else {
       // Fallback defaults
       name.value = 'Bobi Wine';
