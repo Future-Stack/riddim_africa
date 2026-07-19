@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
-import 'package:riddimafrica/core/utils/constants/colors.dart';
 import 'package:riddimafrica/core/common/widgets/home_app_bar.dart';
 import 'package:riddimafrica/core/common/widgets/custom_search_bar.dart';
 import 'package:riddimafrica/core/common/widgets/product_card.dart';
@@ -45,6 +44,90 @@ class UserHomeScreen extends GetView<UserHomeController> {
 
               // Live Radio Card
               const LiveRadioCard(),
+              const SizedBox(height: 24),
+              // ─── Featured Products ─────────────────────────────────────────
+              _buildSectionHeader(
+                context,
+                title: 'Featured Products',
+                onSeeAll: () {},
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 200.h,
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.featuredProducts.length,
+                  itemBuilder: (context, index) {
+                    final product = controller.featuredProducts[index];
+                    return Padding(
+                      padding: EdgeInsets.only(right: 12.w),
+                      child: SizedBox(
+                        width: 150.w,
+                        child: ProductCard(
+                          imageUrl: product.imageUrl,
+                          title: product.title,
+                          subtitle: product.subtitle,
+                          rating: product.rating,
+                          categoryText: product.categoryText,
+                          price: product.price,
+                          onTap: () {
+                            Get.toNamed(
+                              AppRoute.marketProductDetail,
+                              arguments: product.id,
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 24),
+              // ─── Artist Merchandise ────────────────────────────────────────
+              _buildSectionHeader(
+                context,
+                title: 'Artist Merchandise',
+                onSeeAll: () {},
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 170.h,
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.artistMerchandise.length,
+                  itemBuilder: (context, index) {
+                    final product = controller.artistMerchandise[index];
+                    return Padding(
+                      padding: EdgeInsets.only(right: 12.w),
+                      child: SizedBox(
+                        width: 160.w,
+                        child: ProductCard(
+                          imageUrl: product.imageUrl,
+                          title: product.title,
+                          subtitle: '',
+                          rating: 0,
+                          categoryText: '',
+                          price: product.price,
+                          showRatingRow: false,
+                          showAddButton: false,
+                          actionText: 'View',
+                          artistName: product.artistName,
+                          artistAvatarUrl: product.artistAvatarUrl,
+                          isVerifiedArtist: product.isVerifiedArtist,
+                          onTap: () {
+                            Get.toNamed(
+                              AppRoute.marketProductDetail,
+                              arguments: product.id,
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
               const SizedBox(height: 24),
 
               // ─── Trending Products ─────────────────────────────────────────
@@ -116,92 +199,6 @@ class UserHomeScreen extends GetView<UserHomeController> {
                             arguments: artist.name,
                           );
                         },
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // ─── Featured Products ─────────────────────────────────────────
-              _buildSectionHeader(
-                context,
-                title: 'Featured Products',
-                onSeeAll: () {},
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                height: 200.h,
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: controller.featuredProducts.length,
-                  itemBuilder: (context, index) {
-                    final product = controller.featuredProducts[index];
-                    return Padding(
-                      padding: EdgeInsets.only(right: 12.w),
-                      child: SizedBox(
-                        width: 150.w,
-                        child: ProductCard(
-                          imageUrl: product.imageUrl,
-                          title: product.title,
-                          subtitle: product.subtitle,
-                          rating: product.rating,
-                          categoryText: product.categoryText,
-                          price: product.price,
-                          onTap: () {
-                            Get.toNamed(
-                              AppRoute.marketProductDetail,
-                              arguments: product.id,
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // ─── Artist Merchandise ────────────────────────────────────────
-              _buildSectionHeader(
-                context,
-                title: 'Artist Merchandise',
-                onSeeAll: () {},
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                height: 230.h,
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: controller.artistMerchandise.length,
-                  itemBuilder: (context, index) {
-                    final product = controller.artistMerchandise[index];
-                    return Padding(
-                      padding: EdgeInsets.only(right: 12.w),
-                      child: SizedBox(
-                        width: 160.w,
-                        child: ProductCard(
-                          imageUrl: product.imageUrl,
-                          title: product.title,
-                          subtitle: '',
-                          rating: 0,
-                          categoryText: '',
-                          price: product.price,
-                          showRatingRow: false,
-                          showAddButton: false,
-                          actionText: 'View',
-                          artistName: product.artistName,
-                          artistAvatarUrl: product.artistAvatarUrl,
-                          isVerifiedArtist: product.isVerifiedArtist,
-                          onTap: () {
-                            Get.toNamed(
-                              AppRoute.marketProductDetail,
-                              arguments: product.id,
-                            );
-                          },
-                        ),
                       ),
                     );
                   },

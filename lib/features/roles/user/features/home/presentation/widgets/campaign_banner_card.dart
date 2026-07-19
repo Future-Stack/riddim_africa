@@ -8,7 +8,7 @@ class CampaignBannerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 180.h,
+      height: 150.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.r),
         image: const DecorationImage(
@@ -39,7 +39,7 @@ class CampaignBannerCard extends StatelessWidget {
               'Marketplace Campaign',
               style: AppTextStyle(
                 context,
-              ).mediumTextStyle(color: AppColors.primarytext, fontSize: 14),
+              ).mediumTextStyle(color: AppColors.onboardingtext, fontSize: 14),
             ),
             const SizedBox(height: 8),
             Text(
