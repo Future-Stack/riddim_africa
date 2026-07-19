@@ -12,36 +12,10 @@ class RefundPolicyScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        leadingWidth: 60,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
-          child: GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: AppColors.primaryappbrownsecond,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: AppColors.white,
-                size: 20,
-              ),
-            ),
-          ),
-        ),
-        title: Text(
-          'Refund Policy',
-          style: AppTextStyle(context).boldTextStyle(
-            color: AppColors.white,
-            fontSize: 18,
-          ),
-        ),
-        centerTitle: false,
+      appBar: const GlobalAppBar(
+        title: 'Refund Policy',
       ),
+
       body: SafeArea(
         child: Obx(() {
           if (controller.isLoadingPolicies.value) {

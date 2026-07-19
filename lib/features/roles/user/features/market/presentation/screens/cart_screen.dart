@@ -14,21 +14,7 @@ class CartScreen extends GetView<CartController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.white),
-          onPressed: () => Get.back(),
-        ),
-        title: Text(
-          'My Cart',
-          style: AppTextStyle(
-            context,
-          ).boldTextStyle(color: AppColors.white, fontSize: 20),
-        ),
-        centerTitle: false,
-      ),
+      appBar: const GlobalAppBar(title: 'My Cart'),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(

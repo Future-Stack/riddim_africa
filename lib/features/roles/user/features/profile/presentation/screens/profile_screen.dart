@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
@@ -36,7 +37,7 @@ class UserProfileScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: AppColors.primaryappbrownsecond,
+                            color: AppColors.primarytext,
                             width: 3,
                           ),
                           image: DecorationImage(
@@ -57,12 +58,16 @@ class UserProfileScreen extends StatelessWidget {
                         onTap: controller.pickProfileImage,
                         child: Container(
                           padding: const EdgeInsets.all(8),
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             color: AppColors.secondary,
+                            border: Border.all(
+                              color: AppColors.primary,
+                              width: 3,
+                            ),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
-                            Icons.camera_alt,
+                            Iconsax.camera,
                             color: AppColors.white,
                             size: 16,
                           ),
@@ -75,39 +80,45 @@ class UserProfileScreen extends StatelessWidget {
               const Gap(16),
 
               // ─── Name, Email & Phone ─────────────────────────────────────
-              Obx(() => Text(
-                    controller.name.value,
-                    style: AppTextStyle(context).boldTextStyle(
-                      color: AppColors.white,
-                      fontSize: 22,
-                    ),
-                  )),
+              Obx(
+                () => Text(
+                  controller.name.value,
+                  style: AppTextStyle(
+                    context,
+                  ).boldTextStyle(color: AppColors.white, fontSize: 22),
+                ),
+              ),
               const Gap(4),
-              Obx(() => Text(
-                    controller.email.value,
-                    style: AppTextStyle(context).mediumTextStyle(
-                      color: AppColors.primarytext,
-                      fontSize: 14,
-                    ),
-                  )),
+              Obx(
+                () => Text(
+                  controller.email.value,
+                  style: AppTextStyle(
+                    context,
+                  ).mediumTextStyle(color: AppColors.primarytext, fontSize: 14),
+                ),
+              ),
               const Gap(4),
-              Obx(() => Text(
-                    '${controller.phoneNumber.value} • ${controller.city.value}, ${controller.country.value}',
-                    style: AppTextStyle(context).mediumTextStyle(
-                      color: AppColors.primarytext,
-                      fontSize: 13,
-                    ),
-                  )),
+              Obx(
+                () => Text(
+                  '${controller.phoneNumber.value} • ${controller.city.value}, ${controller.country.value}',
+                  style: AppTextStyle(
+                    context,
+                  ).mediumTextStyle(color: AppColors.primarytext, fontSize: 13),
+                ),
+              ),
               const Gap(24),
 
               // ─── Stats Card ──────────────────────────────────────────────
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.primaryappbrown,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: AppColors.primaryappbrownsecond.withValues(alpha: 0.5),
+                    color: AppColors.primarytext.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
@@ -120,12 +131,14 @@ class UserProfileScreen extends StatelessWidget {
                       label: 'Orders',
                     ),
                     _buildDivider(),
-                    Obx(() => _buildStatItem(
-                          context,
-                          icon: Iconsax.heart,
-                          value: controller.wishlist.length.toString(),
-                          label: 'Wishlist',
-                        )),
+                    Obx(
+                      () => _buildStatItem(
+                        context,
+                        icon: Iconsax.heart,
+                        value: controller.wishlist.length.toString(),
+                        label: 'Wishlist',
+                      ),
+                    ),
                     _buildDivider(),
                     _buildStatItem(
                       context,
@@ -140,21 +153,20 @@ class UserProfileScreen extends StatelessWidget {
 
               // ─── Riddim Africa Member Card ───────────────────────────────
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryappbrown,
+                  color: AppColors.primaryappbrownsecond,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: AppColors.primaryappbrownsecond.withValues(alpha: 0.5),
+                    color: AppColors.primarytext.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
                   children: [
-                    // Ankh Logo Drawing
-                    CustomPaint(
-                      size: const Size(40, 50),
-                      painter: RedAnkhPainter(),
-                    ),
+                    Image.asset(ImagePath.logo1, width: 56, height: 56),
                     const Gap.h(16),
                     Expanded(
                       child: Column(
@@ -162,9 +174,9 @@ class UserProfileScreen extends StatelessWidget {
                         children: [
                           Text(
                             'Riddim Africa Member',
-                            style: AppTextStyle(context).boldTextStyle(
+                            style: AppTextStyle(context).mediumTextStyle(
                               color: AppColors.onboardingbutton,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                           const Gap(2),
@@ -184,10 +196,14 @@ class UserProfileScreen extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.transparent,
+                        color: AppColors.onboardingbutton.withValues(
+                          alpha: 0.11,
+                        ),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: AppColors.onboardingbutton.withValues(alpha: 0.4),
+                          color: AppColors.onboardingbutton.withValues(
+                            alpha: 0.4,
+                          ),
                           width: 1.2,
                         ),
                       ),
@@ -210,7 +226,7 @@ class UserProfileScreen extends StatelessWidget {
                   color: AppColors.primaryappbrown,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: AppColors.primaryappbrownsecond.withValues(alpha: 0.5),
+                    color: AppColors.primarytext.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Column(
@@ -269,7 +285,10 @@ class UserProfileScreen extends StatelessWidget {
                 text: 'Logout',
                 textColor: AppColors.secondary,
                 backgroundColor: Colors.transparent,
-                border: const BorderSide(color: AppColors.secondary, width: 1.5),
+                border: const BorderSide(
+                  color: AppColors.secondary,
+                  width: 1.5,
+                ),
                 leadingIcon: Icons.logout,
                 onPressed: () {
                   Get.offAllNamed(AppRoute.welcomescreen);
@@ -296,18 +315,16 @@ class UserProfileScreen extends StatelessWidget {
         const Gap(6),
         Text(
           value,
-          style: AppTextStyle(context).boldTextStyle(
-            color: AppColors.white,
-            fontSize: 20,
-          ),
+          style: AppTextStyle(
+            context,
+          ).boldTextStyle(color: AppColors.white, fontSize: 20),
         ),
         const Gap(2),
         Text(
           label,
-          style: AppTextStyle(context).mediumTextStyle(
-            color: AppColors.primarytext,
-            fontSize: 12,
-          ),
+          style: AppTextStyle(
+            context,
+          ).mediumTextStyle(color: AppColors.primarytext, fontSize: 12),
         ),
       ],
     );
@@ -317,13 +334,13 @@ class UserProfileScreen extends StatelessWidget {
     return Container(
       height: 40,
       width: 1,
-      color: AppColors.primaryappbrownsecond.withValues(alpha: 0.5),
+      color: AppColors.primarytext.withValues(alpha: 0.1),
     );
   }
 
   Widget _buildMenuDivider() {
-    return const Divider(
-      color: AppColors.primaryappbrownsecond,
+    return Divider(
+      color: AppColors.primarytext.withValues(alpha: 0.1),
       height: 1,
       thickness: 1,
     );
@@ -341,18 +358,14 @@ class UserProfileScreen extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       leading: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: iconBg,
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
         child: Icon(icon, color: iconColor, size: 20),
       ),
       title: Text(
         title,
-        style: AppTextStyle(context).mediumTextStyle(
-          color: AppColors.white,
-          fontSize: 16,
-        ),
+        style: AppTextStyle(
+          context,
+        ).mediumTextStyle(color: AppColors.white, fontSize: 16),
       ),
       trailing: const Icon(
         Icons.chevron_right,
@@ -378,7 +391,14 @@ class RedAnkhPainter extends CustomPainter {
 
     // Draw loop as an oval
     final loopPath = Path()
-      ..addOval(Rect.fromLTWH(cx - size.width * 0.26, top, size.width * 0.52, loopHeight));
+      ..addOval(
+        Rect.fromLTWH(
+          cx - size.width * 0.26,
+          top,
+          size.width * 0.52,
+          loopHeight,
+        ),
+      );
     canvas.drawPath(loopPath, paint);
 
     // Inner cutout to make it a loop ring (using transparent paint to cut, or paint with background color)
@@ -386,7 +406,12 @@ class RedAnkhPainter extends CustomPainter {
       ..color = AppColors.primaryappbrown
       ..style = PaintingStyle.fill;
     canvas.drawOval(
-      Rect.fromLTWH(cx - size.width * 0.11, top + 6, size.width * 0.22, loopHeight - 12),
+      Rect.fromLTWH(
+        cx - size.width * 0.11,
+        top + 6,
+        size.width * 0.22,
+        loopHeight - 12,
+      ),
       cutoutPaint,
     );
 

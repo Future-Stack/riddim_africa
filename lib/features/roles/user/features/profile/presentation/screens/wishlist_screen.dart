@@ -14,31 +14,12 @@ class WishlistScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        leadingWidth: 60,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
-          child: GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: AppColors.primaryappbrownsecond,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: AppColors.white,
-                size: 20,
-              ),
-            ),
-          ),
-        ),
-        title: Obx(() {
+      appBar: GlobalAppBar(
+        titleWidget: Obx(() {
           final count = controller.wishlist.length;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 'Wishlist',
@@ -58,8 +39,8 @@ class WishlistScreen extends StatelessWidget {
             ],
           );
         }),
-        centerTitle: false,
       ),
+
       body: SafeArea(
         child: Obx(() {
           if (controller.wishlist.isEmpty) {

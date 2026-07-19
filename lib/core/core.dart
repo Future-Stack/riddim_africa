@@ -20,6 +20,7 @@ export 'models/response_data.dart';
 export 'common/styles/global_text_style.dart';
 export 'common/common_button/common_button.dart';
 export 'common/common_text_field/pro_text_field.dart';
+export 'common/widgets/global_app_bar.dart';
 export 'bindings/controller_binder.dart';
 export 'services/firebase/fcm_handler.dart';
 export 'services/firebase/firebase_service.dart';

@@ -13,9 +13,8 @@ class OrderConfirmedScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: OrdersAppBar(
-        orderNumber: order?.orderNumber,
-        orderDate: order?.orderDate,
+      appBar: const GlobalAppBar(
+        title: 'Order Confirmed',
       ),
       body: SafeArea(
         child: Padding(

@@ -14,36 +14,10 @@ class SettingsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        leadingWidth: 60,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
-          child: GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: AppColors.primaryappbrownsecond,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: AppColors.white,
-                size: 20,
-              ),
-            ),
-          ),
-        ),
-        title: Text(
-          'Settings',
-          style: AppTextStyle(context).boldTextStyle(
-            color: AppColors.white,
-            fontSize: 18,
-          ),
-        ),
-        centerTitle: false,
+      appBar: const GlobalAppBar(
+        title: 'Settings',
       ),
+
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -53,10 +27,9 @@ class SettingsScreen extends StatelessWidget {
               // ─── Account Section ─────────────────────────────────────────
               Text(
                 'ACCOUNT',
-                style: AppTextStyle(context).boldTextStyle(
-                  color: AppColors.onboardingtext,
-                  fontSize: 12,
-                ),
+                style: AppTextStyle(
+                  context,
+                ).boldTextStyle(color: AppColors.onboardingtext, fontSize: 12),
               ),
               const Gap(10),
               Container(
@@ -64,7 +37,9 @@ class SettingsScreen extends StatelessWidget {
                   color: AppColors.primaryappbrown,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: AppColors.primaryappbrownsecond.withValues(alpha: 0.5),
+                    color: AppColors.primaryappbrownsecond.withValues(
+                      alpha: 0.5,
+                    ),
                   ),
                 ),
                 child: _buildActionRow(
@@ -81,10 +56,9 @@ class SettingsScreen extends StatelessWidget {
               // ─── Notifications Section ───────────────────────────────────
               Text(
                 'NOTIFICATIONS',
-                style: AppTextStyle(context).boldTextStyle(
-                  color: AppColors.onboardingtext,
-                  fontSize: 12,
-                ),
+                style: AppTextStyle(
+                  context,
+                ).boldTextStyle(color: AppColors.onboardingtext, fontSize: 12),
               ),
               const Gap(10),
               Container(
@@ -92,52 +66,55 @@ class SettingsScreen extends StatelessWidget {
                   color: AppColors.primaryappbrown,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: AppColors.primaryappbrownsecond.withValues(alpha: 0.5),
+                    color: AppColors.primaryappbrownsecond.withValues(
+                      alpha: 0.5,
+                    ),
                   ),
                 ),
-                child: Obx(() => Column(
-                      children: [
-                        _buildSwitchRow(
-                          context,
-                          icon: Iconsax.notification,
-                          iconBg: const Color(0xFFBB483D).withValues(alpha: 0.1),
-                          iconColor: const Color(0xFFBB483D),
-                          title: 'Order Notifications',
-                          value: controller.orderNotifications.value,
-                          onChanged: controller.setOrderNotifications,
-                        ),
-                        _buildDivider(),
-                        _buildSwitchRow(
-                          context,
-                          icon: Iconsax.notification,
-                          iconBg: const Color(0xFFBB483D).withValues(alpha: 0.1),
-                          iconColor: const Color(0xFFBB483D),
-                          title: 'Artist Updates',
-                          value: controller.artistUpdates.value,
-                          onChanged: controller.setArtistUpdates,
-                        ),
-                        _buildDivider(),
-                        _buildSwitchRow(
-                          context,
-                          icon: Iconsax.notification,
-                          iconBg: const Color(0xFFBB483D).withValues(alpha: 0.1),
-                          iconColor: const Color(0xFFBB483D),
-                          title: 'Radio Alerts',
-                          value: controller.radioAlerts.value,
-                          onChanged: controller.setRadioAlerts,
-                        ),
-                      ],
-                    )),
+                child: Obx(
+                  () => Column(
+                    children: [
+                      _buildSwitchRow(
+                        context,
+                        icon: Iconsax.notification,
+                        iconBg: const Color(0xFFBB483D).withValues(alpha: 0.1),
+                        iconColor: const Color(0xFFBB483D),
+                        title: 'Order Notifications',
+                        value: controller.orderNotifications.value,
+                        onChanged: controller.setOrderNotifications,
+                      ),
+                      _buildDivider(),
+                      _buildSwitchRow(
+                        context,
+                        icon: Iconsax.notification,
+                        iconBg: const Color(0xFFBB483D).withValues(alpha: 0.1),
+                        iconColor: const Color(0xFFBB483D),
+                        title: 'Artist Updates',
+                        value: controller.artistUpdates.value,
+                        onChanged: controller.setArtistUpdates,
+                      ),
+                      _buildDivider(),
+                      _buildSwitchRow(
+                        context,
+                        icon: Iconsax.notification,
+                        iconBg: const Color(0xFFBB483D).withValues(alpha: 0.1),
+                        iconColor: const Color(0xFFBB483D),
+                        title: 'Radio Alerts',
+                        value: controller.radioAlerts.value,
+                        onChanged: controller.setRadioAlerts,
+                      ),
+                    ],
+                  ),
+                ),
               ),
               const Gap(20),
 
               // ─── About Section ───────────────────────────────────────────
               Text(
                 'ABOUT',
-                style: AppTextStyle(context).boldTextStyle(
-                  color: AppColors.onboardingtext,
-                  fontSize: 12,
-                ),
+                style: AppTextStyle(
+                  context,
+                ).boldTextStyle(color: AppColors.onboardingtext, fontSize: 12),
               ),
               const Gap(10),
               Container(
@@ -145,7 +122,9 @@ class SettingsScreen extends StatelessWidget {
                   color: AppColors.primaryappbrown,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: AppColors.primaryappbrownsecond.withValues(alpha: 0.5),
+                    color: AppColors.primaryappbrownsecond.withValues(
+                      alpha: 0.5,
+                    ),
                   ),
                 ),
                 child: Column(
@@ -241,18 +220,14 @@ class SettingsScreen extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       leading: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: iconBg,
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
         child: Icon(icon, color: iconColor, size: 20),
       ),
       title: Text(
         title,
-        style: AppTextStyle(context).mediumTextStyle(
-          color: AppColors.white,
-          fontSize: 16,
-        ),
+        style: AppTextStyle(
+          context,
+        ).mediumTextStyle(color: AppColors.white, fontSize: 16),
       ),
       trailing: const Icon(
         Icons.chevron_right,
@@ -276,20 +251,17 @@ class SettingsScreen extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       leading: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: iconBg,
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
         child: Icon(icon, color: iconColor, size: 20),
       ),
       title: Text(
         title,
-        style: AppTextStyle(context).mediumTextStyle(
-          color: AppColors.white,
-          fontSize: 16,
-        ),
+        style: AppTextStyle(
+          context,
+        ).mediumTextStyle(color: AppColors.white, fontSize: 16),
       ),
       trailing: Switch.adaptive(
+        
         value: value,
         onChanged: onChanged,
         activeThumbColor: AppColors.white,
@@ -308,4 +280,3 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 }
-
