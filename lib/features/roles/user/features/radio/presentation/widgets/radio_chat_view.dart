@@ -169,7 +169,7 @@ class _RadioChatViewState extends State<RadioChatView> {
             children: [
               Expanded(
                 child: Container(
-                  height: 52.h,
+                  height: 45.h,
                   decoration: BoxDecoration(
                     color: const Color(0xFFEDF2F4),
                     borderRadius: BorderRadius.circular(22.r),
@@ -212,8 +212,8 @@ class _RadioChatViewState extends State<RadioChatView> {
               GestureDetector(
                 onTap: controller.sendMessage,
                 child: Container(
-                  height: 45.h,
-                  width: 45.h,
+                  height: 40.h,
+                  width: 40.h,
                   decoration: const BoxDecoration(
                     color: AppColors.bordercolor,
                     shape: BoxShape.circle,
