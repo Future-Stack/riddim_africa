@@ -214,25 +214,28 @@ class SettingsScreen extends StatelessWidget {
     required String title,
     required VoidCallback onTap,
   }) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      leading: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
-        child: Icon(icon, color: iconColor, size: 20),
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
+          child: Icon(icon, color: iconColor, size: 20),
+        ),
+        title: Text(
+          title,
+          style: AppTextStyle(
+            context,
+          ).mediumTextStyle(color: AppColors.white, fontSize: 16),
+        ),
+        trailing: const Icon(
+          Icons.chevron_right,
+          color: AppColors.primarytext,
+          size: 20,
+        ),
+        onTap: onTap,
       ),
-      title: Text(
-        title,
-        style: AppTextStyle(
-          context,
-        ).mediumTextStyle(color: AppColors.white, fontSize: 16),
-      ),
-      trailing: const Icon(
-        Icons.chevron_right,
-        color: AppColors.primarytext,
-        size: 20,
-      ),
-      onTap: onTap,
     );
   }
 
@@ -245,29 +248,32 @@ class SettingsScreen extends StatelessWidget {
     required bool value,
     required ValueChanged<bool> onChanged,
   }) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      leading: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
-        child: Icon(icon, color: iconColor, size: 20),
-      ),
-      title: Text(
-        title,
-        style: AppTextStyle(
-          context,
-        ).mediumTextStyle(color: AppColors.white, fontSize: 16),
-      ),
-      trailing: Transform.scale(
-        scale: 0.8,
-        child: Switch.adaptive(
-          value: value,
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        leading: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
+          child: Icon(icon, color: iconColor, size: 20),
+        ),
+        title: Text(
+          title,
+          style: AppTextStyle(
+            context,
+          ).mediumTextStyle(color: AppColors.white, fontSize: 16),
+        ),
+        trailing: Transform.scale(
+          scale: 0.8,
+          child: Switch.adaptive(
+            value: value,
 
-          onChanged: onChanged,
-          activeThumbColor: AppColors.white,
-          activeTrackColor: AppColors.purple,
-          inactiveThumbColor: AppColors.white.withValues(alpha: 0.6),
-          inactiveTrackColor: AppColors.primaryappbrownsecond,
+            onChanged: onChanged,
+            activeThumbColor: AppColors.white,
+            activeTrackColor: AppColors.purple,
+            inactiveThumbColor: AppColors.white.withValues(alpha: 0.6),
+            inactiveTrackColor: AppColors.primaryappbrownsecond,
+          ),
         ),
       ),
     );

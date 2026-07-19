@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:riddimafrica/features/notification/presentation/controllers/notification_controller.dart';
+import 'package:riddimafrica/features/notification/bindings/notification_binding.dart';
 import 'package:riddimafrica/features/roles/user/features/radio/bindings/radio_binding.dart';
 import 'package:riddimafrica/features/roles/user/features/market/binding/market_binding.dart';
 import 'package:riddimafrica/features/roles/user/features/profile/binding/profile_binding.dart';
@@ -15,24 +15,28 @@ import '../presentation/controllers/global_search_controller.dart';
 class HomeBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<NotificationController>(() => NotificationController());
-    Get.lazyPut<HomeLocalDataSource>(() => HomeLocalDataSourceImpl());
-    Get.lazyPut<HomeRepository>(() => HomeRepositoryImpl(Get.find<HomeLocalDataSource>()));
-    Get.lazyPut(() => GetHomeProductsUseCase(Get.find<HomeRepository>()));
-    Get.lazyPut(() => GetSuggestedArtistsUseCase(Get.find<HomeRepository>()));
-    Get.lazyPut(() => UserHomeController(Get.find<GetHomeProductsUseCase>()));
-    Get.lazyPut(() => GlobalSearchController(
-          Get.find<GetHomeProductsUseCase>(),
-          Get.find<GetSuggestedArtistsUseCase>(),
-        ));
-        
-    // Inject Radio and Market dependencies
     RadioBinding().dependencies();
     MarketBinding().dependencies();
-    
-    // Inject Profile and Settings dependencies
     ProfileBinding().dependencies();
     SettingsBinding().dependencies();
+    NotificationBinding().dependencies();
+
+    // Home specific registrations
+    Get.lazyPut<HomeLocalDataSource>(() => HomeLocalDataSourceImpl());
+    Get.lazyPut<HomeRepository>(
+      () => HomeRepositoryImpl(Get.find<HomeLocalDataSource>()),
+    );
+    Get.lazyPut(() => GetHomeProductsUseCase(Get.find<HomeRepository>()));
+    Get.lazyPut(() => GetSuggestedArtistsUseCase(Get.find<HomeRepository>()));
+    Get.lazyPut(
+      () => GlobalSearchController(
+        Get.find<GetHomeProductsUseCase>(),
+        Get.find<GetSuggestedArtistsUseCase>(),
+      ),
+    );
+    Get.lazyPut(
+      () => UserHomeController(Get.find<GetHomeProductsUseCase>()),
+    );
   }
 }
 

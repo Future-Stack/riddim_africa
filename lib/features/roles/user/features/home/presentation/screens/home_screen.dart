@@ -1,99 +1,269 @@
 import 'package:flutter/material.dart';
-import 'package:riddimafrica/core/utils/constants/colors.dart';
-import 'package:riddimafrica/core/common/styles/global_text_style.dart';
-import 'package:riddimafrica/core/common/widgets/home_app_bar.dart';
-import 'package:riddimafrica/core/common/widgets/custom_search_bar.dart';
-import 'package:riddimafrica/core/common/widgets/product_card.dart';
-import '../widgets/category_chips_row.dart';
 import 'package:get/get.dart';
-import 'package:riddimafrica/routes/app_routes.dart';
-import '../controllers/user_home_controller.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:riddimafrica/core/common/widgets/custom_search_bar.dart';
+import 'package:riddimafrica/core/core.dart';
+import '../controllers/global_search_controller.dart';
+import '../widgets/recent_search_tile.dart';
+import '../widgets/suggested_product_tile.dart';
+import '../widgets/suggested_artist_tile.dart';
 
-class UserHomeScreen extends GetView<UserHomeController> {
+class UserHomeScreen extends GetView<GlobalSearchController> {
   const UserHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: AppColors.primary, // Dark brown background
-      appBar: const HomeAppBar(),
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
-            // Search Bar Section
+            // Top Search Bar Row (no back button, full search bar width)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 12.0,
+              ),
               child: CustomSearchBar(
-                readOnly: true,
-                onTap: () => Get.toNamed(AppRoute.globalSearch),
+                controller: controller.searchBarController,
+                autofocus: false, // Don't focus automatically when loading tab
+                onSubmitted: controller.onSearchSubmitted,
               ),
             ),
-            const SizedBox(height: 24),
-            
-            // Category Chips Row
-            Obx(() => CategoryChipsRow(
-              selectedMainCategory: controller.selectedMainCategory.value,
-              selectedSubCategory: controller.selectedSubCategory.value,
-              onMainCategorySelected: controller.selectMainCategory,
-              onSubCategorySelected: controller.selectSubCategory,
-            )),
-            const SizedBox(height: 24),
-            
-            // Products Found Text
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Obx(() => Text(
-                '${controller.productsList.length} products found',
-                style: AppTextStyle(context).mediumTextStyle(
-                  color: AppColors.primarytext,
-                  fontSize: 16,
-                ),
-              )),
-            ),
-            const SizedBox(height: 16),
-            
-            // Grid of Products
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+
+            // Search Content Area
+            Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (controller.productsList.isEmpty) {
-                  return const Center(child: Text('No products available'));
-                }
-                return GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 0.65, // Adjust for card height
-                ),
-                itemCount: controller.productsList.length,
-                itemBuilder: (context, index) {
-                  final product = controller.productsList[index];
-                  return ProductCard(
-                    imageUrl: product.imageUrl,
-                    title: product.title,
-                    subtitle: product.subtitle,
-                    rating: product.rating,
-                    categoryText: product.categoryText,
-                    price: product.price,
-                    isHot: product.isHot,
-                    onTap: () {
-                      Get.toNamed('/marketProductDetail', arguments: product.id);
-                    },
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.onboardingbutton,
+                    ),
                   );
-                },
-              );
+                }
+
+                // If Search Input is Empty -> Show Suggestions
+                if (controller.searchText.value.isEmpty) {
+                  return SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 12),
+
+                        // 1. Recent Searches Section
+                        if (controller.recentSearches.isNotEmpty) ...[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Recent Searches',
+                                style: AppTextStyle(context).semiBoldTextStyle(
+                                  color: AppColors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: controller.clearRecentSearches,
+                                child: Text(
+                                  'Clear',
+                                  style: AppTextStyle(context).mediumTextStyle(
+                                    color: AppColors.secondary,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Column(
+                            children: controller.recentSearches.map((query) {
+                              return RecentSearchTile(
+                                query: query,
+                                onTap: () =>
+                                    controller.selectRecentSearch(query),
+                                onRemove: () =>
+                                    controller.removeRecentSearch(query),
+                              );
+                            }).toList(),
+                          ),
+                          const SizedBox(height: 24),
+                        ],
+
+                        // 2. Suggested Products Section
+                        if (controller.allProducts.isNotEmpty) ...[
+                          Text(
+                            'Suggested Products',
+                            style: AppTextStyle(context).semiBoldTextStyle(
+                              color: AppColors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Column(
+                            children: controller.allProducts.take(3).map((
+                              product,
+                            ) {
+                              return SuggestedProductTile(
+                                product: product,
+                                onTap: () {
+                                  controller.addRecentSearch(product.title);
+                                  Get.toNamed(
+                                    '/marketProductDetail',
+                                    arguments: product.id,
+                                  );
+                                },
+                              );
+                            }).toList(),
+                          ),
+                          const SizedBox(height: 24),
+                        ],
+
+                        // 3. Suggested Artists Section
+                        if (controller.allArtists.isNotEmpty) ...[
+                          Text(
+                            'Suggested Artists',
+                            style: AppTextStyle(context).semiBoldTextStyle(
+                              color: AppColors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            height: 140,
+                            child: ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: controller.allArtists.length,
+                              itemBuilder: (context, index) {
+                                final artist = controller.allArtists[index];
+                                return SuggestedArtistTile(
+                                  artist: artist,
+                                  onTap: () {
+                                    controller.addRecentSearch(artist.name);
+                                    controller.selectRecentSearch(artist.name);
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                        ],
+                      ],
+                    ),
+                  );
+                }
+
+                // If Search Input is NOT Empty -> Show Search Results
+                final hasProducts = controller.filteredProducts.isNotEmpty;
+                final hasArtists = controller.filteredArtists.isNotEmpty;
+
+                if (!hasProducts && !hasArtists) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Iconsax.search_status,
+                            color: AppColors.primarytext,
+                            size: 64,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No results found',
+                            style: AppTextStyle(context).semiBoldTextStyle(
+                              color: AppColors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'We couldn\'t find any products or artists matching "${controller.searchText.value}"',
+                            style: AppTextStyle(context).regularTextStyle(
+                              color: AppColors.primarytext,
+                              fontSize: 14,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
+                return SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 12),
+
+                      // Matching Products
+                      if (hasProducts) ...[
+                        Text(
+                          'Products',
+                          style: AppTextStyle(context).semiBoldTextStyle(
+                            color: AppColors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Column(
+                          children: controller.filteredProducts.map((product) {
+                            return SuggestedProductTile(
+                              product: product,
+                              onTap: () {
+                                controller.addRecentSearch(product.title);
+                                Get.toNamed(
+                                  '/marketProductDetail',
+                                  arguments: product.id,
+                                );
+                              },
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+
+                      // Matching Artists
+                      if (hasArtists) ...[
+                        Text(
+                          'Artists',
+                          style: AppTextStyle(context).semiBoldTextStyle(
+                            color: AppColors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          height: 140,
+                          child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: controller.filteredArtists.length,
+                            itemBuilder: (context, index) {
+                              final artist = controller.filteredArtists[index];
+                              return SuggestedArtistTile(
+                                artist: artist,
+                                onTap: () {
+                                  controller.addRecentSearch(artist.name);
+                                  controller.selectRecentSearch(artist.name);
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                      ],
+                    ],
+                  ),
+                );
               }),
             ),
-            const SizedBox(height: 24),
           ],
         ),
       ),

@@ -36,4 +36,9 @@ class MarketRepositoryImpl implements MarketRepository {
   ) async {
     return localDataSource.getMockArtistProducts(artistName);
   }
+
+  @override
+  Future<List<MarketProductEntity>> getMarketProducts() async {
+    return localDataSource.getMockProducts();
+  }
 }

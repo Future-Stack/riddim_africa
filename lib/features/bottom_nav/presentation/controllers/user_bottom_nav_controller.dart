@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/features/roles/user/features/home/presentation/screens/home_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/market_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/radio/presentation/screens/radio_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/cart_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/profile/presentation/screens/profile_screen.dart';
@@ -52,7 +53,7 @@ class UserBottomNavController extends GetxController {
   // ── Screens — keep in the same order as items ──────────────────────────
   final List<Widget> screens = [
     const UserHomeScreen(),
-    const ProductsScreen(),
+    const UserMarketScreen(),
     const RadioScreen(),
     const CartScreen(),
     const UserProfileScreen(),
@@ -71,4 +72,3 @@ class UserBottomNavController extends GetxController {
     if (idx != -1) changeIndex(idx);
   }
 }
-
