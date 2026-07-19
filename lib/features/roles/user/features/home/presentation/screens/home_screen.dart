@@ -196,7 +196,12 @@ class UserHomeScreen extends GetView<UserHomeController> {
                         onTap: () {
                           Get.toNamed(
                             AppRoute.artistProfile,
-                            arguments: artist.name,
+                            arguments: {
+                              'name': artist.name,
+                              'avatarUrl': artist.imageUrl,
+                              'rating': 4.9,
+                              'isVerified': true,
+                            },
                           );
                         },
                       ),
@@ -240,7 +245,7 @@ class UserHomeScreen extends GetView<UserHomeController> {
               ),
               const Icon(
                 Icons.chevron_right_rounded,
-                color: AppColors.onboardingbutton,
+                color: AppColors.secondary,
                 size: 16,
               ),
             ],
