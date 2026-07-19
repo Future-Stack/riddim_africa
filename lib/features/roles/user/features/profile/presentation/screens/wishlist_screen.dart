@@ -23,18 +23,16 @@ class WishlistScreen extends StatelessWidget {
             children: [
               Text(
                 'Wishlist',
-                style: AppTextStyle(context).boldTextStyle(
-                  color: AppColors.white,
-                  fontSize: 18,
-                ),
+                style: AppTextStyle(
+                  context,
+                ).boldTextStyle(color: AppColors.white, fontSize: 18),
               ),
               const SizedBox(height: 2),
               Text(
                 '$count saved items',
-                style: AppTextStyle(context).regularTextStyle(
-                  color: AppColors.primarytext,
-                  fontSize: 12,
-                ),
+                style: AppTextStyle(
+                  context,
+                ).regularTextStyle(color: AppColors.primarytext, fontSize: 12),
               ),
             ],
           );
@@ -85,7 +83,9 @@ class WishlistScreen extends StatelessWidget {
                     'Added to Cart',
                     '${product.title} added to shopping cart!',
                     snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: AppColors.bordercolor.withValues(alpha: 0.9),
+                    backgroundColor: AppColors.bordercolor.withValues(
+                      alpha: 0.9,
+                    ),
                     colorText: AppColors.white,
                   );
                 },
@@ -156,7 +156,7 @@ class _WishlistProductCard extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: AppColors.black.withValues(alpha: 0.6),
+                        color: AppColors.black.withValues(alpha: 0.3),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
@@ -179,20 +179,18 @@ class _WishlistProductCard extends StatelessWidget {
               children: [
                 Text(
                   product.title,
-                  style: AppTextStyle(context).boldTextStyle(
-                    color: AppColors.white,
-                    fontSize: 14,
-                  ),
+                  style: AppTextStyle(
+                    context,
+                  ).boldTextStyle(color: AppColors.white, fontSize: 14),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const Gap(2),
                 Text(
                   product.subtitle,
-                  style: AppTextStyle(context).mediumTextStyle(
-                    color: AppColors.primarytext,
-                    fontSize: 11,
-                  ),
+                  style: AppTextStyle(
+                    context,
+                  ).mediumTextStyle(color: AppColors.primarytext, fontSize: 11),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

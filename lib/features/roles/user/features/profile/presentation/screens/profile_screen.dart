@@ -67,7 +67,7 @@ class UserProfileScreen extends StatelessWidget {
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
-                            Iconsax.camera,
+                            Icons.camera_alt,
                             color: AppColors.white,
                             size: 16,
                           ),

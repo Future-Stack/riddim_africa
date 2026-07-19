@@ -86,10 +86,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: Center(
                     child: Text(
                       'Save',
-                      style: AppTextStyle(context).boldTextStyle(
-                        color: AppColors.white,
-                        fontSize: 14,
-                      ),
+                      style: AppTextStyle(
+                        context,
+                      ).boldTextStyle(color: AppColors.white, fontSize: 14),
                     ),
                   ),
                 ),
@@ -119,7 +118,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: AppColors.primaryappbrownsecond,
+                              color: AppColors.primarytext,
                               width: 3,
                             ),
                             image: DecorationImage(
@@ -140,7 +139,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           onTap: controller.pickProfileImage,
                           child: Container(
                             padding: const EdgeInsets.all(6),
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppColors.primary,
+                                width: 3,
+                              ),
                               color: AppColors.secondary,
                               shape: BoxShape.circle,
                             ),

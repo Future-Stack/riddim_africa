@@ -114,9 +114,7 @@ class ProductImageGallery extends StatelessWidget {
                       width: size,
                       height: size,
                       margin: const EdgeInsets.symmetric(horizontal: 6.0),
-                      padding: isSelected
-                          ? const EdgeInsets.all(3.0)
-                          : EdgeInsets.zero,
+
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
                           isSelected ? 10.0 : 8.0,

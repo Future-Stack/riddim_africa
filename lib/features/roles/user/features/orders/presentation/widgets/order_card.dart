@@ -37,9 +37,11 @@ class OrderCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Iconsax.box,
-                      color: AppColors.secondary,
+                      color: isDelivered
+                          ? AppColors.onboardingbutton
+                          : AppColors.secondary,
                       size: 20,
                     ),
                     const SizedBox(width: 8),

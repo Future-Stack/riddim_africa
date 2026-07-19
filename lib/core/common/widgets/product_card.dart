@@ -166,8 +166,11 @@ class ProductCard extends StatelessWidget {
                       bottom: -15,
                       left: 10,
                       child: Container(
-                        padding: const EdgeInsets.all(2.0),
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.onboardingbutton,
+                            width: 2,
+                          ),
                           color: AppColors.primaryappbrown,
                           shape: BoxShape.circle,
                         ),
@@ -180,19 +183,25 @@ class ProductCard extends StatelessWidget {
                             ),
                             if (isVerifiedArtist)
                               Positioned(
-                                bottom: -2,
-                                right: -2,
-                                child: Container(
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.green,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                    size: 8,
-                                  ),
+                                bottom: 20,
+                                right: -5,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Container(
+                                      width: 16,
+                                      height: 16,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.verified,
+                                      color: AppColors.success,
+                                      size: 10.sp,
+                                    ),
+                                  ],
                                 ),
                               ),
                           ],

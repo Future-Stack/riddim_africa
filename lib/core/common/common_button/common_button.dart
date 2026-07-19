@@ -128,11 +128,11 @@ class ProElevatedButton extends StatelessWidget {
         boxShadow: showGlow
             ? [
                 BoxShadow(
-                  color: shadowColor,
-                  blurRadius: 15,
+                  color: shadowColor.withValues(alpha: 0.25),
+                  blurRadius: 10,
                   spreadRadius: 2,
                   offset: const Offset(0, 4),
-                )
+                ),
               ]
             : null,
       ),
