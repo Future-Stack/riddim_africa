@@ -6,6 +6,7 @@ class ArtistModel extends ArtistEntity {
     required super.name,
     required super.imageUrl,
     required super.genre,
+    required super.followers,
   });
 
   factory ArtistModel.fromJson(Map<String, dynamic> json) {
@@ -14,6 +15,7 @@ class ArtistModel extends ArtistEntity {
       name: json['name'] as String,
       imageUrl: json['imageUrl'] as String,
       genre: json['genre'] as String,
+      followers: json['followers'] as String? ?? '0',
     );
   }
 
@@ -23,6 +25,7 @@ class ArtistModel extends ArtistEntity {
       'name': name,
       'imageUrl': imageUrl,
       'genre': genre,
+      'followers': followers,
     };
   }
 }

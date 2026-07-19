@@ -147,28 +147,28 @@ class CategoryChipsRow extends StatelessWidget {
           ),
         ),
         child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: AppColors.white,
-            size: 16,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            label,
-            style: isActive 
-              ? AppTextStyle(context).boldTextStyle(
-                  color: AppColors.white,
-                  fontSize: 14,
-                )
-              : AppTextStyle(context).mediumTextStyle(
-                  color: AppColors.white,
-                  fontSize: 14,
-                ),
-          ),
-        ],
-      ),
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: AppColors.white,
+              size: 16,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: isActive
+                  ? AppTextStyle(context).boldTextStyle(
+                      color: AppColors.white,
+                      fontSize: 14,
+                    )
+                  : AppTextStyle(context).mediumTextStyle(
+                      color: AppColors.white,
+                      fontSize: 14,
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -193,17 +193,17 @@ class CategoryChipsRow extends StatelessWidget {
           ),
         ),
         child: Text(
-        label,
-        style: isActive
-          ? AppTextStyle(context).boldTextStyle(
-              color: AppColors.white,
-              fontSize: 14,
-            )
-          : AppTextStyle(context).mediumTextStyle(
-              color: AppColors.primarytext,
-              fontSize: 14,
-            ),
-      ),
+          label,
+          style: isActive
+              ? AppTextStyle(context).boldTextStyle(
+                  color: AppColors.white,
+                  fontSize: 14,
+                )
+              : AppTextStyle(context).mediumTextStyle(
+                  color: AppColors.primarytext,
+                  fontSize: 14,
+                ),
+        ),
       ),
     );
   }

@@ -24,7 +24,7 @@ class NotificationScreen extends GetView<NotificationController> {
             onTap: () => Get.back(),
             child: Container(
               decoration: const BoxDecoration(
-                color: AppColors.primaryappbrownsecond,
+                color: AppColors.appbardivider,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -41,18 +41,16 @@ class NotificationScreen extends GetView<NotificationController> {
             children: [
               Text(
                 'Notifications',
-                style: AppTextStyle(context).boldTextStyle(
-                  color: AppColors.white,
-                  fontSize: 20,
-                ),
+                style: AppTextStyle(
+                  context,
+                ).boldTextStyle(color: AppColors.white, fontSize: 20),
               ),
               const SizedBox(height: 2),
               Text(
                 '${controller.unreadCount} unread',
-                style: AppTextStyle(context).regularTextStyle(
-                  color: AppColors.primarytext,
-                  fontSize: 13,
-                ),
+                style: AppTextStyle(
+                  context,
+                ).regularTextStyle(color: AppColors.primarytext, fontSize: 13),
               ),
             ],
           ),
@@ -75,10 +73,9 @@ class NotificationScreen extends GetView<NotificationController> {
               },
               child: Text(
                 'Mark all read',
-                style: AppTextStyle(context).mediumTextStyle(
-                  color: AppColors.secondary,
-                  fontSize: 14,
-                ),
+                style: AppTextStyle(
+                  context,
+                ).mediumTextStyle(color: AppColors.secondary, fontSize: 14),
               ),
             ),
           ),
@@ -153,18 +150,16 @@ class NotificationScreen extends GetView<NotificationController> {
           const SizedBox(height: 16),
           Text(
             'No notifications',
-            style: AppTextStyle(context).boldTextStyle(
-              color: AppColors.white,
-              fontSize: 18,
-            ),
+            style: AppTextStyle(
+              context,
+            ).boldTextStyle(color: AppColors.white, fontSize: 18),
           ),
           const SizedBox(height: 8),
           Text(
             'You are all caught up!',
-            style: AppTextStyle(context).regularTextStyle(
-              color: AppColors.primarytext,
-              fontSize: 14,
-            ),
+            style: AppTextStyle(
+              context,
+            ).regularTextStyle(color: AppColors.primarytext, fontSize: 14),
           ),
         ],
       ),
@@ -172,8 +167,6 @@ class NotificationScreen extends GetView<NotificationController> {
   }
 
   void _showNotificationDetail(BuildContext context, NotificationModel item) {
-    Get.bottomSheet(
-      NotificationDetailSheet(item: item),
-    );
+    Get.bottomSheet(NotificationDetailSheet(item: item));
   }
 }

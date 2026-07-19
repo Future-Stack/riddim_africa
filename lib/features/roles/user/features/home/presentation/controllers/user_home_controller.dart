@@ -1,52 +1,57 @@
 import 'package:get/get.dart';
 import '../../domain/entities/product_entity.dart';
-import '../../domain/usecases/get_home_products_usecase.dart';
+import '../../domain/entities/artist_entity.dart';
+import '../../domain/usecases/get_trending_products_usecase.dart';
+import '../../domain/usecases/get_featured_artists_usecase.dart';
+import '../../domain/usecases/get_featured_products_usecase.dart';
+import '../../domain/usecases/get_artist_merchandise_usecase.dart';
 
 class UserHomeController extends GetxController {
-  final GetHomeProductsUseCase _getHomeProductsUseCase;
+  final GetTrendingProductsUseCase _getTrendingProductsUseCase;
+  final GetFeaturedArtistsUseCase _getFeaturedArtistsUseCase;
+  final GetFeaturedProductsUseCase _getFeaturedProductsUseCase;
+  final GetArtistMerchandiseUseCase _getArtistMerchandiseUseCase;
 
-  UserHomeController(this._getHomeProductsUseCase);
+  UserHomeController(
+    this._getTrendingProductsUseCase,
+    this._getFeaturedArtistsUseCase,
+    this._getFeaturedProductsUseCase,
+    this._getArtistMerchandiseUseCase,
+  );
 
-  // State
-  final RxString searchText = ''.obs;
-  final RxString selectedMainCategory = 'Featured'.obs;
-  final RxString selectedSubCategory = 'All'.obs;
+  // States
   final RxBool isLoading = false.obs;
 
-  // Products
-  final RxList<ProductEntity> productsList = <ProductEntity>[].obs;
+  // Lists
+  final RxList<ProductEntity> trendingProducts = <ProductEntity>[].obs;
+  final RxList<ArtistEntity> featuredArtists = <ArtistEntity>[].obs;
+  final RxList<ProductEntity> featuredProducts = <ProductEntity>[].obs;
+  final RxList<ProductEntity> artistMerchandise = <ProductEntity>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    _loadProducts();
+    _loadDashboardData();
   }
 
-  Future<void> _loadProducts() async {
+  Future<void> _loadDashboardData() async {
     isLoading.value = true;
     try {
-      final products = await _getHomeProductsUseCase.execute();
-      productsList.value = products;
+      final results = await Future.wait([
+        _getTrendingProductsUseCase.execute(),
+        _getFeaturedArtistsUseCase.execute(),
+        _getFeaturedProductsUseCase.execute(),
+        _getArtistMerchandiseUseCase.execute(),
+      ]);
+
+      trendingProducts.value = results[0] as List<ProductEntity>;
+      featuredArtists.value = results[1] as List<ArtistEntity>;
+      featuredProducts.value = results[2] as List<ProductEntity>;
+      artistMerchandise.value = results[3] as List<ProductEntity>;
     } catch (e) {
-      // Handle error gracefully
-      Get.snackbar('Error', 'Failed to load products');
+      Get.snackbar('Error', 'Failed to load home dashboard data');
     } finally {
       isLoading.value = false;
     }
-  }
-
-  void onSearchChanged(String value) {
-    searchText.value = value;
-    // Implement search filtering logic here if needed
-  }
-
-  void selectMainCategory(String category) {
-    selectedMainCategory.value = category;
-    // Filter products if needed
-  }
-
-  void selectSubCategory(String category) {
-    selectedSubCategory.value = category;
-    // Filter products if needed
   }
 }

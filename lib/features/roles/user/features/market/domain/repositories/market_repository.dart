@@ -8,4 +8,5 @@ abstract class MarketRepository {
   Future<List<CartItemEntity>> getCartItems();
   Future<List<DeliveryAddressEntity>> getDeliveryAddresses();
   Future<List<MarketProductEntity>> getArtistProducts(String artistName);
+  Future<List<MarketProductEntity>> getMarketProducts();
 }

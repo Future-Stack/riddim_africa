@@ -7,10 +7,12 @@ import '../domain/usecases/get_delivery_addresses_usecase.dart';
 import '../domain/usecases/get_product_detail_usecase.dart';
 import '../domain/usecases/get_related_products_usecase.dart';
 import '../domain/usecases/get_artist_products_usecase.dart';
+import '../domain/usecases/get_market_products_usecase.dart';
 import '../presentation/controllers/cart_controller.dart';
 import '../presentation/controllers/checkout_controller.dart';
 import '../presentation/controllers/product_detail_controller.dart';
 import '../presentation/controllers/artist_profile_controller.dart';
+import '../controllers/market_controller.dart';
 
 class MarketBinding extends Bindings {
   @override
@@ -31,6 +33,7 @@ class MarketBinding extends Bindings {
       () => GetDeliveryAddressesUseCase(Get.find<MarketRepository>()),
     );
     Get.lazyPut(() => GetArtistProductsUseCase(Get.find<MarketRepository>()));
+    Get.lazyPut(() => GetMarketProductsUseCase(Get.find<MarketRepository>()));
 
     // Controllers
     Get.lazyPut(
@@ -45,6 +48,9 @@ class MarketBinding extends Bindings {
     );
     Get.lazyPut(
       () => ArtistProfileController(Get.find<GetArtistProductsUseCase>()),
+    );
+    Get.lazyPut(
+      () => MarketController(Get.find<GetMarketProductsUseCase>()),
     );
   }
 }

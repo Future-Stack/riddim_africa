@@ -1,102 +1,252 @@
 import 'package:flutter/material.dart';
-import 'package:riddimafrica/core/utils/constants/colors.dart';
-import 'package:riddimafrica/core/common/styles/global_text_style.dart';
+import 'package:get/get.dart';
+import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/core/common/widgets/home_app_bar.dart';
 import 'package:riddimafrica/core/common/widgets/custom_search_bar.dart';
 import 'package:riddimafrica/core/common/widgets/product_card.dart';
-import '../widgets/category_chips_row.dart';
-import 'package:get/get.dart';
 import 'package:riddimafrica/routes/app_routes.dart';
 import '../controllers/user_home_controller.dart';
+import '../widgets/campaign_banner_card.dart';
+import '../widgets/live_radio_card.dart';
+import '../widgets/featured_artist_card.dart';
 
 class UserHomeScreen extends GetView<UserHomeController> {
   const UserHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: AppColors.primary, // Dark brown background
       appBar: const HomeAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            // Search Bar Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: CustomSearchBar(
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.onboardingbutton),
+          );
+        }
+
+        return SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Search Bar Section (tapping navigates to global search)
+              CustomSearchBar(
                 readOnly: true,
                 onTap: () => Get.toNamed(AppRoute.globalSearch),
               ),
-            ),
-            const SizedBox(height: 24),
-            
-            // Category Chips Row
-            Obx(() => CategoryChipsRow(
-              selectedMainCategory: controller.selectedMainCategory.value,
-              selectedSubCategory: controller.selectedSubCategory.value,
-              onMainCategorySelected: controller.selectMainCategory,
-              onSubCategorySelected: controller.selectSubCategory,
-            )),
-            const SizedBox(height: 24),
-            
-            // Products Found Text
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Obx(() => Text(
-                '${controller.productsList.length} products found',
-                style: AppTextStyle(context).mediumTextStyle(
-                  color: AppColors.primarytext,
-                  fontSize: 16,
+              const SizedBox(height: 20),
+
+              // Marketplace Campaign Card
+              const CampaignBannerCard(),
+              const SizedBox(height: 20),
+
+              // Live Radio Card
+              const LiveRadioCard(),
+              const SizedBox(height: 24),
+              // ─── Featured Products ─────────────────────────────────────────
+              _buildSectionHeader(
+                context,
+                title: 'Featured Products',
+                onSeeAll: () {},
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 200.h,
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.featuredProducts.length,
+                  itemBuilder: (context, index) {
+                    final product = controller.featuredProducts[index];
+                    return Padding(
+                      padding: EdgeInsets.only(right: 12.w),
+                      child: SizedBox(
+                        width: 150.w,
+                        child: ProductCard(
+                          imageUrl: product.imageUrl,
+                          title: product.title,
+                          subtitle: product.subtitle,
+                          rating: product.rating,
+                          categoryText: product.categoryText,
+                          price: product.price,
+                          onTap: () {
+                            Get.toNamed(
+                              AppRoute.marketProductDetail,
+                              arguments: product.id,
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              )),
-            ),
-            const SizedBox(height: 16),
-            
-            // Grid of Products
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Obx(() {
-                if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (controller.productsList.isEmpty) {
-                  return const Center(child: Text('No products available'));
-                }
-                return GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 0.65, // Adjust for card height
+              ),
+              const SizedBox(height: 24),
+              // ─── Artist Merchandise ────────────────────────────────────────
+              _buildSectionHeader(
+                context,
+                title: 'Artist Merchandise',
+                onSeeAll: () {},
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 170.h,
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.artistMerchandise.length,
+                  itemBuilder: (context, index) {
+                    final product = controller.artistMerchandise[index];
+                    return Padding(
+                      padding: EdgeInsets.only(right: 12.w),
+                      child: SizedBox(
+                        width: 160.w,
+                        child: ProductCard(
+                          imageUrl: product.imageUrl,
+                          title: product.title,
+                          subtitle: '',
+                          rating: 0,
+                          categoryText: '',
+                          price: product.price,
+                          showRatingRow: false,
+                          showAddButton: false,
+                          actionText: 'View',
+                          artistName: product.artistName,
+                          artistAvatarUrl: product.artistAvatarUrl,
+                          isVerifiedArtist: product.isVerifiedArtist,
+                          onTap: () {
+                            Get.toNamed(
+                              AppRoute.marketProductDetail,
+                              arguments: product.id,
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                itemCount: controller.productsList.length,
-                itemBuilder: (context, index) {
-                  final product = controller.productsList[index];
-                  return ProductCard(
-                    imageUrl: product.imageUrl,
-                    title: product.title,
-                    subtitle: product.subtitle,
-                    rating: product.rating,
-                    categoryText: product.categoryText,
-                    price: product.price,
-                    isHot: product.isHot,
-                    onTap: () {
-                      Get.toNamed('/marketProductDetail', arguments: product.id);
-                    },
-                  );
-                },
-              );
-              }),
-            ),
-            const SizedBox(height: 24),
-          ],
+              ),
+              const SizedBox(height: 24),
+
+              // ─── Trending Products ─────────────────────────────────────────
+              _buildSectionHeader(
+                context,
+                title: 'Trending Products',
+                onSeeAll: () => Get.toNamed(AppRoute.getUserhomescreen()),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 170.h,
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.trendingProducts.length,
+                  itemBuilder: (context, index) {
+                    final product = controller.trendingProducts[index];
+                    return Padding(
+                      padding: EdgeInsets.only(right: 12.w),
+                      child: SizedBox(
+                        width: 140.w,
+                        child: ProductCard(
+                          imageUrl: product.imageUrl,
+                          title: product.title,
+                          subtitle: '',
+                          rating: 0,
+                          categoryText: '',
+                          price: product.price,
+                          rank: index + 1,
+                          showFavoriteButton: false,
+                          showRatingRow: false,
+                          showAddButton: false,
+                          onTap: () {
+                            Get.toNamed(
+                              AppRoute.marketProductDetail,
+                              arguments: product.id,
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // ─── Featured Artists ──────────────────────────────────────────
+              _buildSectionHeader(
+                context,
+                title: 'Featured Artists',
+                onSeeAll: () {},
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 145.h,
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.featuredArtists.length,
+                  itemBuilder: (context, index) {
+                    final artist = controller.featuredArtists[index];
+                    return Padding(
+                      padding: EdgeInsets.only(right: 12.w),
+                      child: FeaturedArtistCard(
+                        artist: artist,
+                        onTap: () {
+                          Get.toNamed(
+                            AppRoute.artistProfile,
+                            arguments: artist.name,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget _buildSectionHeader(
+    BuildContext context, {
+    required String title,
+    required VoidCallback onSeeAll,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          title,
+          style: AppTextStyle(
+            context,
+          ).boldTextStyle(color: AppColors.white, fontSize: 20),
         ),
-      ),
+        GestureDetector(
+          onTap: onSeeAll,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'See all ',
+                style: AppTextStyle(
+                  context,
+                ).mediumTextStyle(color: AppColors.secondary, fontSize: 14),
+              ),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: AppColors.onboardingbutton,
+                size: 16,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

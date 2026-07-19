@@ -21,4 +21,24 @@ class HomeRepositoryImpl implements HomeRepository {
     final artistModels = await localDataSource.getMockArtists();
     return artistModels;
   }
+
+  @override
+  Future<List<ProductEntity>> getTrendingProducts() async {
+    return localDataSource.getMockTrendingProducts();
+  }
+
+  @override
+  Future<List<ArtistEntity>> getFeaturedArtists() async {
+    return localDataSource.getMockFeaturedArtists();
+  }
+
+  @override
+  Future<List<ProductEntity>> getFeaturedProducts() async {
+    return localDataSource.getMockFeaturedProducts();
+  }
+
+  @override
+  Future<List<ProductEntity>> getArtistMerchandise() async {
+    return localDataSource.getMockArtistMerchandise();
+  }
 }

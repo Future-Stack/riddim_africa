@@ -28,6 +28,17 @@ import 'package:riddimafrica/features/roles/user/features/orders/presentation/sc
 import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_review_screen.dart';
 import 'package:riddimafrica/features/notification/bindings/notification_binding.dart';
 import 'package:riddimafrica/features/notification/presentation/screens/notification_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/profile/binding/profile_binding.dart';
+import 'package:riddimafrica/features/roles/user/features/profile/presentation/screens/edit_profile_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/profile/presentation/screens/wishlist_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/settings/binding/settings_binding.dart';
+import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/settings_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/change_password_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/faq_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/privacy_policy_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/refund_policy_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/cookie_notice_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/community_guidelines_screen.dart';
 
 class AppRoute {
   static const String welcomescreen = "/welcomeScreen";
@@ -66,6 +77,17 @@ class AppRoute {
   static const String marketCheckout = "/marketCheckout";
   static const String artistProfile = "/artistProfile";
   static const String notifications = "/notifications";
+
+  // PROFILE & SETTINGS
+  static const String editProfile = "/editProfile";
+  static const String wishlist = "/wishlist";
+  static const String settings = "/settings";
+  static const String changePassword = "/changePassword";
+  static const String faq = "/faq";
+  static const String privacyPolicy = "/privacyPolicy";
+  static const String refundPolicy = "/refundPolicy";
+  static const String cookieNotice = "/cookieNotice";
+  static const String communityGuidelines = "/communityGuidelines";
 
   //ORDERS
   static const String orderList = "/orderList";
@@ -179,6 +201,51 @@ class AppRoute {
       name: orderReview,
       page: () => const OrderReviewScreen(),
       binding: OrderBinding(),
+    ),
+    GetPage(
+      name: editProfile,
+      page: () => const EditProfileScreen(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: wishlist,
+      page: () => const WishlistScreen(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: settings,
+      page: () => const SettingsScreen(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: changePassword,
+      page: () => const ChangePasswordScreen(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: faq,
+      page: () => const FaqScreen(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: privacyPolicy,
+      page: () => const PrivacyPolicyScreen(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: refundPolicy,
+      page: () => const RefundPolicyScreen(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: cookieNotice,
+      page: () => const CookieNoticeScreen(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: communityGuidelines,
+      page: () => const CommunityGuidelinesScreen(),
+      binding: SettingsBinding(),
     ),
   ];
 }

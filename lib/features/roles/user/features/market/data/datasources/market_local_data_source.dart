@@ -8,6 +8,7 @@ abstract class MarketLocalDataSource {
   Future<List<CartItemModel>> getMockCartItems();
   Future<List<DeliveryAddressModel>> getMockDeliveryAddresses();
   Future<List<MarketProductModel>> getMockArtistProducts(String artistName);
+  Future<List<MarketProductModel>> getMockProducts();
 }
 
 class MarketLocalDataSourceImpl implements MarketLocalDataSource {
@@ -51,34 +52,48 @@ class MarketLocalDataSourceImpl implements MarketLocalDataSource {
 
     return const [
       MarketProductModel(
-        id: '10',
+        id: '1',
         imageUrl:
-            'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=500&auto=format&fit=crop',
-        title: 'Dashiki Shirt',
+            'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=500&auto=format&fit=crop',
+        title: 'Kente Drum Bag',
         sellerName: 'Craft Studio UG',
-        rating: 4.5,
-        category: 'Clothing',
-        price: 'UGX 65,000',
+        rating: 4.9,
+        category: 'Artist Merch',
+        price: 'UGX 45,000',
+        inStock: true,
       ),
       MarketProductModel(
-        id: '11',
+        id: '2',
         imageUrl:
-            'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=500&auto=format&fit=crop',
-        title: 'Masai Bracelet',
-        sellerName: 'Heritage Jewels',
+            'https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?q=80&w=500&auto=format&fit=crop',
+        title: 'Ankara Sneakers',
+        sellerName: 'Sole Africa',
         rating: 4.7,
-        category: 'Crafts',
-        price: 'UGX 145,000',
+        category: 'Clothing',
+        price: 'UGX 85,000',
+        inStock: true,
       ),
       MarketProductModel(
-        id: '12',
+        id: '3',
         imageUrl:
-            'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?q=80&w=500&auto=format&fit=crop',
-        title: 'Kente Cap',
-        sellerName: 'AfroStyle KLA',
-        rating: 4.3,
-        category: 'Clothing',
-        price: 'UGX 38,000',
+            'https://images.unsplash.com/photo-1578932750294-f5075e85f44a?q=80&w=500&auto=format&fit=crop',
+        title: 'Tribal Mask Art',
+        sellerName: 'Woodland Arts',
+        rating: 4.8,
+        category: 'Art',
+        price: 'UGX 120,000',
+        inStock: true,
+      ),
+      MarketProductModel(
+        id: '4',
+        imageUrl:
+            'https://images.unsplash.com/photo-1603484435887-39b036579fc9?q=80&w=500&auto=format&fit=crop',
+        title: 'Beaded Necklace',
+        sellerName: 'Heritage Jewels',
+        rating: 4.5,
+        category: 'Crafts',
+        price: 'UGX 25,000',
+        inStock: true,
       ),
     ];
   }
@@ -167,6 +182,57 @@ class MarketLocalDataSourceImpl implements MarketLocalDataSource {
         rating: 4.6,
         category: '',
         price: 'UGX 22,000',
+      ),
+    ];
+  }
+
+  @override
+  Future<List<MarketProductModel>> getMockProducts() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return const [
+      MarketProductModel(
+        id: '1',
+        imageUrl:
+            'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=500&auto=format&fit=crop',
+        title: 'Kente Drum Bag',
+        sellerName: 'Craft Studio UG',
+        rating: 4.9,
+        category: 'Artist Merch',
+        price: 'UGX 45,000',
+        inStock: true,
+      ),
+      MarketProductModel(
+        id: '2',
+        imageUrl:
+            'https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?q=80&w=500&auto=format&fit=crop',
+        title: 'Ankara Sneakers',
+        sellerName: 'Sole Africa',
+        rating: 4.7,
+        category: 'Clothing',
+        price: 'UGX 85,000',
+        inStock: true,
+      ),
+      MarketProductModel(
+        id: '3',
+        imageUrl:
+            'https://images.unsplash.com/photo-1578932750294-f5075e85f44a?q=80&w=500&auto=format&fit=crop',
+        title: 'Tribal Mask Art',
+        sellerName: 'Woodland Arts',
+        rating: 4.8,
+        category: 'Art',
+        price: 'UGX 120,000',
+        inStock: true,
+      ),
+      MarketProductModel(
+        id: '4',
+        imageUrl:
+            'https://images.unsplash.com/photo-1603484435887-39b036579fc9?q=80&w=500&auto=format&fit=crop',
+        title: 'Beaded Necklace',
+        sellerName: 'Heritage Jewels',
+        rating: 4.5,
+        category: 'Crafts',
+        price: 'UGX 25,000',
+        inStock: true,
       ),
     ];
   }

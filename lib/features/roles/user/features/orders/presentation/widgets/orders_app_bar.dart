@@ -70,7 +70,7 @@ class OrdersAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onTap: onBackPressed ?? () => Get.back(),
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: AppColors.primaryappbrownsecond,
+                    color: AppColors.appbardivider,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(

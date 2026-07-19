@@ -7,6 +7,9 @@ class ProductEntity {
   final String categoryText;
   final String price;
   final bool isHot;
+  final String? artistName;
+  final String? artistAvatarUrl;
+  final bool isVerifiedArtist;
 
   const ProductEntity({
     required this.id,
@@ -17,5 +20,8 @@ class ProductEntity {
     required this.categoryText,
     required this.price,
     this.isHot = false,
+    this.artistName,
+    this.artistAvatarUrl,
+    this.isVerifiedArtist = false,
   });
 }

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/features/roles/user/features/home/presentation/screens/home_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/market_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/radio/presentation/screens/radio_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/cart_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/profile/presentation/screens/profile_screen.dart';
 import '../../domain/entities/nav_model.dart';
 
 // ─── Placeholder screens ───────────────────────────────────────────────────
@@ -21,13 +23,6 @@ class RevenueScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       const _PlaceholderPage(label: 'Revenue');
-}
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const _PlaceholderPage(label: 'Profile');
 }
 
 class _PlaceholderPage extends StatelessWidget {
@@ -58,10 +53,10 @@ class UserBottomNavController extends GetxController {
   // ── Screens — keep in the same order as items ──────────────────────────
   final List<Widget> screens = [
     const UserHomeScreen(),
-    const ProductsScreen(),
+    const UserMarketScreen(),
     const RadioScreen(),
     const CartScreen(),
-    const ProfileScreen(),
+    const UserProfileScreen(),
   ];
 
   // ── Actions ────────────────────────────────────────────────────────────
