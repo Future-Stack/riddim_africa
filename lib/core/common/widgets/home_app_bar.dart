@@ -44,7 +44,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                           height: 20,
                           colorFilter: const ColorFilter.mode(
                             AppColors
-                                .primarytext, // tint the icon if it's a single-color svg
+                                .appbardivider, // tint the icon if it's a single-color svg
                             BlendMode.srcIn,
                           ),
                         ),

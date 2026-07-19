@@ -245,7 +245,7 @@ class UserHomeScreen extends GetView<UserHomeController> {
               ),
               const Icon(
                 Icons.chevron_right_rounded,
-                color: AppColors.onboardingbutton,
+                color: AppColors.secondary,
                 size: 16,
               ),
             ],

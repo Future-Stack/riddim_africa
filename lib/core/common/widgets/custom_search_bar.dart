@@ -80,7 +80,7 @@ class CustomSearchBar extends StatelessWidget {
               width: 15.h,
               height: 15.h,
               colorFilter: const ColorFilter.mode(
-                AppColors.primarytext,
+                AppColors.appbardivider,
                 BlendMode.srcIn,
               ),
             ),
