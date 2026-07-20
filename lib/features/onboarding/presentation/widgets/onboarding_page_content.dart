@@ -59,7 +59,7 @@ class OnboardingPageContent extends StatelessWidget {
                           fit: BoxFit.contain,
                         ),
                       ),
-                    if (pageData.centerLogoPath != null) SizedBox(height: 24.h),
+                    if (pageData.centerLogoPath != null) SizedBox(height: 5.h),
                     if (pageData.showDots)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -77,7 +77,7 @@ class OnboardingPageContent extends StatelessWidget {
                           );
                         }),
                       ),
-                    if (pageData.showDots) SizedBox(height: 32.h),
+                    if (pageData.showDots) SizedBox(height: 20.h),
                     Text(
                       pageData.title,
                       style: AppTextStyle(context).boldTextStyle(

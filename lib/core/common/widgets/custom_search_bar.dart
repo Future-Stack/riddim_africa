@@ -38,6 +38,7 @@ class CustomSearchBar extends StatelessWidget {
         ],
       ),
       child: TextField(
+        textAlign: TextAlign.start,
         controller: controller,
         readOnly: readOnly,
         onTap: onTap,
@@ -60,7 +61,7 @@ class CustomSearchBar extends StatelessWidget {
             heightFactor: 1.0,
             child: SvgPicture.asset(
               IconPath.search,
-              width: 15.h,
+              width: 18.h,
               height: 15.h,
               colorFilter: const ColorFilter.mode(
                 AppColors.primarytext,
@@ -92,7 +93,7 @@ class CustomSearchBar extends StatelessWidget {
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 16.h),
+          contentPadding: EdgeInsets.symmetric(vertical: 14.h),
         ),
       ),
     );
