@@ -151,7 +151,7 @@ class CheckoutScreen extends GetView<CheckoutController> {
                           fontSize: 16,
                           borderRadius: 16,
                           showGlow: true,
-                          glowColor: AppColors.secondary.withOpacity(0.4),
+                          glowColor: AppColors.secondary.withValues(alpha: 0.4),
                         ),
                       ),
                     ],

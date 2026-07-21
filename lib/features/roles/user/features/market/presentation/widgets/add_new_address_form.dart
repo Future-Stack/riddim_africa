@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:riddimafrica/core/core.dart';
-import 'package:riddimafrica/core/common/common_text_field/pro_text_field.dart';
 import '../controllers/checkout_controller.dart';
 import 'address_type_option.dart';
 
@@ -109,7 +108,7 @@ class AddNewAddressForm extends StatelessWidget {
                       fontSize: 14,
                       borderRadius: 24,
                       showGlow: true,
-                      glowColor: AppColors.onboardingbutton.withOpacity(0.4),
+                      glowColor: AppColors.onboardingbutton.withValues(alpha: 0.4),
                     ),
                   ),
                 ],

@@ -120,7 +120,7 @@ class OrderConfirmedSection extends StatelessWidget {
           fontSize: 16,
           borderRadius: 16,
           showGlow: true,
-          glowColor: AppColors.secondary.withOpacity(0.4),
+          glowColor: AppColors.secondary.withValues(alpha: 0.4),
         ),
         const SizedBox(height: 16),
         ProElevatedButton(

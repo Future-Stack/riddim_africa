@@ -57,7 +57,7 @@ class StatsBox extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: (iconColor ?? AppColors.bordercolor).withOpacity(0.12),
+            color: (iconColor ?? AppColors.bordercolor).withValues(alpha: 0.12),
           ),
           child: Icon(
             icon,

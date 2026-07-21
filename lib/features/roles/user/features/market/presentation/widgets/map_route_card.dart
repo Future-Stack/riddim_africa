@@ -22,7 +22,7 @@ class MapRouteCard extends StatelessWidget {
                 // Subtle map grid background
                 Positioned.fill(
                   child: GridPaper(
-                    color: Colors.white.withOpacity(0.02),
+                    color: Colors.white.withValues(alpha: 0.02),
                     divisions: 1,
                     subdivisions: 1,
                   ),
