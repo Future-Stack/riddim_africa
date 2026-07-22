@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
-import 'package:riddimafrica/core/common/common_button/common_button.dart';
 import 'package:riddimafrica/features/authentication/presentation/controllers/auth_controller.dart';
 
 class ForgotPasswordOtpScreen extends StatelessWidget {

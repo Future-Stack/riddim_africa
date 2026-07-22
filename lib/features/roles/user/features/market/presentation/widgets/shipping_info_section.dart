@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
-import 'package:riddimafrica/core/common/common_text_field/pro_text_field.dart';
 import '../controllers/checkout_controller.dart';
 import 'delivery_address_chip.dart';
 import 'map_route_card.dart';

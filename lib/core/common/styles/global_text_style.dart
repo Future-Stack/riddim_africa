@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:riddimafrica/core/utils/constants/colors.dart';
 import 'package:riddimafrica/core/utils/constants/sizer.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppTextStyle {
   final BuildContext? _context;

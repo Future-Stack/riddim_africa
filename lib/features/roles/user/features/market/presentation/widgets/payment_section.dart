@@ -87,7 +87,7 @@ class PaymentSection extends StatelessWidget {
           fontSize: 16,
           borderRadius: 16,
           showGlow: true,
-          glowColor: AppColors.secondary.withOpacity(0.5),
+          glowColor: AppColors.secondary.withValues(alpha: 0.5),
         ),
       ],
     );
