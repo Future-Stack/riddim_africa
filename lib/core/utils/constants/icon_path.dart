@@ -19,4 +19,7 @@ class IconPath {
   static const String kid = 'assets/icons/kid.svg';
   static const String send = 'assets/icons/send.svg';
   static const String checkcircle = 'assets/icons/checkcircle.svg';
+  static const String info = 'assets/icons/info.svg';
+  static const String dcube = 'assets/icons/dcube.svg';
+  static const String clock = 'assets/icons/clock.svg';
 }

@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_home/bindings/artist_home_binding.dart';
+
 import 'package:riddimafrica/features/authentication/presentation/screens/welcome_screen.dart';
 import 'package:riddimafrica/features/onboarding/bindings/onboarding_binding.dart';
 import 'package:riddimafrica/features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -116,7 +118,11 @@ class AppRoute {
       page: () => const UserBottomNav(),
       binding: HomeBinding(),
     ),
-    GetPage(name: artistbottomNav, page: () => const ArtistBottomNav()),
+    GetPage(
+      name: artistbottomNav,
+      page: () => const ArtistBottomNav(),
+      binding: ArtistHomeBinding(),
+    ),
     GetPage(name: sellerbottomNav, page: () => const SellerBottomNav()),
     GetPage(
       name: loginScreen,

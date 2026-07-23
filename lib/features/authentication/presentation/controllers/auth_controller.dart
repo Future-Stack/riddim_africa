@@ -30,7 +30,14 @@ class AuthController extends GetxController {
 
   void onLoginSubmit() {
     if (loginFormKey.currentState?.validate() ?? false) {
-      Get.offAllNamed(AppRoute.userbottomNav);
+      final email = loginEmailController.text.trim();
+      // login(loginEmailController.text.trim(), loginPasswordController.text);
+
+      if (email == 'artist@g.com') {
+        Get.offAllNamed(AppRoute.artistbottomNav);
+      } else {
+        Get.offAllNamed(AppRoute.userbottomNav);
+      }
     }
   }
 
@@ -40,7 +47,7 @@ class AuthController extends GetxController {
     try {
       final ResponseData response = await loginUseCase.execute(email, password);
       if (response.isSuccess) {
-        Get.offAllNamed(AppRoute.userbottomNav);
+        Get.offAllNamed(AppRoute.artistbottomNav);
       } else {
         Get.snackbar('Error', 'Login failed');
       }
@@ -104,7 +111,10 @@ class AuthController extends GetxController {
   }
 
   // --- Forgot Password OTP State ---
-  final List<TextEditingController> otpControllers = List.generate(4, (_) => TextEditingController());
+  final List<TextEditingController> otpControllers = List.generate(
+    4,
+    (_) => TextEditingController(),
+  );
   final List<FocusNode> otpFocusNodes = List.generate(4, (_) => FocusNode());
 
   void onOtpChanged(String value, int index) {
@@ -148,7 +158,8 @@ class AuthController extends GetxController {
   }
 
   void onUpdatePassword() {
-    if (newPasswordController.text.isNotEmpty && confirmNewPasswordController.text.isNotEmpty) {
+    if (newPasswordController.text.isNotEmpty &&
+        confirmNewPasswordController.text.isNotEmpty) {
       Get.offAllNamed(AppRoute.loginScreen);
     } else {
       Get.snackbar('Error', 'Please fill both password fields');
