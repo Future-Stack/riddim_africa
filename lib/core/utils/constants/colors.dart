@@ -23,6 +23,12 @@ class AppColors {
   //border color
   static const Color bordercolor = Color(0xFF377A7D);
   static const Color textfieldcolor = Color(0xFF212B36);
+  static const Color cardBorder = Color(0xFF655042);
+  static const Color cardBorder2 = Color(0x26AD46FF);
+
+  //background color
+  static const Color backgroundcolor = Color(0xFF2C1A0D);
+  static const Color iconBackground = Color(0x00BC7D26);
 
   // ─── Status ────────────────────────────────────────────
   static const Color success = Color(0xFF3BB515);

@@ -5,12 +5,7 @@ import 'package:riddimafrica/core/utils/constants/icon_path.dart';
 import '../../domain/entities/nav_model.dart';
 
 // ─── Placeholder screens ───────────────────────────────────────────────────
-// Replace these with your actual screen widgets.
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-  @override
-  Widget build(BuildContext context) => const _PlaceholderPage(label: 'Home');
-}
+import 'package:riddimafrica/features/roles/artist/features/artist_home/presentation/screens/artist_home_screen.dart';
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({super.key});
@@ -59,7 +54,7 @@ class ArtistBottomNavController extends GetxController {
 
   // ── Screens — keep in the same order as items ──────────────────────────
   final List<Widget> screens = const [
-    HomeScreen(),
+    ArtistHomeScreen(),
     ProductsScreen(),
     OrdersScreen(),
     RevenueScreen(),

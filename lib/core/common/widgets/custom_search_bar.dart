@@ -12,6 +12,13 @@ class CustomSearchBar extends StatelessWidget {
     this.controller,
     this.autofocus = false,
     this.onSubmitted,
+    this.textColor,
+    this.hintTextColor,
+    this.backgroundColor,
+    this.borderColor,
+    this.borderWidth,
+    this.prefixIconColor,
+    this.suffixIconColor,
   });
 
   final String hintText;
@@ -22,13 +29,25 @@ class CustomSearchBar extends StatelessWidget {
   final bool autofocus;
   final ValueChanged<String>? onSubmitted;
 
+  // New optional customization params
+  final Color? textColor;
+  final Color? hintTextColor;
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final double? borderWidth;
+  final Color? prefixIconColor;
+  final Color? suffixIconColor;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 40.h, // fixed height keeps everything centered predictably
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: backgroundColor ?? AppColors.white,
         borderRadius: BorderRadius.circular(30.0),
+        border: borderColor != null
+            ? Border.all(color: borderColor!, width: borderWidth ?? 1.0)
+            : null,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -49,13 +68,14 @@ class CustomSearchBar extends StatelessWidget {
             TextAlignVertical.center, // <-- centers text vertically
         style: AppTextStyle(
           context,
-        ).mediumTextStyle(color: AppColors.primary, fontSize: 16),
+        ).mediumTextStyle(color: textColor ?? AppColors.primary, fontSize: 16),
         decoration: InputDecoration(
           isCollapsed: true, // <-- removes default internal padding quirks
           hintText: hintText,
-          hintStyle: AppTextStyle(
-            context,
-          ).mediumTextStyle(color: AppColors.primarytext, fontSize: 12.sp),
+          hintStyle: AppTextStyle(context).mediumTextStyle(
+            color: hintTextColor ?? AppColors.primarytext,
+            fontSize: 12.sp,
+          ),
           prefixIcon: Center(
             widthFactor: 1.0,
             heightFactor: 1.0,
@@ -63,8 +83,8 @@ class CustomSearchBar extends StatelessWidget {
               IconPath.search,
               width: 18.h,
               height: 15.h,
-              colorFilter: const ColorFilter.mode(
-                AppColors.primarytext,
+              colorFilter: ColorFilter.mode(
+                prefixIconColor ?? AppColors.primarytext,
                 BlendMode.srcIn,
               ),
             ),
@@ -80,8 +100,8 @@ class CustomSearchBar extends StatelessWidget {
               IconPath.microphone,
               width: 15.h,
               height: 15.h,
-              colorFilter: const ColorFilter.mode(
-                AppColors.appbardivider,
+              colorFilter: ColorFilter.mode(
+                suffixIconColor ?? AppColors.appbardivider,
                 BlendMode.srcIn,
               ),
             ),
