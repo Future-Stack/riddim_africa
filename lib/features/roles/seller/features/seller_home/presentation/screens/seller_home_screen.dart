@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/core/common/widgets/custom_search_bar.dart';
+import 'package:riddimafrica/features/bottom_nav/presentation/controllers/seller_bottom_nav_controller.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_orders/data/models/seller_order_model.dart';
 import 'package:riddimafrica/routes/app_routes.dart';
 
 import '../controllers/seller_home_controller.dart';
@@ -61,7 +63,16 @@ class SellerHomeScreen extends GetView<SellerHomeController> {
               ],
 
               // Revenue Card
-              SellerRevenueCard(stats: controller.stats.value!),
+              GestureDetector(
+                onTap: () {
+                  if (Get.isRegistered<SellerBottomNavController>()) {
+                    Get.find<SellerBottomNavController>().changeIndex(3);
+                  } else {
+                    Get.toNamed(AppRoute.sellerRevenue);
+                  }
+                },
+                child: SellerRevenueCard(stats: controller.stats.value!),
+              ),
               const SizedBox(height: 20),
 
               // Stats Row
@@ -80,7 +91,11 @@ class SellerHomeScreen extends GetView<SellerHomeController> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Navigate to full orders view
+                      if (Get.isRegistered<SellerBottomNavController>()) {
+                        Get.find<SellerBottomNavController>().changeIndex(2);
+                      } else {
+                        Get.toNamed(AppRoute.sellerOrders);
+                      }
                     },
                     child: Row(
                       children: [
@@ -120,8 +135,32 @@ class SellerHomeScreen extends GetView<SellerHomeController> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: controller.recentOrders.length,
                   itemBuilder: (context, index) {
-                    return SellerRecentOrderCard(
-                      order: controller.recentOrders[index],
+                    final recentOrder = controller.recentOrders[index];
+                    return GestureDetector(
+                      onTap: () {
+                        // Find matching order in mock data or construct model
+                        final match = SellerOrderModel.getInitialOrders().firstWhere(
+                          (o) => o.id == recentOrder.id,
+                          orElse: () => SellerOrderModel(
+                            id: recentOrder.id,
+                            productCode: recentOrder.id,
+                            productTitle: recentOrder.productName,
+                            customerName: recentOrder.customerName,
+                            price: 'UGX ${recentOrder.price.toInt()}',
+                            status: SellerOrderStatus.newOrder,
+                            orderTime: recentOrder.date,
+                            paymentMethod: 'Paid via Mobile Money',
+                            productImage: recentOrder.productImageUrl,
+                          ),
+                        );
+                        Get.toNamed(
+                          AppRoute.sellerNewOrderAlert,
+                          arguments: match,
+                        );
+                      },
+                      child: SellerRecentOrderCard(
+                        order: recentOrder,
+                      ),
                     );
                   },
                 ),

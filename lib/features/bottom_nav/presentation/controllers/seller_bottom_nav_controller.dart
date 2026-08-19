@@ -6,15 +6,9 @@ import 'package:riddimafrica/features/roles/seller/features/seller_home/presenta
 
 import 'package:riddimafrica/features/roles/seller/features/seller_products/presentation/screens/seller_products_screen.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_orders/presentation/screens/seller_orders_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_revenue/presentation/screens/seller_revenue_screen.dart';
 
 // ─── Placeholder screens ────────────────────────────────────────────────────
-
-class SellerRevenueScreen extends StatelessWidget {
-  const SellerRevenueScreen({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const _PlaceholderPage(label: 'Revenue');
-}
 
 class SellerProfileScreen extends StatelessWidget {
   const SellerProfileScreen({super.key});
