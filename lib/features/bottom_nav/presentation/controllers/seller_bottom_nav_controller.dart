@@ -1,37 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/utils/constants/icon_path.dart';
+import 'package:riddimafrica/features/bottom_nav/domain/entities/nav_model.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_home/presentation/screens/seller_home_screen.dart';
 
-// ─── Placeholder screens ───────────────────────────────────────────────────
-// Replace these with your actual screen widgets.
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-  @override
-  Widget build(BuildContext context) => const _PlaceholderPage(label: 'Home');
-}
-
-class ProductsScreen extends StatelessWidget {
-  const ProductsScreen({super.key});
+// ─── Placeholder screens ────────────────────────────────────────────────────
+class SellerProductsScreen extends StatelessWidget {
+  const SellerProductsScreen({super.key});
   @override
   Widget build(BuildContext context) =>
       const _PlaceholderPage(label: 'Products');
 }
 
-class OrdersScreen extends StatelessWidget {
-  const OrdersScreen({super.key});
+class SellerOrdersScreen extends StatelessWidget {
+  const SellerOrdersScreen({super.key});
   @override
   Widget build(BuildContext context) => const _PlaceholderPage(label: 'Orders');
 }
 
-class RevenueScreen extends StatelessWidget {
-  const RevenueScreen({super.key});
+class SellerRevenueScreen extends StatelessWidget {
+  const SellerRevenueScreen({super.key});
   @override
   Widget build(BuildContext context) =>
       const _PlaceholderPage(label: 'Revenue');
 }
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class SellerProfileScreen extends StatelessWidget {
+  const SellerProfileScreen({super.key});
   @override
   Widget build(BuildContext context) =>
       const _PlaceholderPage(label: 'Profile');
@@ -46,22 +41,6 @@ class _PlaceholderPage extends StatelessWidget {
       child: Text(label, style: Theme.of(context).textTheme.headlineMedium),
     ),
   );
-}
-
-// ─── Nav Item Model ─────────────────────────────────────────────────────────
-
-class NavItem {
-  final String title;
-  final String iconPath;
-  final String activeIconPath; // filled variant for selected state
-  final int? badgeCount; // optional notification badge
-
-  const NavItem({
-    required this.title,
-    required this.iconPath,
-    String? activeIconPath,
-    this.badgeCount,
-  }) : activeIconPath = activeIconPath ?? iconPath;
 }
 
 // ─── Controller ─────────────────────────────────────────────────────────────
@@ -80,11 +59,11 @@ class SellerBottomNavController extends GetxController {
 
   // ── Screens — keep in the same order as items ──────────────────────────
   final List<Widget> screens = const [
-    HomeScreen(),
-    ProductsScreen(),
-    OrdersScreen(),
-    RevenueScreen(),
-    ProfileScreen(),
+    SellerHomeScreen(),
+    SellerProductsScreen(),
+    SellerOrdersScreen(),
+    SellerRevenueScreen(),
+    SellerProfileScreen(),
   ];
 
   // ── Actions ────────────────────────────────────────────────────────────

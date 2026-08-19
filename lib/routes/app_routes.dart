@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_home/bindings/artist_home_binding.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_home/bindings/seller_home_binding.dart';
 
 import 'package:riddimafrica/features/authentication/presentation/screens/welcome_screen.dart';
 import 'package:riddimafrica/features/onboarding/bindings/onboarding_binding.dart';
@@ -41,6 +42,12 @@ import 'package:riddimafrica/features/roles/user/features/settings/presentation/
 import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/refund_policy_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/cookie_notice_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/community_guidelines_screen.dart';
+import 'package:riddimafrica/features/authentication/presentation/screens/seller_id_verification_screen.dart';
+import 'package:riddimafrica/features/authentication/presentation/screens/seller_business_type_screen.dart';
+import 'package:riddimafrica/features/authentication/presentation/screens/seller_payment_method_screen.dart';
+import 'package:riddimafrica/features/authentication/presentation/screens/seller_document_form_screen.dart';
+import 'package:riddimafrica/features/authentication/presentation/screens/seller_id_photo_upload_screen.dart';
+import 'package:riddimafrica/features/authentication/presentation/screens/seller_business_details_screen.dart';
 
 class AppRoute {
   static const String welcomescreen = "/welcomeScreen";
@@ -56,6 +63,14 @@ class AppRoute {
   static const String userbottomNav = "/userbottomNav";
   static const String artistbottomNav = "/artistbottomNav";
   static const String sellerbottomNav = "/sellerbottomNav";
+
+  // Seller registration flow (new multi-step)
+  static const String sellerIdVerificationScreen = "/sellerIdVerificationScreen";
+  static const String sellerBusinessTypeScreen = "/sellerBusinessTypeScreen";
+  static const String sellerPaymentMethodScreen = "/sellerPaymentMethodScreen";
+  static const String sellerDocumentFormScreen = "/sellerDocumentFormScreen";
+  static const String sellerIdPhotoUploadScreen = "/sellerIdPhotoUploadScreen";
+  static const String sellerBusinessDetailsScreen = "/sellerBusinessDetailsScreen";
 
   static const String internetlost = "/internetlost";
   static const String communityScreen = "/communityScreen";
@@ -123,7 +138,11 @@ class AppRoute {
       page: () => const ArtistBottomNav(),
       binding: ArtistHomeBinding(),
     ),
-    GetPage(name: sellerbottomNav, page: () => const SellerBottomNav()),
+    GetPage(
+      name: sellerbottomNav,
+      page: () => const SellerBottomNav(),
+      binding: SellerHomeBinding(),
+    ),
     GetPage(
       name: loginScreen,
       page: () => const LoginScreen(),
@@ -147,6 +166,60 @@ class AppRoute {
     GetPage(
       name: createNewPasswordScreen,
       page: () => const CreateNewPasswordScreen(),
+      binding: AuthBinding(),
+    ),
+    // Seller registration flow (full multi-step)
+    GetPage(
+      name: sellerIdVerificationScreen,
+      page: () => const SellerIdVerificationScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: sellerBusinessTypeScreen,
+      page: () => const SellerBusinessTypeScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: sellerPaymentMethodScreen,
+      page: () => const SellerPaymentMethodScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: sellerDocumentFormScreen,
+      page: () => const SellerDocumentFormScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: sellerIdPhotoUploadScreen,
+      page: () {
+        int docType = 0;
+        bool isDocument = false;
+        if (Get.arguments is Map) {
+          docType = Get.arguments['docType'] ?? 0;
+          isDocument = Get.arguments['isDocument'] ?? false;
+        } else if (Get.arguments is int) {
+          final int step = Get.arguments as int;
+          if (step == 0) {
+            docType = 0;
+            isDocument = false;
+          } else if (step == 1) {
+            docType = 1;
+            isDocument = false;
+          } else {
+            docType = 1;
+            isDocument = true;
+          }
+        }
+        return SellerIdPhotoUploadScreen(
+          docType: docType,
+          isDocumentUpload: isDocument,
+        );
+      },
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: sellerBusinessDetailsScreen,
+      page: () => const SellerBusinessDetailsScreen(),
       binding: AuthBinding(),
     ),
 
