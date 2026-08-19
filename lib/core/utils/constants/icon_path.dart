@@ -22,4 +22,9 @@ class IconPath {
   static const String info = 'assets/icons/info.svg';
   static const String dcube = 'assets/icons/dcube.svg';
   static const String clock = 'assets/icons/clock.svg';
+  static const String basicInfo = 'assets/icons/basic_info.png';
+  static const String businessInfo = 'assets/icons/business_info.png';
+  static const String paymentInfo = 'assets/icons/payment_info.png';
+  static const String cameraPlus = 'assets/icons/camera_plus.png';
+  static const String uploadTray = 'assets/icons/upload_tray.png';
 }

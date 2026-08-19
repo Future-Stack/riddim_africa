@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/routes/app_routes.dart';
-import 'package:riddimafrica/features/notification/presentation/controllers/notification_controller.dart';
 
 class ArtistHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ArtistHomeAppBar({super.key});
@@ -24,7 +23,9 @@ class ArtistHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.primarytext, width: 1.5),
                 image: const DecorationImage(
-                  image: NetworkImage('https://picsum.photos/150'), // Placeholder
+                  image: NetworkImage(
+                    'https://picsum.photos/150',
+                  ), // Placeholder
                   fit: BoxFit.cover,
                 ),
               ),
@@ -67,7 +68,7 @@ class ArtistHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                       shape: BoxShape.circle,
                     ),
                     child: SvgPicture.asset(
-                      IconPath.notification, 
+                      IconPath.notification,
                       width: 20,
                       height: 20,
                       colorFilter: const ColorFilter.mode(
@@ -82,7 +83,8 @@ class ArtistHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                     child: Container(
                       padding: const EdgeInsets.all(6.0),
                       decoration: const BoxDecoration(
-                        color: AppColors.secondary, // Assuming error or custom red for badge
+                        color: AppColors
+                            .secondary, // Assuming error or custom red for badge
                         shape: BoxShape.circle,
                       ),
                       child: const Text(

@@ -6,6 +6,7 @@ import 'package:riddimafrica/core/utils/constants/colors.dart';
 import 'package:riddimafrica/core/common/styles/global_text_style.dart';
 
 import '../controllers/seller_bottom_nav_controller.dart';
+import '../../domain/entities/nav_model.dart';
 
 class SellerBottomNav extends StatelessWidget {
   const SellerBottomNav({super.key});
