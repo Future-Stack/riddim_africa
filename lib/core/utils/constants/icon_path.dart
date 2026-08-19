@@ -27,4 +27,5 @@ class IconPath {
   static const String paymentInfo = 'assets/icons/payment_info.png';
   static const String cameraPlus = 'assets/icons/camera_plus.png';
   static const String uploadTray = 'assets/icons/upload_tray.png';
+  static const String badgeCheck = 'assets/icons/checkmark_badge-04.svg';
 }

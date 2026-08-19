@@ -4,13 +4,9 @@ import 'package:riddimafrica/core/utils/constants/icon_path.dart';
 import 'package:riddimafrica/features/bottom_nav/domain/entities/nav_model.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_home/presentation/screens/seller_home_screen.dart';
 
+import 'package:riddimafrica/features/roles/seller/features/seller_products/presentation/screens/seller_products_screen.dart';
+
 // ─── Placeholder screens ────────────────────────────────────────────────────
-class SellerProductsScreen extends StatelessWidget {
-  const SellerProductsScreen({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const _PlaceholderPage(label: 'Products');
-}
 
 class SellerOrdersScreen extends StatelessWidget {
   const SellerOrdersScreen({super.key});
