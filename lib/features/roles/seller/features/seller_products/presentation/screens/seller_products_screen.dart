@@ -22,29 +22,28 @@ class SellerProductsScreen extends GetView<SellerProductsController> {
         leadingWidth: 56,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
-          child: GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: AppColors.appbardivider,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: AppColors.white,
-                size: 20,
-              ),
-            ),
-          ),
+          // child: GestureDetector(
+          //   onTap: () => Get.back(),
+          //   child: Container(
+          //     decoration: const BoxDecoration(
+          //       color: AppColors.appbardivider,
+          //       shape: BoxShape.circle,
+          //     ),
+          //     // child: const Icon(
+          //     //   Icons.arrow_back,
+          //     //   color: AppColors.white,
+          //     //   size: 20,
+          //     // ),
+          //   ),
+          // ),
         ),
         title: Text(
           'My Products',
-          style: AppTextStyle(context).boldTextStyle(
-            color: AppColors.white,
-            fontSize: 18,
-          ),
+          style: AppTextStyle(
+            context,
+          ).boldTextStyle(color: AppColors.white, fontSize: 18),
         ),
-        centerTitle: false,
+        centerTitle: true,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -75,7 +74,10 @@ class SellerProductsScreen extends GetView<SellerProductsController> {
               Obx(() {
                 if (!c.isSearchVisible.value) return const SizedBox.shrink();
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   child: TextField(
                     controller: c.searchController,
                     onChanged: (val) => c.onSearchChanged(val),
@@ -86,21 +88,34 @@ class SellerProductsScreen extends GetView<SellerProductsController> {
                         color: AppColors.primarytext.withValues(alpha: 0.6),
                         fontSize: 14,
                       ),
-                      prefixIcon: const Icon(Icons.search, color: AppColors.primarytext, size: 20),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: AppColors.primarytext,
+                        size: 20,
+                      ),
                       filled: true,
                       fillColor: AppColors.white.withValues(alpha: 0.06),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 10,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppColors.white.withValues(alpha: 0.1)),
+                        borderSide: BorderSide(
+                          color: AppColors.white.withValues(alpha: 0.1),
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppColors.white.withValues(alpha: 0.1)),
+                        borderSide: BorderSide(
+                          color: AppColors.white.withValues(alpha: 0.1),
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: AppColors.secondary),
+                        borderSide: const BorderSide(
+                          color: AppColors.secondary,
+                        ),
                       ),
                     ),
                   ),
@@ -109,7 +124,10 @@ class SellerProductsScreen extends GetView<SellerProductsController> {
 
               // Pill Tabs: Live (count) | In Review (count) | Rejected (count)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 child: Obx(
                   () => Row(
                     children: [
@@ -226,10 +244,9 @@ class SellerProductsScreen extends GetView<SellerProductsController> {
                     const SizedBox(width: 6),
                     Text(
                       'Submit New',
-                      style: AppTextStyle(context).boldTextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
+                      style: AppTextStyle(
+                        context,
+                      ).boldTextStyle(color: Colors.white, fontSize: 15),
                     ),
                   ],
                 ),
@@ -277,7 +294,10 @@ class SellerProductsScreen extends GetView<SellerProductsController> {
               if (count > 0 && !isSelected) ...[
                 const SizedBox(width: 4),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 1,
+                  ),
                   decoration: const BoxDecoration(
                     color: Color(0xFFE65100),
                     shape: BoxShape.circle,

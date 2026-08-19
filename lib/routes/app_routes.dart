@@ -55,6 +55,8 @@ import 'package:riddimafrica/features/roles/seller/features/seller_products/pres
 import 'package:riddimafrica/features/roles/seller/features/seller_products/presentation/screens/seller_review_tracking_screen.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_products/presentation/screens/seller_rejected_product_detail_screen.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_products/presentation/screens/seller_admin_chat_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_orders/bindings/seller_orders_binding.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_orders/presentation/screens/seller_orders_screen.dart';
 
 class AppRoute {
   static const String welcomescreen = "/welcomeScreen";
@@ -86,6 +88,9 @@ class AppRoute {
   static const String sellerReviewTracking = "/sellerReviewTracking";
   static const String sellerRejectedProductDetail = "/sellerRejectedProductDetail";
   static const String sellerAdminChat = "/sellerAdminChat";
+
+  // Seller Orders flow
+  static const String sellerOrders = "/sellerOrders";
 
   static const String internetlost = "/internetlost";
   static const String communityScreen = "/communityScreen";
@@ -268,6 +273,13 @@ class AppRoute {
       name: sellerAdminChat,
       page: () => const SellerAdminChatScreen(),
       binding: SellerProductsBinding(),
+    ),
+
+    // Seller Orders flow
+    GetPage(
+      name: sellerOrders,
+      page: () => const SellerOrdersScreen(),
+      binding: SellerOrdersBinding(),
     ),
 
     //USER
