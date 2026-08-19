@@ -57,6 +57,19 @@ import 'package:riddimafrica/features/roles/seller/features/seller_products/pres
 import 'package:riddimafrica/features/roles/seller/features/seller_products/presentation/screens/seller_admin_chat_screen.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_orders/bindings/seller_orders_binding.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_orders/presentation/screens/seller_orders_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_orders/presentation/screens/seller_new_order_alert_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_orders/presentation/screens/seller_order_shipment_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_orders/presentation/screens/seller_order_tracking_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_orders/presentation/screens/seller_order_completed_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_orders/presentation/screens/seller_order_cancelled_detail_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_orders/data/models/seller_order_model.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_revenue/bindings/seller_revenue_binding.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_revenue/presentation/screens/seller_revenue_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_revenue/presentation/screens/seller_revenue_transactions_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_revenue/presentation/screens/seller_request_payment_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_revenue/presentation/screens/seller_payment_details_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_revenue/presentation/screens/seller_payout_detail_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_revenue/data/models/seller_revenue_model.dart';
 
 class AppRoute {
   static const String welcomescreen = "/welcomeScreen";
@@ -91,6 +104,18 @@ class AppRoute {
 
   // Seller Orders flow
   static const String sellerOrders = "/sellerOrders";
+  static const String sellerNewOrderAlert = "/sellerNewOrderAlert";
+  static const String sellerOrderShipment = "/sellerOrderShipment";
+  static const String sellerOrderTracking = "/sellerOrderTracking";
+  static const String sellerOrderCompleted = "/sellerOrderCompleted";
+  static const String sellerOrderCancelledDetail = "/sellerOrderCancelledDetail";
+
+  // Seller Revenue flow
+  static const String sellerRevenue = "/sellerRevenue";
+  static const String sellerRevenueTransactions = "/sellerRevenueTransactions";
+  static const String sellerRequestPayment = "/sellerRequestPayment";
+  static const String sellerPaymentDetails = "/sellerPaymentDetails";
+  static const String sellerPayoutDetail = "/sellerPayoutDetail";
 
   static const String internetlost = "/internetlost";
   static const String communityScreen = "/communityScreen";
@@ -280,6 +305,98 @@ class AppRoute {
       name: sellerOrders,
       page: () => const SellerOrdersScreen(),
       binding: SellerOrdersBinding(),
+    ),
+    GetPage(
+      name: sellerNewOrderAlert,
+      page: () {
+        final order = Get.arguments as SellerOrderModel? ??
+            SellerOrderModel.getInitialOrders().first;
+        return SellerNewOrderAlertScreen(order: order);
+      },
+      binding: SellerOrdersBinding(),
+    ),
+    GetPage(
+      name: sellerOrderShipment,
+      page: () {
+        final order = Get.arguments as SellerOrderModel? ??
+            SellerOrderModel.getInitialOrders().first;
+        return SellerOrderShipmentScreen(order: order);
+      },
+      binding: SellerOrdersBinding(),
+    ),
+    GetPage(
+      name: sellerOrderTracking,
+      page: () {
+        final order = Get.arguments as SellerOrderModel? ??
+            SellerOrderModel.getInitialOrders().first;
+        return SellerOrderTrackingScreen(order: order);
+      },
+      binding: SellerOrdersBinding(),
+    ),
+    GetPage(
+      name: sellerOrderCompleted,
+      page: () {
+        final order = Get.arguments as SellerOrderModel? ??
+            SellerOrderModel.getInitialOrders().firstWhere(
+              (o) => o.status == SellerOrderStatus.delivered,
+              orElse: () => SellerOrderModel.getInitialOrders().first,
+            );
+        return SellerOrderCompletedScreen(order: order);
+      },
+      binding: SellerOrdersBinding(),
+    ),
+    GetPage(
+      name: sellerOrderCancelledDetail,
+      page: () {
+        final order = Get.arguments as SellerOrderModel? ??
+            SellerOrderModel.getInitialOrders().firstWhere(
+              (o) => o.status == SellerOrderStatus.cancelled,
+              orElse: () => SellerOrderModel.getInitialOrders().first,
+            );
+        return SellerOrderCancelledDetailScreen(order: order);
+      },
+      binding: SellerOrdersBinding(),
+    ),
+
+    // Seller Revenue flow
+    GetPage(
+      name: sellerRevenue,
+      page: () => const SellerRevenueScreen(),
+      binding: SellerRevenueBinding(),
+    ),
+    GetPage(
+      name: sellerRevenueTransactions,
+      page: () => const SellerRevenueTransactionsScreen(),
+      binding: SellerRevenueBinding(),
+    ),
+    GetPage(
+      name: sellerRequestPayment,
+      page: () => const SellerRequestPaymentScreen(),
+      binding: SellerRevenueBinding(),
+    ),
+    GetPage(
+      name: sellerPaymentDetails,
+      page: () {
+        final tx = Get.arguments as SellerTransactionModel? ??
+            SellerTransactionModel.getInitialTransactions().firstWhere(
+              (t) => t.status == SellerTransactionStatus.settled,
+              orElse: () => SellerTransactionModel.getInitialTransactions().first,
+            );
+        return SellerPaymentDetailsScreen(transaction: tx);
+      },
+      binding: SellerRevenueBinding(),
+    ),
+    GetPage(
+      name: sellerPayoutDetail,
+      page: () {
+        final tx = Get.arguments as SellerTransactionModel? ??
+            SellerTransactionModel.getInitialTransactions().firstWhere(
+              (t) => t.status == SellerTransactionStatus.inProgress,
+              orElse: () => SellerTransactionModel.getInitialTransactions().first,
+            );
+        return SellerPayoutDetailScreen(transaction: tx);
+      },
+      binding: SellerRevenueBinding(),
     ),
 
     //USER

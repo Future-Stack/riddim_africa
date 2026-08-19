@@ -25,28 +25,27 @@ class SellerOrdersScreen extends StatelessWidget {
         leading: Navigator.canPop(context)
             ? Padding(
                 padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
-                child: GestureDetector(
-                  onTap: () => Get.back(),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: AppColors.appbardivider,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.arrow_back,
-                      color: AppColors.white,
-                      size: 20,
-                    ),
-                  ),
-                ),
+                // child: GestureDetector(
+                //   onTap: () => Get.back(),
+                //   child: Container(
+                //     decoration: const BoxDecoration(
+                //       color: AppColors.appbardivider,
+                //       shape: BoxShape.circle,
+                //     ),
+                //     child: const Icon(
+                //       Icons.arrow_back,
+                //       color: AppColors.white,
+                //       size: 20,
+                //     ),
+                //   ),
+                // ),
               )
             : null,
         title: Text(
           'Orders',
-          style: AppTextStyle(context).boldTextStyle(
-            color: AppColors.white,
-            fontSize: 18,
-          ),
+          style: AppTextStyle(
+            context,
+          ).boldTextStyle(color: AppColors.white, fontSize: 18),
         ),
         centerTitle: true,
         actions: [
@@ -78,8 +77,10 @@ class SellerOrdersScreen extends StatelessWidget {
             Obx(() {
               if (!c.isSearchVisible.value) return const SizedBox.shrink();
               return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 child: TextField(
                   controller: c.searchController,
                   onChanged: (val) => c.onSearchChanged(val),
@@ -115,9 +116,7 @@ class SellerOrdersScreen extends StatelessWidget {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: AppColors.secondary,
-                      ),
+                      borderSide: const BorderSide(color: AppColors.secondary),
                     ),
                   ),
                 ),
@@ -188,8 +187,10 @@ class SellerOrdersScreen extends StatelessWidget {
                 }
 
                 return ListView.builder(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   physics: const BouncingScrollPhysics(),
                   itemCount: list.length,
                   itemBuilder: (context, index) {
@@ -241,8 +242,10 @@ class SellerOrdersScreen extends StatelessWidget {
               if (count > 0 && !isSelected) ...[
                 const SizedBox(width: 4),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 1,
+                  ),
                   decoration: const BoxDecoration(
                     color: Color(0xFFE65100),
                     shape: BoxShape.circle,
@@ -322,10 +325,9 @@ class SellerOrdersScreen extends StatelessWidget {
                       // Product Title
                       Text(
                         order.productTitle,
-                        style: AppTextStyle(context).boldTextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
+                        style: AppTextStyle(
+                          context,
+                        ).boldTextStyle(color: Colors.white, fontSize: 14),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

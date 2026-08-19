@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/features/bottom_nav/presentation/controllers/seller_bottom_nav_controller.dart';
+import 'package:riddimafrica/routes/app_routes.dart';
 import '../../data/models/seller_order_model.dart';
 
 class SellerOrderCompletedScreen extends StatelessWidget {
@@ -154,10 +155,11 @@ class SellerOrderCompletedScreen extends StatelessWidget {
                   height: 52,
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.back();
-                      // Switch to Revenue tab (index 3) if registered
                       if (Get.isRegistered<SellerBottomNavController>()) {
+                        Get.back();
                         Get.find<SellerBottomNavController>().changeIndex(3);
+                      } else {
+                        Get.toNamed(AppRoute.sellerRevenue);
                       }
                     },
                     style: ElevatedButton.styleFrom(
