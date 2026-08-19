@@ -48,6 +48,13 @@ import 'package:riddimafrica/features/authentication/presentation/screens/seller
 import 'package:riddimafrica/features/authentication/presentation/screens/seller_document_form_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/seller_id_photo_upload_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/seller_business_details_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_products/bindings/seller_products_binding.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_products/presentation/screens/seller_products_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_products/presentation/screens/submit_product_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_products/presentation/screens/seller_live_product_detail_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_products/presentation/screens/seller_review_tracking_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_products/presentation/screens/seller_rejected_product_detail_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_products/presentation/screens/seller_admin_chat_screen.dart';
 
 class AppRoute {
   static const String welcomescreen = "/welcomeScreen";
@@ -71,6 +78,14 @@ class AppRoute {
   static const String sellerDocumentFormScreen = "/sellerDocumentFormScreen";
   static const String sellerIdPhotoUploadScreen = "/sellerIdPhotoUploadScreen";
   static const String sellerBusinessDetailsScreen = "/sellerBusinessDetailsScreen";
+
+  // Seller Products & Submission flow
+  static const String sellerProducts = "/sellerProducts";
+  static const String sellerSubmitProduct = "/sellerSubmitProduct";
+  static const String sellerLiveProductDetail = "/sellerLiveProductDetail";
+  static const String sellerReviewTracking = "/sellerReviewTracking";
+  static const String sellerRejectedProductDetail = "/sellerRejectedProductDetail";
+  static const String sellerAdminChat = "/sellerAdminChat";
 
   static const String internetlost = "/internetlost";
   static const String communityScreen = "/communityScreen";
@@ -221,6 +236,38 @@ class AppRoute {
       name: sellerBusinessDetailsScreen,
       page: () => const SellerBusinessDetailsScreen(),
       binding: AuthBinding(),
+    ),
+
+    // Seller Products & Submission flow
+    GetPage(
+      name: sellerProducts,
+      page: () => const SellerProductsScreen(),
+      binding: SellerProductsBinding(),
+    ),
+    GetPage(
+      name: sellerSubmitProduct,
+      page: () => const SubmitProductScreen(),
+      binding: SellerProductsBinding(),
+    ),
+    GetPage(
+      name: sellerLiveProductDetail,
+      page: () => const SellerLiveProductDetailScreen(),
+      binding: SellerProductsBinding(),
+    ),
+    GetPage(
+      name: sellerReviewTracking,
+      page: () => const SellerReviewTrackingScreen(),
+      binding: SellerProductsBinding(),
+    ),
+    GetPage(
+      name: sellerRejectedProductDetail,
+      page: () => const SellerRejectedProductDetailScreen(),
+      binding: SellerProductsBinding(),
+    ),
+    GetPage(
+      name: sellerAdminChat,
+      page: () => const SellerAdminChatScreen(),
+      binding: SellerProductsBinding(),
     ),
 
     //USER

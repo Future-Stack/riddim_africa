@@ -110,7 +110,7 @@ class ArtistHomeScreen extends GetView<ArtistHomeController> {
                     padding: const EdgeInsets.all(20.0),
                     child: Text(
                       'No recent orders.',
-                      style: TextStyle(color: Colors.white.withOpacity(0.5)),
+                      style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
                     ),
                   ),
                 )
