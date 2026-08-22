@@ -70,6 +70,25 @@ import 'package:riddimafrica/features/roles/seller/features/seller_revenue/prese
 import 'package:riddimafrica/features/roles/seller/features/seller_revenue/presentation/screens/seller_payment_details_screen.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_revenue/presentation/screens/seller_payout_detail_screen.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_revenue/data/models/seller_revenue_model.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/bindings/seller_profile_binding.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_profile_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_edit_profile_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_verification_badge_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_documents_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_document_detail_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_review_ratings_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_profile_payment_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_support_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_live_chat_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_settings_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_notification_settings_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_change_password_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_refund_policy_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_community_guidelines_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_privacy_policy_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_cookie_notice_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_delete_account_screen.dart';
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/data/models/seller_document_model.dart';
 
 class AppRoute {
   static const String welcomescreen = "/welcomeScreen";
@@ -116,6 +135,25 @@ class AppRoute {
   static const String sellerRequestPayment = "/sellerRequestPayment";
   static const String sellerPaymentDetails = "/sellerPaymentDetails";
   static const String sellerPayoutDetail = "/sellerPayoutDetail";
+
+  // Seller Profile & Settings flow
+  static const String sellerProfile = "/sellerProfile";
+  static const String sellerEditProfile = "/sellerEditProfile";
+  static const String sellerVerificationBadge = "/sellerVerificationBadge";
+  static const String sellerDocuments = "/sellerDocuments";
+  static const String sellerDocumentDetail = "/sellerDocumentDetail";
+  static const String sellerReviewRatings = "/sellerReviewRatings";
+  static const String sellerProfilePayment = "/sellerProfilePayment";
+  static const String sellerSupport = "/sellerSupport";
+  static const String sellerLiveChat = "/sellerLiveChat";
+  static const String sellerSettings = "/sellerSettings";
+  static const String sellerNotificationSettings = "/sellerNotificationSettings";
+  static const String sellerChangePassword = "/sellerChangePassword";
+  static const String sellerRefundPolicy = "/sellerRefundPolicy";
+  static const String sellerCommunityGuidelines = "/sellerCommunityGuidelines";
+  static const String sellerPrivacyPolicy = "/sellerPrivacyPolicy";
+  static const String sellerCookieNotice = "/sellerCookieNotice";
+  static const String sellerDeleteAccount = "/sellerDeleteAccount";
 
   static const String internetlost = "/internetlost";
   static const String communityScreen = "/communityScreen";
@@ -397,6 +435,97 @@ class AppRoute {
         return SellerPayoutDetailScreen(transaction: tx);
       },
       binding: SellerRevenueBinding(),
+    ),
+
+    // Seller Profile & Settings flow
+    GetPage(
+      name: sellerProfile,
+      page: () => const SellerProfileScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerEditProfile,
+      page: () => const SellerEditProfileScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerVerificationBadge,
+      page: () => const SellerVerificationBadgeScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerDocuments,
+      page: () => const SellerDocumentsScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerDocumentDetail,
+      page: () {
+        final doc = Get.arguments as SellerDocumentModel? ??
+            SellerDocumentModel.mockDocuments.first;
+        return SellerDocumentDetailScreen(document: doc);
+      },
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerReviewRatings,
+      page: () => const SellerReviewRatingsScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerProfilePayment,
+      page: () => const SellerProfilePaymentScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerSupport,
+      page: () => const SellerSupportScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerLiveChat,
+      page: () => const SellerLiveChatScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerSettings,
+      page: () => const SellerSettingsScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerNotificationSettings,
+      page: () => const SellerNotificationSettingsScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerChangePassword,
+      page: () => const SellerChangePasswordScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerRefundPolicy,
+      page: () => const SellerRefundPolicyScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerCommunityGuidelines,
+      page: () => const SellerCommunityGuidelinesScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerPrivacyPolicy,
+      page: () => const SellerPrivacyPolicyScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerCookieNotice,
+      page: () => const SellerCookieNoticeScreen(),
+      binding: SellerProfileBinding(),
+    ),
+    GetPage(
+      name: sellerDeleteAccount,
+      page: () => const SellerDeleteAccountScreen(),
+      binding: SellerProfileBinding(),
     ),
 
     //USER

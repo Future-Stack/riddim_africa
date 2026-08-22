@@ -18,10 +18,7 @@ class SellerRevenueCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         gradient: LinearGradient(
-          colors: [
-            AppColors.secondary.withValues(alpha: 0.8),
-            AppColors.primary,
-          ],
+          colors: [const Color(0xFF893F25), AppColors.primary],
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
         ),
@@ -40,10 +37,9 @@ class SellerRevenueCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'UGX ${currencyFormatter.format(stats.totalRevenue)}',
-            style: AppTextStyle(context).boldTextStyle(
-              color: AppColors.white,
-              fontSize: 28,
-            ),
+            style: AppTextStyle(
+              context,
+            ).boldTextStyle(color: AppColors.white, fontSize: 28),
           ),
           const SizedBox(height: 8),
           Container(
@@ -55,18 +51,13 @@ class SellerRevenueCard extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.trending_up,
-                  color: Colors.green,
-                  size: 14,
-                ),
+                const Icon(Icons.trending_up, color: Colors.green, size: 14),
                 const SizedBox(width: 4),
                 Text(
                   '+${stats.revenueGrowthPercentage.toStringAsFixed(0)}% this month',
-                  style: AppTextStyle(context).mediumTextStyle(
-                    color: Colors.green,
-                    fontSize: 12,
-                  ),
+                  style: AppTextStyle(
+                    context,
+                  ).mediumTextStyle(color: Colors.green, fontSize: 12),
                 ),
               ],
             ),
@@ -98,7 +89,12 @@ class SellerRevenueCard extends StatelessWidget {
     );
   }
 
-  Widget _buildSubCard(BuildContext context, {required String title, required double amount, required NumberFormat formatter}) {
+  Widget _buildSubCard(
+    BuildContext context, {
+    required String title,
+    required double amount,
+    required NumberFormat formatter,
+  }) {
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -118,10 +114,9 @@ class SellerRevenueCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             'UGX ${formatter.format(amount)}',
-            style: AppTextStyle(context).boldTextStyle(
-              color: AppColors.white,
-              fontSize: 16,
-            ),
+            style: AppTextStyle(
+              context,
+            ).boldTextStyle(color: AppColors.white, fontSize: 16),
           ),
         ],
       ),
