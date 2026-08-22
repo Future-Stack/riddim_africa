@@ -104,6 +104,9 @@ extension DesignPixel on num {
   double get h => toDouble() * AppSizer.heightRatio;
   double get sp => toDouble() * AppSizer.widthRatio;
   double get r => toDouble() * AppSizer.minRatio;
+
+  Widget get verticalSpace => SizedBox(height: h);
+  Widget get horizontalSpace => SizedBox(width: w);
 }
 
 /// Device-type aware scaling layered on top of design-pixel scaling.

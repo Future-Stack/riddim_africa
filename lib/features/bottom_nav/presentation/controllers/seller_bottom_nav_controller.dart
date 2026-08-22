@@ -8,25 +8,7 @@ import 'package:riddimafrica/features/roles/seller/features/seller_products/pres
 import 'package:riddimafrica/features/roles/seller/features/seller_orders/presentation/screens/seller_orders_screen.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_revenue/presentation/screens/seller_revenue_screen.dart';
 
-// ─── Placeholder screens ────────────────────────────────────────────────────
-
-class SellerProfileScreen extends StatelessWidget {
-  const SellerProfileScreen({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const _PlaceholderPage(label: 'Profile');
-}
-
-class _PlaceholderPage extends StatelessWidget {
-  const _PlaceholderPage({required this.label});
-  final String label;
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    body: Center(
-      child: Text(label, style: Theme.of(context).textTheme.headlineMedium),
-    ),
-  );
-}
+import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_profile_screen.dart';
 
 // ─── Controller ─────────────────────────────────────────────────────────────
 
