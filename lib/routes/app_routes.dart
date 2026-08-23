@@ -2,6 +2,13 @@ import 'package:get/get.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_home/bindings/artist_home_binding.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_profile/bindings/artist_profile_binding.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_edit_profile_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_documents_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_document_detail_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_followers_ratings_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_profile_payment_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_support_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_live_chat_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/data/models/artist_document_model.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_verification/bindings/artist_verification_binding.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_verification/presentation/screens/artist_verification_screen.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_home/bindings/seller_home_binding.dart';
@@ -186,6 +193,12 @@ class AppRoute {
   static const String editProfile = "/editProfile";
   static const String artistEditProfile = "/artistEditProfile";
   static const String artistVerification = "/artistVerification";
+  static const String artistDocuments = "/artistDocuments";
+  static const String artistDocumentDetail = "/artistDocumentDetail";
+  static const String artistReviewRatings = "/artistReviewRatings";
+  static const String artistPayment = "/artistPayment";
+  static const String artistSupport = "/artistSupport";
+  static const String artistLiveChat = "/artistLiveChat";
   static const String wishlist = "/wishlist";
   static const String settings = "/settings";
   static const String changePassword = "/changePassword";
@@ -646,6 +659,40 @@ class AppRoute {
       name: artistVerification,
       page: () => const ArtistVerificationScreen(),
       binding: ArtistVerificationBinding(),
+    ),
+    GetPage(
+      name: artistDocuments,
+      page: () => const ArtistDocumentsScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistDocumentDetail,
+      page: () => ArtistDocumentDetailScreen(
+        document: (Get.arguments is ArtistDocumentModel)
+            ? (Get.arguments as ArtistDocumentModel)
+            : ArtistDocumentModel.mockDocuments.first,
+      ),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistReviewRatings,
+      page: () => const ArtistFollowersRatingsScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistPayment,
+      page: () => const ArtistProfilePaymentScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistSupport,
+      page: () => const ArtistSupportScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistLiveChat,
+      page: () => const ArtistLiveChatScreen(),
+      binding: ArtistProfileBinding(),
     ),
   ];
 }

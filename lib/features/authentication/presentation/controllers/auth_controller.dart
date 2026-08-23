@@ -36,7 +36,7 @@ class AuthController extends GetxController {
 
       if (email == 'seller@gmail.com' && password == '1234') {
         Get.offAllNamed(AppRoute.sellerbottomNav);
-      } else if (email == 'artist@g.com') {
+      } else if (email == 'artist@gmail.com') {
         Get.offAllNamed(AppRoute.artistbottomNav);
       } else {
         Get.offAllNamed(AppRoute.userbottomNav);

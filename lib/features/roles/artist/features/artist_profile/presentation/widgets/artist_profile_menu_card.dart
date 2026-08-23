@@ -45,16 +45,7 @@ class ArtistProfileMenuCard extends StatelessWidget {
             iconColor: const Color(0xFF4C8DFF),
             iconBackgroundColor: const Color(0xFF1B293D),
             title: 'Documents',
-            onTap: () {
-              Get.snackbar(
-                'Documents',
-                'Your artist legal documents are up to date.',
-                backgroundColor: AppColors.primaryappbrown,
-                colorText: AppColors.white,
-                snackPosition: SnackPosition.BOTTOM,
-                margin: const EdgeInsets.all(16),
-              );
-            },
+            onTap: () => Get.toNamed(AppRoute.artistDocuments),
           ),
 
           // 4. Review & Ratings
@@ -63,16 +54,7 @@ class ArtistProfileMenuCard extends StatelessWidget {
             iconColor: const Color(0xFFB55FE6),
             iconBackgroundColor: const Color(0xFF331B38),
             title: 'Review & Ratings',
-            onTap: () {
-              Get.snackbar(
-                'Review & Ratings',
-                'Rating: 4.8 / 5.0 across 120 client reviews.',
-                backgroundColor: AppColors.primaryappbrown,
-                colorText: AppColors.white,
-                snackPosition: SnackPosition.BOTTOM,
-                margin: const EdgeInsets.all(16),
-              );
-            },
+            onTap: () => Get.toNamed(AppRoute.artistReviewRatings),
           ),
 
           // 5. Payment Method
@@ -81,16 +63,7 @@ class ArtistProfileMenuCard extends StatelessWidget {
             iconColor: const Color(0xFF3BD5B8),
             iconBackgroundColor: const Color(0xFF173835),
             title: 'Payment Method',
-            onTap: () {
-              Get.snackbar(
-                'Payment Method',
-                'Mobile Money and Bank accounts linked.',
-                backgroundColor: AppColors.primaryappbrown,
-                colorText: AppColors.white,
-                snackPosition: SnackPosition.BOTTOM,
-                margin: const EdgeInsets.all(16),
-              );
-            },
+            onTap: () => Get.toNamed(AppRoute.artistPayment),
           ),
 
           // 6. Support
@@ -99,7 +72,7 @@ class ArtistProfileMenuCard extends StatelessWidget {
             iconColor: const Color(0xFF3BA7D5),
             iconBackgroundColor: const Color(0xFF1B3038),
             title: 'Support',
-            onTap: () => Get.toNamed(AppRoute.faq),
+            onTap: () => Get.toNamed(AppRoute.artistSupport),
           ),
 
           // 7. Settings

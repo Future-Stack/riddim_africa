@@ -6,6 +6,12 @@ import '../domain/usecases/get_artist_profile_usecase.dart';
 import '../domain/usecases/update_artist_profile_usecase.dart';
 import '../presentation/controllers/artist_profile_controller.dart';
 
+import '../presentation/controllers/artist_followers_ratings_controller.dart';
+import '../presentation/controllers/artist_support_controller.dart';
+import '../presentation/controllers/artist_payment_controller.dart';
+import '../presentation/controllers/artist_documents_controller.dart';
+import '../presentation/controllers/artist_live_chat_controller.dart';
+
 class ArtistProfileBinding extends Bindings {
   @override
   void dependencies() {
@@ -27,5 +33,10 @@ class ArtistProfileBinding extends Bindings {
         updateArtistProfileUseCase: Get.find<UpdateArtistProfileUseCase>(),
       ),
     );
+    Get.lazyPut(() => ArtistFollowersRatingsController());
+    Get.lazyPut(() => ArtistSupportController());
+    Get.lazyPut(() => ArtistPaymentController());
+    Get.lazyPut(() => ArtistDocumentsController());
+    Get.lazyPut(() => ArtistLiveChatController());
   }
 }
