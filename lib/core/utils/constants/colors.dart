@@ -30,11 +30,31 @@ class AppColors {
   static const Color backgroundcolor = Color(0xFF2C1A0D);
   static const Color iconBackground = Color(0x00BC7D26);
 
-  // ─── Status ────────────────────────────────────────────
+  // ─── Status & Revenue Palette ────────────────────────
   static const Color success = Color(0xFF3BB515);
+  static const Color greenBright = Color(0xFF00E676);
+  static const Color greenDark = Color(0xFF143521);
+  static const Color greenDeep = Color(0xFF1B4324);
+
   static const Color warning = Color(0xFFF59E0B);
+  static const Color amberBright = Color(0xFFF5A623);
+  static const Color amberDark = Color(0xFF383015);
+  static const Color amberDeep = Color(0xFF3B2800);
+
   static const Color error = Color(0xFFDB321C);
   static const Color info = Color(0xFF3B82F6);
+
+  static const Color gold = Color(0xFFE5B282);
+  static const Color goldText = Color(0xFFE5B282);
+  static const Color chartLine = Color(0xFFE5B282);
+  static const Color subCardBrown = Color(0xFF8B4E38);
+  static const Color heroGradientStart = Color(0xFF5A2814);
+  static const Color heroGradientEnd = Color(0xFF381A0D);
+
+  static const Color tealDark = Color(0xFF183D3D);
+  static const Color tealDarkBg = Color(0xFF142E2E);
+  static const Color tealBorder = Color(0xFF235A5A);
+  static const Color tabUnderlineTeal = Color(0xFF377A7D);
 
   // ─── Light Theme ───────────────────────────────────────
   static const Color lightBackground = Color(0xFFFFFFFF);
@@ -70,6 +90,13 @@ class AppColors {
     begin: Alignment(0.0, 0.0),
     end: Alignment(0.707, -0.707),
     colors: [lightTextPrimary, lightTextSecondary],
+  );
+
+  // revinue card gradient
+  static const Gradient revenueCardGradient = LinearGradient(
+    begin: Alignment(0.0, 0.0),
+    end: Alignment(0.8, -0.99),
+    colors: [AppColors.heroGradientStart, AppColors.secondary],
   );
 
   // ─── Theme-aware helpers ───────────────────────────────

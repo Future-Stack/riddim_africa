@@ -7,6 +7,9 @@ import '../../domain/entities/nav_model.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_home/presentation/screens/artist_home_screen.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_profile_screen.dart';
 
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/presentation/screens/artist_revenue_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/bindings/artist_revenue_binding.dart';
+
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({super.key});
   @override
@@ -18,13 +21,6 @@ class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
   @override
   Widget build(BuildContext context) => const _PlaceholderPage(label: 'Orders');
-}
-
-class RevenueScreen extends StatelessWidget {
-  const RevenueScreen({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const _PlaceholderPage(label: 'Revenue');
 }
 
 class _PlaceholderPage extends StatelessWidget {
@@ -45,12 +41,18 @@ class _PlaceholderPage extends StatelessWidget {
 class ArtistBottomNavController extends GetxController {
   final RxInt currentIndex = 0.obs; // default to Home (index 0)
 
+  @override
+  void onInit() {
+    super.onInit();
+    ArtistRevenueBinding().dependencies();
+  }
+
   // ── Screens — keep in the same order as items ──────────────────────────
   final List<Widget> screens = const [
     ArtistHomeScreen(),
     ProductsScreen(),
     OrdersScreen(),
-    RevenueScreen(),
+    ArtistRevenueScreen(),
     ArtistProfileScreen(),
   ];
   // ── Nav items — add/remove/reorder freely ──────────────────────────────

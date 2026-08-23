@@ -11,6 +11,14 @@ import 'package:riddimafrica/features/roles/artist/features/artist_profile/prese
 import 'package:riddimafrica/features/roles/artist/features/artist_profile/data/models/artist_document_model.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_verification/bindings/artist_verification_binding.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_verification/presentation/screens/artist_verification_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/bindings/artist_revenue_binding.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/presentation/screens/artist_revenue_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/presentation/screens/artist_revenue_transactions_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/presentation/screens/artist_payment_details_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/presentation/screens/artist_payout_detail_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/presentation/screens/artist_request_payment_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/domain/entities/artist_transaction_entity.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/data/models/artist_transaction_model.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_home/bindings/seller_home_binding.dart';
 
 import 'package:riddimafrica/features/authentication/presentation/screens/welcome_screen.dart';
@@ -213,6 +221,13 @@ class AppRoute {
   static const String orderDetail = "/orderDetail";
   static const String orderConfirmed = "/orderConfirmed";
   static const String orderReview = "/orderReview";
+
+  // ARTIST REVENUE
+  static const String artistRevenue = "/artistRevenue";
+  static const String artistRevenueTransactions = "/artistRevenueTransactions";
+  static const String artistPaymentDetails = "/artistPaymentDetails";
+  static const String artistPayoutDetail = "/artistPayoutDetail";
+  static const String artistRequestPayment = "/artistRequestPayment";
 
   static List<GetPage> routes = [
     GetPage(
@@ -693,6 +708,51 @@ class AppRoute {
       name: artistLiveChat,
       page: () => const ArtistLiveChatScreen(),
       binding: ArtistProfileBinding(),
+    ),
+    // Artist Revenue flow
+    GetPage(
+      name: artistRevenue,
+      page: () => const ArtistRevenueScreen(),
+      binding: ArtistRevenueBinding(),
+    ),
+    GetPage(
+      name: artistRevenueTransactions,
+      page: () => const ArtistRevenueTransactionsScreen(),
+      binding: ArtistRevenueBinding(),
+    ),
+    GetPage(
+      name: artistPaymentDetails,
+      page: () {
+        final tx = Get.arguments as ArtistTransactionEntity? ??
+            ArtistTransactionModel.getInitialTransactions().firstWhere(
+              (t) => t.status == ArtistTransactionStatus.settled,
+              orElse: () =>
+                  ArtistTransactionModel.getInitialTransactions().first,
+            );
+        return ArtistPaymentDetailsScreen(transaction: tx);
+      },
+      binding: ArtistRevenueBinding(),
+    ),
+    GetPage(
+      name: artistPayoutDetail,
+      page: () {
+        final tx = Get.arguments as ArtistTransactionEntity? ??
+            ArtistTransactionModel.getInitialTransactions().firstWhere(
+              (t) => t.status == ArtistTransactionStatus.inProgress,
+              orElse: () =>
+                  ArtistTransactionModel.getInitialTransactions().first,
+            );
+        return ArtistPayoutDetailScreen(transaction: tx);
+      },
+      binding: ArtistRevenueBinding(),
+    ),
+    GetPage(
+      name: artistRequestPayment,
+      page: () {
+        final tx = Get.arguments as ArtistTransactionEntity?;
+        return ArtistRequestPaymentScreen(transaction: tx);
+      },
+      binding: ArtistRevenueBinding(),
     ),
   ];
 }
