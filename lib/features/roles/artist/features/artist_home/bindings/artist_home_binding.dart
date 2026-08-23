@@ -5,6 +5,7 @@ import '../domain/repositories/artist_home_repository.dart';
 import '../domain/usecases/get_artist_dashboard_stats_usecase.dart';
 import '../domain/usecases/get_artist_recent_orders_usecase.dart';
 import '../presentation/controllers/artist_home_controller.dart';
+import '../../artist_profile/bindings/artist_profile_binding.dart';
 
 class ArtistHomeBinding extends Bindings {
   @override
@@ -17,5 +18,8 @@ class ArtistHomeBinding extends Bindings {
     Get.lazyPut(() => ArtistHomeController(
         Get.find<GetArtistDashboardStatsUseCase>(),
         Get.find<GetArtistRecentOrdersUseCase>()));
+
+    // Profile dependencies for bottom nav tab
+    ArtistProfileBinding().dependencies();
   }
 }

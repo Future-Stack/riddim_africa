@@ -4,8 +4,8 @@ import 'package:riddimafrica/core/utils/constants/icon_path.dart';
 
 import '../../domain/entities/nav_model.dart';
 
-// ─── Placeholder screens ───────────────────────────────────────────────────
 import 'package:riddimafrica/features/roles/artist/features/artist_home/presentation/screens/artist_home_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_profile_screen.dart';
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({super.key});
@@ -25,13 +25,6 @@ class RevenueScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       const _PlaceholderPage(label: 'Revenue');
-}
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const _PlaceholderPage(label: 'Profile');
 }
 
 class _PlaceholderPage extends StatelessWidget {
@@ -58,7 +51,7 @@ class ArtistBottomNavController extends GetxController {
     ProductsScreen(),
     OrdersScreen(),
     RevenueScreen(),
-    ProfileScreen(),
+    ArtistProfileScreen(),
   ];
   // ── Nav items — add/remove/reorder freely ──────────────────────────────
   final List<NavItem> artistitems = const [

@@ -22,7 +22,11 @@ class BlobPainter extends CustomPainter {
     // Outer halo
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromCenter(center: Offset(cx, cy), width: bw * 1.18, height: bh * 1.18),
+        Rect.fromCenter(
+          center: Offset(cx, cy),
+          width: bw * 1.18,
+          height: bh * 1.18,
+        ),
         const Radius.circular(30),
       ),
       Paint()
@@ -31,8 +35,11 @@ class BlobPainter extends CustomPainter {
     );
 
     // Blob body
-    final blobRect =
-        Rect.fromCenter(center: Offset(cx, cy), width: bw, height: bh);
+    final blobRect = Rect.fromCenter(
+      center: Offset(cx, cy),
+      width: bw,
+      height: bh,
+    );
     canvas.drawRRect(
       RRect.fromRectAndRadius(blobRect, const Radius.circular(24)),
       Paint()

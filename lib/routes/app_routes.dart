@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_home/bindings/artist_home_binding.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/bindings/artist_profile_binding.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_edit_profile_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_verification/bindings/artist_verification_binding.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_verification/presentation/screens/artist_verification_screen.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_home/bindings/seller_home_binding.dart';
 
 import 'package:riddimafrica/features/authentication/presentation/screens/welcome_screen.dart';
@@ -180,6 +184,8 @@ class AppRoute {
 
   // PROFILE & SETTINGS
   static const String editProfile = "/editProfile";
+  static const String artistEditProfile = "/artistEditProfile";
+  static const String artistVerification = "/artistVerification";
   static const String wishlist = "/wishlist";
   static const String settings = "/settings";
   static const String changePassword = "/changePassword";
@@ -630,6 +636,16 @@ class AppRoute {
       name: communityGuidelines,
       page: () => const CommunityGuidelinesScreen(),
       binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: artistEditProfile,
+      page: () => const ArtistEditProfileScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistVerification,
+      page: () => const ArtistVerificationScreen(),
+      binding: ArtistVerificationBinding(),
     ),
   ];
 }

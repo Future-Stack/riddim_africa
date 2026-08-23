@@ -82,8 +82,8 @@ class AuthController extends GetxController {
   }
 
   // Profile setup tab/step state
-  int profileSetupStep = 0;    // 0=Basic Info, 1=Business Info, 2=Payment
-  int profileSetupSubTab = 0;  // 0=Personal Info, 1=Verification
+  int profileSetupStep = 0; // 0=Basic Info, 1=Business Info, 2=Payment
+  int profileSetupSubTab = 0; // 0=Personal Info, 1=Verification
 
   void setProfileSetupStep(int step) {
     profileSetupStep = step;
@@ -126,7 +126,8 @@ class AuthController extends GetxController {
   }
 
   // --- Verification State ---
-  int selectedVerificationDoc = 0; // 0=National ID, 1=Passport, 2=Driving License
+  int selectedVerificationDoc =
+      0; // 0=National ID, 1=Passport, 2=Driving License
   int get selectedDocTab => selectedVerificationDoc;
   set selectedDocTab(int val) => selectedVerificationDoc = val;
   void setDocTab(int index) => setVerificationDoc(index);
@@ -146,7 +147,8 @@ class AuthController extends GetxController {
   String? selfieImagePath;
 
   // --- Business Details State ---
-  int selectedBusinessType = -1; // 0=Individual / Solo Trader, 1=Partnership, 2=Registered Company, 3=NGO / Non-profit
+  int selectedBusinessType =
+      -1; // 0=Individual / Solo Trader, 1=Partnership, 2=Registered Company, 3=NGO / Non-profit
   final businessStoreNameController = TextEditingController();
   final businessNameController = TextEditingController();
   final businessEmailController = TextEditingController();
@@ -202,7 +204,9 @@ class AuthController extends GetxController {
   List<String> passportImages = [];
   String? passportDocPath;
 
-  Future<void> pickIdFrontImage({ImageSource source = ImageSource.camera}) async {
+  Future<void> pickIdFrontImage({
+    ImageSource source = ImageSource.camera,
+  }) async {
     try {
       final XFile? photo = await _picker.pickImage(source: source);
       if (photo != null) {
@@ -214,7 +218,9 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> pickIdBackImage({ImageSource source = ImageSource.camera}) async {
+  Future<void> pickIdBackImage({
+    ImageSource source = ImageSource.camera,
+  }) async {
     try {
       final XFile? photo = await _picker.pickImage(source: source);
       if (photo != null) {
@@ -226,7 +232,9 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> pickPassportImage({ImageSource source = ImageSource.camera}) async {
+  Future<void> pickPassportImage({
+    ImageSource source = ImageSource.camera,
+  }) async {
     try {
       final XFile? photo = await _picker.pickImage(source: source);
       if (photo != null) {
@@ -245,7 +253,9 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> pickPassportDocument({ImageSource source = ImageSource.gallery}) async {
+  Future<void> pickPassportDocument({
+    ImageSource source = ImageSource.gallery,
+  }) async {
     try {
       final XFile? photo = await _picker.pickImage(source: source);
       if (photo != null) {
