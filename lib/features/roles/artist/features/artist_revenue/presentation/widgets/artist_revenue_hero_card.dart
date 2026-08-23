@@ -106,19 +106,19 @@ class ArtistRevenueHeroCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: AppColors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(14.r),
-                          border: Border.all(
-                            color: AppColors.white.withValues(alpha: 0.08),
-                          ),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               'Settled to Mobile money',
-                              style: AppTextStyle(context).boldTextStyle(
-                                color: AppColors.onboardingtext,
+                              style: AppTextStyle(context).getTextStyle(
+                                color: AppColors.textfieldelementcolor,
                                 fontSize: 10.5.sp,
+                                fontWeight: FontWeight.w800,
                               ),
                             ),
                             6.verticalSpace,
@@ -151,9 +151,6 @@ class ArtistRevenueHeroCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: AppColors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(14.r),
-                          border: Border.all(
-                            color: AppColors.white.withValues(alpha: 0.08),
-                          ),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,9 +158,10 @@ class ArtistRevenueHeroCard extends StatelessWidget {
                           children: [
                             Text(
                               'Payout in progress',
-                              style: AppTextStyle(context).boldTextStyle(
-                                color: AppColors.onboardingtext,
+                              style: AppTextStyle(context).getTextStyle(
+                                color: AppColors.textfieldelementcolor,
                                 fontSize: 10.5.sp,
+                                fontWeight: FontWeight.w800,
                               ),
                             ),
                             6.verticalSpace,
@@ -256,9 +254,11 @@ class ArtistRevenueHeroCard extends StatelessWidget {
     if (settledRevenue != null) {
       return Text(
         'UGX ${formatter.format(settledRevenue)}',
-        style: AppTextStyle(
-          context,
-        ).boldTextStyle(color: AppColors.white, fontSize: 15.5.sp),
+        style: AppTextStyle(context).getTextStyle(
+          color: AppColors.white,
+          fontSize: 15.5.sp,
+          fontWeight: FontWeight.w800,
+        ),
       );
     }
     if (Get.isRegistered<ArtistRevenueController>()) {
@@ -284,9 +284,11 @@ class ArtistRevenueHeroCard extends StatelessWidget {
     if (payoutInProgress != null) {
       return Text(
         'UGX ${formatter.format(payoutInProgress)}',
-        style: AppTextStyle(
-          context,
-        ).boldTextStyle(color: AppColors.white, fontSize: 15.5.sp),
+        style: AppTextStyle(context).getTextStyle(
+          color: AppColors.white,
+          fontSize: 15.5.sp,
+          fontWeight: FontWeight.w800,
+        ),
       );
     }
     if (Get.isRegistered<ArtistRevenueController>()) {
