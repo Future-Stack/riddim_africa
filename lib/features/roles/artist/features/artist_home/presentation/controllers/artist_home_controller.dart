@@ -33,7 +33,7 @@ class ArtistHomeController extends GetxController {
       stats.value = results[0] as ArtistDashboardStatsEntity;
       recentOrders.value = results[1] as List<ArtistRecentOrderEntity>;
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load artist dashboard data');
+      Get.snackbar('Error', 'Failed to load seller dashboard data');
     } finally {
       isLoading.value = false;
     }

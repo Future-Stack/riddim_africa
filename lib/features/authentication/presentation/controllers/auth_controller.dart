@@ -36,10 +36,20 @@ class AuthController extends GetxController {
 
       if (email == 'seller@gmail.com' && password == '1234') {
         Get.offAllNamed(AppRoute.sellerbottomNav);
-      } else if (email == 'artist@g.com') {
+      } else if (email == 'artist@gmail.com' && password == '1234') {
         Get.offAllNamed(AppRoute.artistbottomNav);
-      } else {
+      } else if (email == 'user@gmail.com' && password == '1234') {
         Get.offAllNamed(AppRoute.userbottomNav);
+      } else {
+        Get.snackbar(
+          'Error',
+          'Invalid email or password',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
+          colorText: Colors.white,
+          margin: const EdgeInsets.all(16),
+          borderRadius: 8,
+        );
       }
     }
   }
@@ -112,8 +122,8 @@ class AuthController extends GetxController {
 
   void onSignupSubmit() {
     if (agreeTerms) {
-      if (selectedRole == 'Seller') {
-        // Seller goes through full verification flow
+      if (selectedRole == 'Seller' || selectedRole == 'Artist') {
+        // Seller and Artist go through full verification flow
         selectedDocTab = 1; // Default to Passport tab
         update();
         Get.toNamed(AppRoute.sellerDocumentFormScreen);
@@ -172,7 +182,7 @@ class AuthController extends GetxController {
   }
 
   void onNextFromPersonalInfo() {
-    if (selectedRole == 'Seller') {
+    if (selectedRole == 'Seller' || selectedRole == 'Artist') {
       profileSetupSubTab = 1;
       update();
     } else {
@@ -195,7 +205,11 @@ class AuthController extends GetxController {
   }
 
   void onCompleteSellerSignup() {
-    Get.offAllNamed(AppRoute.sellerbottomNav);
+    if (selectedRole == 'Artist') {
+      Get.offAllNamed(AppRoute.artistbottomNav);
+    } else {
+      Get.offAllNamed(AppRoute.sellerbottomNav);
+    }
   }
 
   final ImagePicker _picker = ImagePicker();
@@ -273,7 +287,11 @@ class AuthController extends GetxController {
   }
 
   void onSellerSignupComplete() {
-    Get.offAllNamed(AppRoute.sellerbottomNav);
+    if (selectedRole == 'Artist') {
+      Get.offAllNamed(AppRoute.artistbottomNav);
+    } else {
+      Get.offAllNamed(AppRoute.sellerbottomNav);
+    }
   }
 
   // --- Forgot Password (Email) State ---

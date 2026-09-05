@@ -24,8 +24,8 @@ class ArtistHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 border: Border.all(color: AppColors.primarytext, width: 1.5),
                 image: const DecorationImage(
                   image: NetworkImage(
-                    'https://picsum.photos/150',
-                  ), // Placeholder
+                    'https://picsum.photos/151',
+                  ),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -46,7 +46,7 @@ class ArtistHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Elishin Nakato',
+                    'Artist Dashboard',
                     style: AppTextStyle(context).boldTextStyle(
                       color: AppColors.onboardingtext,
                       fontSize: 18,
@@ -83,12 +83,11 @@ class ArtistHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                     child: Container(
                       padding: const EdgeInsets.all(6.0),
                       decoration: const BoxDecoration(
-                        color: AppColors
-                            .secondary, // Assuming error or custom red for badge
+                        color: AppColors.secondary,
                         shape: BoxShape.circle,
                       ),
                       child: const Text(
-                        '3', // Mock badge count matching UI
+                        '2',
                         style: TextStyle(
                           color: AppColors.white,
                           fontSize: 10,

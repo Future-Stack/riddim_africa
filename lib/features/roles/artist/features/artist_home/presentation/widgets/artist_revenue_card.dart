@@ -3,10 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:riddimafrica/core/core.dart';
 import '../../domain/entities/artist_dashboard_stats_entity.dart';
 
-class RevenueCard extends StatelessWidget {
+class ArtistRevenueCard extends StatelessWidget {
   final ArtistDashboardStatsEntity stats;
 
-  const RevenueCard({super.key, required this.stats});
+  const ArtistRevenueCard({super.key, required this.stats});
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +18,7 @@ class RevenueCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         gradient: LinearGradient(
-          colors: [
-            AppColors.secondary.withValues(alpha: 0.8), // Assuming secondary is a brownish/orange color
-            AppColors.primary,
-          ],
+          colors: [const Color(0xFF893F25), AppColors.primary],
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
         ),
@@ -40,10 +37,9 @@ class RevenueCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'UGX ${currencyFormatter.format(stats.totalRevenue)}',
-            style: AppTextStyle(context).boldTextStyle(
-              color: AppColors.white,
-              fontSize: 28,
-            ),
+            style: AppTextStyle(
+              context,
+            ).boldTextStyle(color: AppColors.white, fontSize: 28),
           ),
           const SizedBox(height: 8),
           Container(
@@ -55,18 +51,13 @@ class RevenueCard extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.trending_up,
-                  color: Colors.green,
-                  size: 14,
-                ),
+                const Icon(Icons.trending_up, color: Colors.green, size: 14),
                 const SizedBox(width: 4),
                 Text(
                   '+${stats.revenueGrowthPercentage.toStringAsFixed(0)}% this month',
-                  style: AppTextStyle(context).mediumTextStyle(
-                    color: Colors.green,
-                    fontSize: 12,
-                  ),
+                  style: AppTextStyle(
+                    context,
+                  ).mediumTextStyle(color: Colors.green, fontSize: 12),
                 ),
               ],
             ),
@@ -98,7 +89,12 @@ class RevenueCard extends StatelessWidget {
     );
   }
 
-  Widget _buildSubCard(BuildContext context, {required String title, required double amount, required NumberFormat formatter}) {
+  Widget _buildSubCard(
+    BuildContext context, {
+    required String title,
+    required double amount,
+    required NumberFormat formatter,
+  }) {
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -118,10 +114,9 @@ class RevenueCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             'UGX ${formatter.format(amount)}',
-            style: AppTextStyle(context).boldTextStyle(
-              color: AppColors.white,
-              fontSize: 16,
-            ),
+            style: AppTextStyle(
+              context,
+            ).boldTextStyle(color: AppColors.white, fontSize: 16),
           ),
         ],
       ),

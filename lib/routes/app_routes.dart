@@ -23,7 +23,7 @@ import 'package:riddimafrica/features/roles/user/features/market/binding/market_
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/product_detail_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/cart_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/checkout_screen.dart';
-import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/artist_profile.dart';
+import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/artist_profile.dart' as user_artist;
 import 'package:riddimafrica/features/roles/user/features/orders/bindings/order_binding.dart';
 import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_list_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_detail_screen.dart';
@@ -90,6 +90,49 @@ import 'package:riddimafrica/features/roles/seller/features/seller_profile/prese
 import 'package:riddimafrica/features/roles/seller/features/seller_profile/presentation/screens/seller_delete_account_screen.dart';
 import 'package:riddimafrica/features/roles/seller/features/seller_profile/data/models/seller_document_model.dart';
 
+
+import 'package:riddimafrica/features/roles/artist/features/artist_products/bindings/artist_products_binding.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_products/presentation/screens/artist_products_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_products/presentation/screens/submit_product_screen.dart' as artist_submit;
+import 'package:riddimafrica/features/roles/artist/features/artist_products/presentation/screens/artist_live_product_detail_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_products/presentation/screens/artist_review_tracking_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_products/presentation/screens/artist_rejected_product_detail_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_products/presentation/screens/artist_admin_chat_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_orders/bindings/artist_orders_binding.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_orders/presentation/screens/artist_orders_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_orders/presentation/screens/artist_new_order_alert_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_orders/presentation/screens/artist_order_shipment_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_orders/presentation/screens/artist_order_tracking_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_orders/presentation/screens/artist_order_completed_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_orders/presentation/screens/artist_order_cancelled_detail_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_orders/data/models/artist_order_model.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/bindings/artist_revenue_binding.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/presentation/screens/artist_revenue_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/presentation/screens/artist_revenue_transactions_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/presentation/screens/artist_request_payment_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/presentation/screens/artist_payment_details_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/presentation/screens/artist_payout_detail_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_revenue/data/models/artist_revenue_model.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/bindings/artist_profile_binding.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_profile_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_edit_profile_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_verification_badge_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_documents_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_document_detail_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_review_ratings_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_profile_payment_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_support_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_live_chat_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_settings_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_notification_settings_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_change_password_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_refund_policy_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_community_guidelines_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_privacy_policy_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_cookie_notice_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/presentation/screens/artist_delete_account_screen.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_profile/data/models/artist_document_model.dart';
+
 class AppRoute {
   static const String welcomescreen = "/welcomeScreen";
   static const String splashScreen = "/splashScreen";
@@ -104,6 +147,49 @@ class AppRoute {
   static const String userbottomNav = "/userbottomNav";
   static const String artistbottomNav = "/artistbottomNav";
   static const String sellerbottomNav = "/sellerbottomNav";
+
+  // Artist Products & Submission flow
+  static const String artistProducts = "/artistProducts";
+  static const String artistSubmitProduct = "/artistSubmitProduct";
+  static const String artistLiveProductDetail = "/artistLiveProductDetail";
+  static const String artistReviewTracking = "/artistReviewTracking";
+  static const String artistRejectedProductDetail = "/artistRejectedProductDetail";
+  static const String artistAdminChat = "/artistAdminChat";
+
+  // Artist Orders flow
+  static const String artistOrders = "/artistOrders";
+  static const String artistNewOrderAlert = "/artistNewOrderAlert";
+  static const String artistOrderShipment = "/artistOrderShipment";
+  static const String artistOrderTracking = "/artistOrderTracking";
+  static const String artistOrderCompleted = "/artistOrderCompleted";
+  static const String artistOrderCancelledDetail = "/artistOrderCancelledDetail";
+
+  // Artist Revenue flow
+  static const String artistRevenue = "/artistRevenue";
+  static const String artistRevenueTransactions = "/artistRevenueTransactions";
+  static const String artistRequestPayment = "/artistRequestPayment";
+  static const String artistPaymentDetails = "/artistPaymentDetails";
+  static const String artistPayoutDetail = "/artistPayoutDetail";
+
+  // Artist Profile & Settings flow
+  static const String artistProfileRole = "/artistProfileRole";
+  static const String artistEditProfile = "/artistEditProfile";
+  static const String artistVerificationBadge = "/artistVerificationBadge";
+  static const String artistDocuments = "/artistDocuments";
+  static const String artistDocumentDetail = "/artistDocumentDetail";
+  static const String artistReviewRatings = "/artistReviewRatings";
+  static const String artistProfilePayment = "/artistProfilePayment";
+  static const String artistSupport = "/artistSupport";
+  static const String artistLiveChat = "/artistLiveChat";
+  static const String artistSettings = "/artistSettings";
+  static const String artistNotificationSettings = "/artistNotificationSettings";
+  static const String artistChangePassword = "/artistChangePassword";
+  static const String artistRefundPolicy = "/artistRefundPolicy";
+  static const String artistCommunityGuidelines = "/artistCommunityGuidelines";
+  static const String artistPrivacyPolicy = "/artistPrivacyPolicy";
+  static const String artistCookieNotice = "/artistCookieNotice";
+  static const String artistDeleteAccount = "/artistDeleteAccount";
+
 
   // Seller registration flow (new multi-step)
   static const String sellerIdVerificationScreen = "/sellerIdVerificationScreen";
@@ -304,6 +390,229 @@ class AppRoute {
       name: sellerBusinessDetailsScreen,
       page: () => const SellerBusinessDetailsScreen(),
       binding: AuthBinding(),
+    ),
+
+
+    // Artist Products & Submission flow
+    GetPage(
+      name: artistProducts,
+      page: () => const ArtistProductsScreen(),
+      binding: ArtistProductsBinding(),
+    ),
+    GetPage(
+      name: artistSubmitProduct,
+      page: () => const artist_submit.SubmitProductScreen(),
+      binding: ArtistProductsBinding(),
+    ),
+    GetPage(
+      name: artistLiveProductDetail,
+      page: () => const ArtistLiveProductDetailScreen(),
+      binding: ArtistProductsBinding(),
+    ),
+    GetPage(
+      name: artistReviewTracking,
+      page: () => const ArtistReviewTrackingScreen(),
+      binding: ArtistProductsBinding(),
+    ),
+    GetPage(
+      name: artistRejectedProductDetail,
+      page: () => const ArtistRejectedProductDetailScreen(),
+      binding: ArtistProductsBinding(),
+    ),
+    GetPage(
+      name: artistAdminChat,
+      page: () => const ArtistAdminChatScreen(),
+      binding: ArtistProductsBinding(),
+    ),
+
+    // Artist Orders flow
+    GetPage(
+      name: artistOrders,
+      page: () => const ArtistOrdersScreen(),
+      binding: ArtistOrdersBinding(),
+    ),
+    GetPage(
+      name: artistNewOrderAlert,
+      page: () {
+        final order = Get.arguments as ArtistOrderModel? ??
+            ArtistOrderModel.getInitialOrders().first;
+        return ArtistNewOrderAlertScreen(order: order);
+      },
+      binding: ArtistOrdersBinding(),
+    ),
+    GetPage(
+      name: artistOrderShipment,
+      page: () {
+        final order = Get.arguments as ArtistOrderModel? ??
+            ArtistOrderModel.getInitialOrders().first;
+        return ArtistOrderShipmentScreen(order: order);
+      },
+      binding: ArtistOrdersBinding(),
+    ),
+    GetPage(
+      name: artistOrderTracking,
+      page: () {
+        final order = Get.arguments as ArtistOrderModel? ??
+            ArtistOrderModel.getInitialOrders().first;
+        return ArtistOrderTrackingScreen(order: order);
+      },
+      binding: ArtistOrdersBinding(),
+    ),
+    GetPage(
+      name: artistOrderCompleted,
+      page: () {
+        final order = Get.arguments as ArtistOrderModel? ??
+            ArtistOrderModel.getInitialOrders().firstWhere(
+              (o) => o.status == ArtistOrderStatus.delivered,
+              orElse: () => ArtistOrderModel.getInitialOrders().first,
+            );
+        return ArtistOrderCompletedScreen(order: order);
+      },
+      binding: ArtistOrdersBinding(),
+    ),
+    GetPage(
+      name: artistOrderCancelledDetail,
+      page: () {
+        final order = Get.arguments as ArtistOrderModel? ??
+            ArtistOrderModel.getInitialOrders().firstWhere(
+              (o) => o.status == ArtistOrderStatus.cancelled,
+              orElse: () => ArtistOrderModel.getInitialOrders().first,
+            );
+        return ArtistOrderCancelledDetailScreen(order: order);
+      },
+      binding: ArtistOrdersBinding(),
+    ),
+
+    // Artist Revenue flow
+    GetPage(
+      name: artistRevenue,
+      page: () => const ArtistRevenueScreen(),
+      binding: ArtistRevenueBinding(),
+    ),
+    GetPage(
+      name: artistRevenueTransactions,
+      page: () => const ArtistRevenueTransactionsScreen(),
+      binding: ArtistRevenueBinding(),
+    ),
+    GetPage(
+      name: artistRequestPayment,
+      page: () => const ArtistRequestPaymentScreen(),
+      binding: ArtistRevenueBinding(),
+    ),
+    GetPage(
+      name: artistPaymentDetails,
+      page: () {
+        final tx = Get.arguments as ArtistTransactionModel? ??
+            ArtistTransactionModel.getInitialTransactions().firstWhere(
+              (t) => t.status == ArtistTransactionStatus.settled,
+              orElse: () => ArtistTransactionModel.getInitialTransactions().first,
+            );
+        return ArtistPaymentDetailsScreen(transaction: tx);
+      },
+      binding: ArtistRevenueBinding(),
+    ),
+    GetPage(
+      name: artistPayoutDetail,
+      page: () {
+        final tx = Get.arguments as ArtistTransactionModel? ??
+            ArtistTransactionModel.getInitialTransactions().firstWhere(
+              (t) => t.status == ArtistTransactionStatus.inProgress,
+              orElse: () => ArtistTransactionModel.getInitialTransactions().first,
+            );
+        return ArtistPayoutDetailScreen(transaction: tx);
+      },
+      binding: ArtistRevenueBinding(),
+    ),
+
+    // Artist Profile & Settings flow
+    GetPage(
+      name: artistProfileRole,
+      page: () => const ArtistProfileScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistEditProfile,
+      page: () => const ArtistEditProfileScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistVerificationBadge,
+      page: () => const ArtistVerificationBadgeScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistDocuments,
+      page: () => const ArtistDocumentsScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistDocumentDetail,
+      page: () {
+        final doc = Get.arguments as ArtistDocumentModel? ??
+            ArtistDocumentModel.mockDocuments.first;
+        return ArtistDocumentDetailScreen(document: doc);
+      },
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistReviewRatings,
+      page: () => const ArtistReviewRatingsScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistProfilePayment,
+      page: () => const ArtistProfilePaymentScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistSupport,
+      page: () => const ArtistSupportScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistLiveChat,
+      page: () => const ArtistLiveChatScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistSettings,
+      page: () => const ArtistSettingsScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistNotificationSettings,
+      page: () => const ArtistNotificationSettingsScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistChangePassword,
+      page: () => const ArtistChangePasswordScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistRefundPolicy,
+      page: () => const ArtistRefundPolicyScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistCommunityGuidelines,
+      page: () => const ArtistCommunityGuidelinesScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistPrivacyPolicy,
+      page: () => const ArtistPrivacyPolicyScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistCookieNotice,
+      page: () => const ArtistCookieNoticeScreen(),
+      binding: ArtistProfileBinding(),
+    ),
+    GetPage(
+      name: artistDeleteAccount,
+      page: () => const ArtistDeleteAccountScreen(),
+      binding: ArtistProfileBinding(),
     ),
 
     // Seller Products & Submission flow
@@ -556,7 +865,7 @@ class AppRoute {
     ),
     GetPage(
       name: artistProfile,
-      page: () => const ArtistProfileScreen(),
+      page: () => const user_artist.ArtistProfileScreen(),
       binding: MarketBinding(),
     ),
     GetPage(
