@@ -4,7 +4,7 @@ import 'package:riddimafrica/core/core.dart';
 import '../controllers/submit_product_controller.dart';
 import 'submit_success_dialog.dart';
 
-class SubmitStep3Pricing extends GetView<SubmitProductController> {
+class SubmitStep3Pricing extends GetView<ArtistSubmitProductController> {
   const SubmitStep3Pricing({super.key});
 
   @override

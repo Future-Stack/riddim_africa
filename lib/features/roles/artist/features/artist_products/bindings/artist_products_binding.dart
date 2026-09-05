@@ -8,7 +8,7 @@ class ArtistProductsBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<ArtistProductsController>(() => ArtistProductsController());
-    Get.lazyPut<SubmitProductController>(() => SubmitProductController());
+    Get.lazyPut<ArtistSubmitProductController>(() => ArtistSubmitProductController());
     Get.lazyPut<ArtistProductDetailController>(() => ArtistProductDetailController());
     Get.lazyPut<ArtistAdminChatController>(() => ArtistAdminChatController());
   }

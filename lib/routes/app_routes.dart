@@ -93,7 +93,7 @@ import 'package:riddimafrica/features/roles/seller/features/seller_profile/data/
 
 import 'package:riddimafrica/features/roles/artist/features/artist_products/bindings/artist_products_binding.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_products/presentation/screens/artist_products_screen.dart';
-import 'package:riddimafrica/features/roles/artist/features/artist_products/presentation/screens/submit_product_screen.dart' as artist_submit;
+import 'package:riddimafrica/features/roles/artist/features/artist_products/presentation/screens/submit_product_screen.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_products/presentation/screens/artist_live_product_detail_screen.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_products/presentation/screens/artist_review_tracking_screen.dart';
 import 'package:riddimafrica/features/roles/artist/features/artist_products/presentation/screens/artist_rejected_product_detail_screen.dart';
@@ -401,7 +401,7 @@ class AppRoute {
     ),
     GetPage(
       name: artistSubmitProduct,
-      page: () => const artist_submit.SubmitProductScreen(),
+      page: () => const ArtistSubmitProductScreen(),
       binding: ArtistProductsBinding(),
     ),
     GetPage(
@@ -623,7 +623,7 @@ class AppRoute {
     ),
     GetPage(
       name: sellerSubmitProduct,
-      page: () => const SubmitProductScreen(),
+      page: () => const SellerSubmitProductScreen(),
       binding: SellerProductsBinding(),
     ),
     GetPage(

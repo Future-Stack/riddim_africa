@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:riddimafrica/core/core.dart';
 import '../controllers/submit_product_controller.dart';
 
-class SubmitStep2Photos extends GetView<SubmitProductController> {
+class SubmitStep2Photos extends GetView<SellerSubmitProductController> {
   const SubmitStep2Photos({super.key});
 
   @override

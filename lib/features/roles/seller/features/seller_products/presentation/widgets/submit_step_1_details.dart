@@ -6,7 +6,7 @@ import '../controllers/submit_product_controller.dart';
 import 'add_size_modal.dart';
 import 'add_color_modal.dart';
 
-class SubmitStep1Details extends GetView<SubmitProductController> {
+class SubmitStep1Details extends GetView<SellerSubmitProductController> {
   const SubmitStep1Details({super.key});
 
   @override
