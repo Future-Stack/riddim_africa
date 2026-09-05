@@ -23,7 +23,7 @@ import 'package:riddimafrica/features/roles/user/features/market/binding/market_
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/product_detail_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/cart_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/checkout_screen.dart';
-import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/artist_profile.dart' as user_artist;
+import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/artist_profile.dart';
 import 'package:riddimafrica/features/roles/user/features/orders/bindings/order_binding.dart';
 import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_list_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/orders/presentation/screens/order_detail_screen.dart';
@@ -865,7 +865,7 @@ class AppRoute {
     ),
     GetPage(
       name: artistProfile,
-      page: () => const user_artist.ArtistProfileScreen(),
+      page: () => const MarketArtistProfileScreen(),
       binding: MarketBinding(),
     ),
     GetPage(
