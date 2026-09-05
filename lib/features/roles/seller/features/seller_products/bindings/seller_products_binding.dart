@@ -8,7 +8,7 @@ class SellerProductsBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<SellerProductsController>(() => SellerProductsController());
-    Get.lazyPut<SubmitProductController>(() => SubmitProductController());
+    Get.lazyPut<SellerSubmitProductController>(() => SellerSubmitProductController());
     Get.lazyPut<SellerProductDetailController>(() => SellerProductDetailController());
     Get.lazyPut<SellerAdminChatController>(() => SellerAdminChatController());
   }

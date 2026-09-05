@@ -7,15 +7,15 @@ import '../widgets/submit_step_1_details.dart';
 import '../widgets/submit_step_2_photos.dart';
 import '../widgets/submit_step_3_pricing.dart';
 
-class SubmitProductScreen extends GetView<SubmitProductController> {
-  const SubmitProductScreen({super.key});
+class ArtistSubmitProductScreen extends GetView<ArtistSubmitProductController> {
+  const ArtistSubmitProductScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     // Ensure controller is registered
-    final c = Get.isRegistered<SubmitProductController>()
-        ? Get.find<SubmitProductController>()
-        : Get.put(SubmitProductController());
+    final c = Get.isRegistered<ArtistSubmitProductController>()
+        ? Get.find<ArtistSubmitProductController>()
+        : Get.put(ArtistSubmitProductController());
 
     return Scaffold(
       backgroundColor: AppColors.primary,

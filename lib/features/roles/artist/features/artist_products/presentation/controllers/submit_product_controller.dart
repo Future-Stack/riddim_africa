@@ -5,7 +5,7 @@ import 'package:riddimafrica/routes/app_routes.dart';
 import '../../data/models/product_variant_model.dart';
 import '../../data/models/artist_product_model.dart';
 
-class SubmitProductController extends GetxController {
+class ArtistSubmitProductController extends GetxController {
   final ImagePicker _imagePicker = ImagePicker();
 
   // Wizard Step: 1, 2, or 3
