@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/core/common/widgets/custom_search_bar.dart';
+import 'package:riddimafrica/features/bottom_nav/presentation/controllers/artist_bottom_nav_controller.dart';
+import 'package:riddimafrica/features/roles/artist/features/artist_orders/data/models/artist_order_model.dart';
 import 'package:riddimafrica/routes/app_routes.dart';
 
 import '../controllers/artist_home_controller.dart';
 import '../widgets/artist_home_app_bar.dart';
-import '../widgets/verification_banner.dart';
-import '../widgets/revenue_card.dart';
-import '../widgets/stats_row.dart';
-import '../widgets/recent_order_card.dart';
+import '../widgets/artist_verification_banner.dart';
+import '../widgets/artist_revenue_card.dart';
+import '../widgets/artist_stats_row.dart';
+import '../widgets/artist_recent_order_card.dart';
 
 class ArtistHomeScreen extends GetView<ArtistHomeController> {
   const ArtistHomeScreen({super.key});
@@ -56,16 +58,25 @@ class ArtistHomeScreen extends GetView<ArtistHomeController> {
 
               // Verification Banner
               if (controller.isBannerVisible.value) ...[
-                VerificationBanner(onClose: controller.hideBanner),
+                ArtistVerificationBanner(onClose: controller.hideBanner),
                 const SizedBox(height: 20),
               ],
 
               // Revenue Card
-              RevenueCard(stats: controller.stats.value!),
+              GestureDetector(
+                onTap: () {
+                  if (Get.isRegistered<ArtistBottomNavController>()) {
+                    Get.find<ArtistBottomNavController>().changeIndex(3);
+                  } else {
+                    Get.toNamed(AppRoute.artistRevenue);
+                  }
+                },
+                child: ArtistRevenueCard(stats: controller.stats.value!),
+              ),
               const SizedBox(height: 20),
 
               // Stats Row
-              StatsRow(stats: controller.stats.value!),
+              ArtistStatsRow(stats: controller.stats.value!),
               const SizedBox(height: 24),
 
               // Recent Orders Section Header
@@ -80,7 +91,11 @@ class ArtistHomeScreen extends GetView<ArtistHomeController> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Navigate to full orders view
+                      if (Get.isRegistered<ArtistBottomNavController>()) {
+                        Get.find<ArtistBottomNavController>().changeIndex(2);
+                      } else {
+                        Get.toNamed(AppRoute.artistOrders);
+                      }
                     },
                     child: Row(
                       children: [
@@ -120,8 +135,32 @@ class ArtistHomeScreen extends GetView<ArtistHomeController> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: controller.recentOrders.length,
                   itemBuilder: (context, index) {
-                    return RecentOrderCard(
-                      order: controller.recentOrders[index],
+                    final recentOrder = controller.recentOrders[index];
+                    return GestureDetector(
+                      onTap: () {
+                        // Find matching order in mock data or construct model
+                        final match = ArtistOrderModel.getInitialOrders().firstWhere(
+                          (o) => o.id == recentOrder.id,
+                          orElse: () => ArtistOrderModel(
+                            id: recentOrder.id,
+                            productCode: recentOrder.id,
+                            productTitle: recentOrder.productName,
+                            customerName: recentOrder.customerName,
+                            price: 'UGX ${recentOrder.price.toInt()}',
+                            status: ArtistOrderStatus.newOrder,
+                            orderTime: recentOrder.date,
+                            paymentMethod: 'Paid via Mobile Money',
+                            productImage: recentOrder.productImageUrl,
+                          ),
+                        );
+                        Get.toNamed(
+                          AppRoute.artistNewOrderAlert,
+                          arguments: match,
+                        );
+                      },
+                      child: ArtistRecentOrderCard(
+                        order: recentOrder,
+                      ),
                     );
                   },
                 ),

@@ -3,10 +3,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:riddimafrica/core/core.dart';
 import '../../domain/entities/artist_dashboard_stats_entity.dart';
 
-class StatsRow extends StatelessWidget {
+class ArtistStatsRow extends StatelessWidget {
   final ArtistDashboardStatsEntity stats;
 
-  const StatsRow({super.key, required this.stats});
+  const ArtistStatsRow({super.key, required this.stats});
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,6 @@ class StatsRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// 🔥 ICON BOX
           Container(
             height: 32,
             width: 32,
@@ -95,18 +94,14 @@ class StatsRow extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(height: 12),
-
           Text(
             value,
             style: AppTextStyle(
               context,
             ).boldTextStyle(color: AppColors.white, fontSize: 20),
           ),
-
           const SizedBox(height: 4),
-
           Text(
             label,
             style: AppTextStyle(context).mediumTextStyle(

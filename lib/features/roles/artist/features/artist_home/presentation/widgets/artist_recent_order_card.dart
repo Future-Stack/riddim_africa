@@ -3,10 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:riddimafrica/core/core.dart';
 import '../../domain/entities/artist_recent_order_entity.dart';
 
-class RecentOrderCard extends StatelessWidget {
+class ArtistRecentOrderCard extends StatelessWidget {
   final ArtistRecentOrderEntity order;
 
-  const RecentOrderCard({super.key, required this.order});
+  const ArtistRecentOrderCard({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +111,7 @@ class RecentOrderCard extends StatelessWidget {
               Text(
                 'UGX ${currencyFormatter.format(order.price)}',
                 style: AppTextStyle(context).boldTextStyle(
-                  color: Colors.yellow, // Using yellow as in UI screenshot
+                  color: Colors.yellow,
                   fontSize: 14,
                 ),
               ),
