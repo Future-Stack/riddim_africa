@@ -4,8 +4,8 @@ import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/core/common/widgets/product_card.dart';
 import '../controllers/artist_profile_controller.dart';
 
-class ArtistProfileScreen extends GetView<ArtistProfileController> {
-  const ArtistProfileScreen({super.key});
+class MarketArtistProfileScreen extends GetView<MarketArtistProfileController> {
+  const MarketArtistProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

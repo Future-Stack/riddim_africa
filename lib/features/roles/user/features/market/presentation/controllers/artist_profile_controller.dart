@@ -2,10 +2,10 @@ import 'package:get/get.dart';
 import '../../domain/entities/market_product_entity.dart';
 import '../../domain/usecases/get_artist_products_usecase.dart';
 
-class ArtistProfileController extends GetxController {
+class MarketArtistProfileController extends GetxController {
   final GetArtistProductsUseCase _getArtistProductsUseCase;
 
-  ArtistProfileController(this._getArtistProductsUseCase);
+  MarketArtistProfileController(this._getArtistProductsUseCase);
 
   // Loading state
   final RxBool isLoading = false.obs;

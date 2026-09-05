@@ -47,7 +47,7 @@ class MarketBinding extends Bindings {
       () => CheckoutController(Get.find<GetDeliveryAddressesUseCase>()),
     );
     Get.lazyPut(
-      () => ArtistProfileController(Get.find<GetArtistProductsUseCase>()),
+      () => MarketArtistProfileController(Get.find<GetArtistProductsUseCase>()),
     );
     Get.lazyPut(
       () => MarketController(Get.find<GetMarketProductsUseCase>()),
