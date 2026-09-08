@@ -76,7 +76,7 @@ class ProfileSetupScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   Text(
-                    'Select Your Role to Riddim Africa',
+                    'Select Your Role to RiddimAfrica',
                     style: AppTextStyle(context).regularTextStyle(
                       fontSize: AppTextStyle.md,
                       color: AppColors.onboardingtext,
