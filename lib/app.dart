@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
     return Sizer(
       builder: (context, orientation, screenType) {
         return GetMaterialApp(
+          title: 'RiddimAfrica',
           debugShowCheckedModeBanner: false,
           initialRoute: AppRoute.getSplashScreen(),
           getPages: AppRoute.routes,
