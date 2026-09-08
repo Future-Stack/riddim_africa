@@ -35,7 +35,7 @@ class OnboardingController extends GetxController {
         centerLogoPath: ImagePath.onlogo3,
         showTopRightLogo: true,
         showDots: false,
-        title: 'Welcome To Riddim Africa',
+        title: 'Welcome To RiddimAfrica',
         subtitle:
             'Your favorite vibes, hottest hits, and nonstop rhythm are just a click away.',
         buttons: [
