@@ -52,7 +52,7 @@ class WelcomeScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              'Welcome to Riddim Africa',
+                              'Welcome to RiddimAfrica',
                               style: AppTextStyle(context).boldTextStyle(
                                 fontSize: 22,
                                 color: AppColors.white,
