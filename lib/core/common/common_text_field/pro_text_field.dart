@@ -8,6 +8,8 @@ class ProTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final bool obscureText;
+  final bool readOnly;
+  final VoidCallback? onTap;
   final TextEditingController? controller;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
@@ -19,6 +21,8 @@ class ProTextField extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.obscureText = false,
+    this.readOnly = false,
+    this.onTap,
     this.controller,
     this.keyboardType = TextInputType.text,
     this.validator,
@@ -42,6 +46,8 @@ class ProTextField extends StatelessWidget {
         TextFormField(
           controller: controller,
           obscureText: obscureText,
+          readOnly: readOnly,
+          onTap: onTap,
           keyboardType: keyboardType,
           validator: validator,
           style: AppTextStyle(context).regularTextStyle(

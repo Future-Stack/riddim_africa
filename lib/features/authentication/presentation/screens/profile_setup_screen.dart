@@ -140,74 +140,76 @@ class ProfileSetupScreen extends StatelessWidget {
                 ],
 
                 // ── Step Tabs (Basic Info | Business Info | Payment) ──────
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Row(
-                    children: List.generate(_steps.length, (i) {
-                      final isActive = controller.profileSetupStep == i;
-                      return Expanded(
-                        child: GestureDetector(
-                          onTap: () => controller.setProfileSetupStep(i),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 6.h),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      _steps[i]['icon'] as String,
-                                      width: 18.w,
-                                      height: 18.w,
-                                      fit: BoxFit.contain,
-                                      color: isActive
-                                          ? AppColors.multicolor
-                                          : AppColors.onboardingtext,
-                                    ),
-                                    SizedBox(width: 5.w),
-                                    Text(
-                                      _steps[i]['label'] as String,
-                                      style: AppTextStyle(context).mediumTextStyle(
-                                        fontSize: 12,
+                if (controller.selectedRole != 'User') ...[
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Row(
+                      children: List.generate(_steps.length, (i) {
+                        final isActive = controller.profileSetupStep == i;
+                        return Expanded(
+                          child: GestureDetector(
+                            onTap: () => controller.setProfileSetupStep(i),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 6.h),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        _steps[i]['icon'] as String,
+                                        width: 18.w,
+                                        height: 18.w,
+                                        fit: BoxFit.contain,
                                         color: isActive
                                             ? AppColors.multicolor
                                             : AppColors.onboardingtext,
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(width: 5.w),
+                                      Text(
+                                        _steps[i]['label'] as String,
+                                        style: AppTextStyle(context).mediumTextStyle(
+                                          fontSize: 12,
+                                          color: isActive
+                                              ? AppColors.multicolor
+                                              : AppColors.onboardingtext,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                height: 2.5,
-                                decoration: BoxDecoration(
-                                  color: isActive
-                                      ? AppColors.bordercolor
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(2),
+                                Container(
+                                  height: 2.5,
+                                  decoration: BoxDecoration(
+                                    color: isActive
+                                        ? AppColors.bordercolor
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    }),
-                  ),
-                ),
-                SizedBox(height: 12.h),
-
-                // ── Sub-tabs for Step 0 (Personal Info | Verification) ────
-                if (controller.profileSetupStep == 0) ...[
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Row(
-                      children: [
-                        _buildSubTab(context, controller, 'Personal Info', 0),
-                        SizedBox(width: 8.w),
-                        _buildSubTab(context, controller, 'Verificaiton', 1),
-                      ],
+                        );
+                      }),
                     ),
                   ),
-                  SizedBox(height: 14.h),
+                  SizedBox(height: 12.h),
+
+                  // ── Sub-tabs for Step 0 (Personal Info | Verification) ────
+                  if (controller.profileSetupStep == 0) ...[
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Row(
+                        children: [
+                          _buildSubTab(context, controller, 'Personal Info', 0),
+                          SizedBox(width: 8.w),
+                          _buildSubTab(context, controller, 'Verificaiton', 1),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 14.h),
+                  ],
                 ],
 
                 // ── Scrollable Form Body ──────────────────────────────────
@@ -228,6 +230,9 @@ class ProfileSetupScreen extends StatelessWidget {
 
   // ── Current Content Router ────────────────────────────────────────────────
   Widget _buildCurrentStepContent(BuildContext context, AuthController controller) {
+    if (controller.selectedRole == 'User') {
+      return _buildPersonalInfoView(context, controller);
+    }
     if (controller.profileSetupStep == 0) {
       if (controller.profileSetupSubTab == 0) {
         return _buildPersonalInfoView(context, controller);
@@ -307,13 +312,29 @@ class ProfileSetupScreen extends StatelessWidget {
         ProTextField(
           controller: controller.signupCountryController,
           labelText: 'Country',
-          hintText: 'Enter Your Country Name',
+          hintText: 'Select Your Country',
+          readOnly: true,
+          suffixIcon: const Icon(
+            Icons.arrow_drop_down,
+            color: AppColors.secondary,
+            size: 28,
+          ),
+          onTap: () => _showCountryPicker(context, controller),
         ),
         SizedBox(height: 10.h),
         ProTextField(
           controller: controller.signupCityController,
           labelText: 'City Name',
-          hintText: 'Enter City',
+          hintText: controller.signupCountryController.text.isEmpty
+              ? 'Select Country First'
+              : 'Select City',
+          readOnly: true,
+          suffixIcon: const Icon(
+            Icons.arrow_drop_down,
+            color: AppColors.secondary,
+            size: 28,
+          ),
+          onTap: () => _showCityPicker(context, controller),
         ),
         SizedBox(height: 10.h),
         ProTextField(
@@ -394,8 +415,9 @@ class ProfileSetupScreen extends StatelessWidget {
         SizedBox(height: 20.h),
 
         ProElevatedButton(
-          text: 'Next',
-          trailingIcon: Icons.arrow_forward_ios,
+          text: controller.selectedRole == 'User' ? 'Create Account' : 'Next',
+          isLoading: controller.isRegistering.value,
+          trailingIcon: controller.selectedRole == 'User' ? null : Icons.arrow_forward_ios,
           iconSize: 14,
           height: 52,
           borderRadius: 30,
@@ -1127,6 +1149,307 @@ class ProfileSetupScreen extends StatelessWidget {
             end: Offset.zero,
           ).animate(CurvedAnimation(parent: anim1, curve: Curves.easeOutCubic)),
           child: child,
+        );
+      },
+    );
+  }
+
+  void _showCountryPicker(BuildContext context, AuthController controller) {
+    final searchController = TextEditingController();
+    final allCountries = AuthController.countryCityMap.keys.toList();
+    final filteredCountries = RxList<String>(allCountries);
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.primary,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        side: BorderSide(color: AppColors.cardBorder),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.65,
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40.w,
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        color: AppColors.onboardingtext.withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Select Country',
+                        style: AppTextStyle(context).boldTextStyle(
+                          fontSize: AppTextStyle.lg,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: AppColors.white, size: 20),
+                        onPressed: () => Navigator.pop(ctx),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12.h),
+                  TextField(
+                    controller: searchController,
+                    onChanged: (val) {
+                      filteredCountries.assignAll(
+                        allCountries.where(
+                          (c) => c.toLowerCase().contains(val.toLowerCase()),
+                        ),
+                      );
+                    },
+                    style: AppTextStyle(context).regularTextStyle(
+                      fontSize: AppTextStyle.md,
+                      color: AppColors.white,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'Search country...',
+                      hintStyle: AppTextStyle(context).regularTextStyle(
+                        fontSize: AppTextStyle.md,
+                        color: AppColors.onboardingtext,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: AppColors.onboardingtext,
+                      ),
+                      filled: true,
+                      fillColor: AppColors.textfieldcolor,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 14.h),
+                  Expanded(
+                    child: Obx(
+                      () => ListView.separated(
+                        itemCount: filteredCountries.length,
+                        separatorBuilder: (_, _) => const Divider(
+                          color: AppColors.cardBorder,
+                          height: 1,
+                        ),
+                        itemBuilder: (context, index) {
+                          final country = filteredCountries[index];
+                          final isSelected =
+                              controller.signupCountryController.text == country;
+
+                          return ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 2.h,
+                            ),
+                            title: Text(
+                              country,
+                              style: AppTextStyle(context).mediumTextStyle(
+                                fontSize: AppTextStyle.md,
+                                color: isSelected
+                                    ? AppColors.secondary
+                                    : AppColors.white,
+                              ),
+                            ),
+                            trailing: isSelected
+                                ? const Icon(
+                                    Icons.check_circle,
+                                    color: AppColors.secondary,
+                                    size: 20,
+                                  )
+                                : null,
+                            onTap: () {
+                              controller.selectCountry(country);
+                              Navigator.pop(ctx);
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showCityPicker(BuildContext context, AuthController controller) {
+    if (controller.signupCountryController.text.isEmpty) {
+      Get.snackbar(
+        'Country Required',
+        'Please select a country first to view cities',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.orange.withValues(alpha: 0.8),
+        colorText: Colors.white,
+        margin: const EdgeInsets.all(16),
+        borderRadius: 8,
+      );
+      return;
+    }
+
+    final searchController = TextEditingController();
+    final allCities = controller.availableCities;
+    final filteredCities = RxList<String>(allCities);
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.primary,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        side: BorderSide(color: AppColors.cardBorder),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.65,
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40.w,
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        color: AppColors.onboardingtext.withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Select City (${controller.signupCountryController.text})',
+                        style: AppTextStyle(context).boldTextStyle(
+                          fontSize: AppTextStyle.lg,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: AppColors.white, size: 20),
+                        onPressed: () => Navigator.pop(ctx),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12.h),
+                  if (allCities.length > 5) ...[
+                    TextField(
+                      controller: searchController,
+                      onChanged: (val) {
+                        filteredCities.assignAll(
+                          allCities.where(
+                            (c) => c.toLowerCase().contains(val.toLowerCase()),
+                          ),
+                        );
+                      },
+                      style: AppTextStyle(context).regularTextStyle(
+                        fontSize: AppTextStyle.md,
+                        color: AppColors.white,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Search city...',
+                        hintStyle: AppTextStyle(context).regularTextStyle(
+                          fontSize: AppTextStyle.md,
+                          color: AppColors.onboardingtext,
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: AppColors.onboardingtext,
+                        ),
+                        filled: true,
+                        fillColor: AppColors.textfieldcolor,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 14.h),
+                  ],
+                  Expanded(
+                    child: Obx(
+                      () => filteredCities.isEmpty
+                          ? Center(
+                              child: Text(
+                                'No cities found',
+                                style: AppTextStyle(context).regularTextStyle(
+                                  fontSize: AppTextStyle.md,
+                                  color: AppColors.onboardingtext,
+                                ),
+                              ),
+                            )
+                          : ListView.separated(
+                              itemCount: filteredCities.length,
+                              separatorBuilder: (_, _) => const Divider(
+                                color: AppColors.cardBorder,
+                                height: 1,
+                              ),
+                              itemBuilder: (context, index) {
+                                final city = filteredCities[index];
+                                final isSelected =
+                                    controller.signupCityController.text == city;
+
+                                return ListTile(
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 8.w,
+                                    vertical: 2.h,
+                                  ),
+                                  title: Text(
+                                    city,
+                                    style: AppTextStyle(context).mediumTextStyle(
+                                      fontSize: AppTextStyle.md,
+                                      color: isSelected
+                                          ? AppColors.secondary
+                                          : AppColors.white,
+                                    ),
+                                  ),
+                                  trailing: isSelected
+                                      ? const Icon(
+                                          Icons.check_circle,
+                                          color: AppColors.secondary,
+                                          size: 20,
+                                        )
+                                      : null,
+                                  onTap: () {
+                                    controller.selectCity(city);
+                                    Navigator.pop(ctx);
+                                  },
+                                );
+                              },
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
         );
       },
     );

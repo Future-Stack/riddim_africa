@@ -5,8 +5,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:riddimafrica/routes/app_routes.dart';
 import 'package:riddimafrica/features/authentication/presentation/controllers/auth_controller.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                     sliver: SliverFillRemaining(
                       hasScrollBody: false,
                       child: Form(
-                        key: controller.loginFormKey,
+                        key: _formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -143,7 +150,7 @@ class LoginScreen extends StatelessWidget {
                                   AppColors.secondary,
                                 ],
                               ),
-                              onPressed: controller.onLoginSubmit,
+                              onPressed: () => controller.onLoginSubmit(_formKey),
                             ),
                             SizedBox(height: 32.h),
                             Row(

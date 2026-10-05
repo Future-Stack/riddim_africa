@@ -75,7 +75,7 @@ class NetworkCaller {
     Map<String, dynamic>? body,
     String? token,
   }) {
-    log('POST   → $endpoint | body: ${jsonEncode(body)}');
+    log('POST   → $endpoint | body: ${jsonEncode(_sanitizeLogBody(body))}');
     return _execute(
       endpoint,
       () => _dio.post(
@@ -91,7 +91,7 @@ class NetworkCaller {
     Map<String, dynamic>? body,
     String? token,
   }) {
-    log('PATCH  → $endpoint');
+    log('PATCH  → $endpoint | body: ${jsonEncode(_sanitizeLogBody(body))}');
     return _execute(
       endpoint,
       () => _dio.patch(
@@ -107,7 +107,7 @@ class NetworkCaller {
     Map<String, dynamic>? body,
     String? token,
   }) {
-    log('PUT    → $endpoint');
+    log('PUT    → $endpoint | body: ${jsonEncode(_sanitizeLogBody(body))}');
     return _execute(
       endpoint,
       () => _dio.put(
@@ -370,13 +370,22 @@ class NetworkCaller {
 
   ResponseData _badResponseError(DioException error) {
     final status = error.response?.statusCode ?? 500;
-    final body = error.response?.data;
+    dynamic body = error.response?.data;
+    if (body is String) {
+      try {
+        body = jsonDecode(body);
+      } catch (_) {}
+    }
 
     final message = switch (status) {
-      401 => 'Session expired. Please log in again.',
-      403 => 'Access denied. You lack permission for this resource.',
-      _ =>
+      401 =>
         (body is Map ? (body['message'] ?? body['detail']) : null) ??
+            'Invalid credentials or session expired.',
+      403 =>
+        (body is Map ? (body['message'] ?? body['detail']) : null) ??
+            'Access denied. You lack permission for this resource.',
+      _ =>
+        (body is Map ? (body['message'] ?? body['detail'] ?? (body['errorSources'] is List ? _joinErrorSources(body['errorSources']) : null)) : null) ??
             'Server returned an error.',
     };
 
@@ -387,7 +396,7 @@ class NetworkCaller {
       isSuccess: false,
       statusCode: status,
       responseData: body ?? '',
-      errorMessage: message,
+      errorMessage: message.toString(),
     );
   }
 
@@ -413,5 +422,23 @@ class NetworkCaller {
       'gif' => 'image/gif',
       _ => throw ArgumentError('Unsupported image format: .$ext'),
     };
+  }
+
+  Map<String, dynamic>? _sanitizeLogBody(Map<String, dynamic>? body) {
+    if (body == null) return null;
+    final sanitized = Map<String, dynamic>.from(body);
+    const sensitiveKeys = {
+      'password',
+      'confirmPassword',
+      'oldPassword',
+      'newPassword',
+      'confirmNewPassword',
+    };
+    for (final key in sensitiveKeys) {
+      if (sanitized.containsKey(key)) {
+        sanitized[key] = '********';
+      }
+    }
+    return sanitized;
   }
 }

@@ -93,6 +93,7 @@ class CreateNewPasswordScreen extends StatelessWidget {
                   const Spacer(),
                   ProElevatedButton(
                     text: 'Update Password',
+                    isLoading: controller.isResetPasswordLoading.value,
                     gradient: const LinearGradient(
                       colors: [AppColors.secondary, AppColors.secondary],
                     ),
