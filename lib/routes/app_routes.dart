@@ -18,6 +18,7 @@ import 'package:riddimafrica/features/authentication/presentation/screens/login_
 import 'package:riddimafrica/features/authentication/presentation/screens/profile_setup_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/forgot_password_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/forgot_password_otp_screen.dart';
+import 'package:riddimafrica/features/authentication/presentation/screens/verify_otp_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/create_new_password_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/market/binding/market_binding.dart';
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/product_detail_screen.dart';
@@ -141,6 +142,7 @@ class AppRoute {
   static const String signupScreen = "/signupScreen";
   static const String forgotPasswordScreen = "/forgotPasswordScreen";
   static const String forgotPasswordOtpScreen = "/forgotPasswordOtpScreen";
+  static const String verifyOtpScreen = "/verifyOtpScreen";
   static const String createNewPasswordScreen = "/createNewPasswordScreen";
 
   //bottom navs
@@ -330,6 +332,11 @@ class AppRoute {
     GetPage(
       name: forgotPasswordOtpScreen,
       page: () => const ForgotPasswordOtpScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: verifyOtpScreen,
+      page: () => const VerifyOtpScreen(),
       binding: AuthBinding(),
     ),
     GetPage(

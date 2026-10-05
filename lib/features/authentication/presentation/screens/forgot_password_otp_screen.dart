@@ -52,7 +52,7 @@ class ForgotPasswordOtpScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 32.h),
-                  RichText(
+                  Obx(() => RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
                       text:
@@ -64,7 +64,7 @@ class ForgotPasswordOtpScreen extends StatelessWidget {
                       ),
                       children: [
                         TextSpan(
-                          text: '01:56 s',
+                          text: controller.formattedForgotOtpTime,
                           style: AppTextStyle(context).mediumTextStyle(
                             fontSize: AppTextStyle.md,
                             color: AppColors.onboardingbutton,
@@ -72,7 +72,7 @@ class ForgotPasswordOtpScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
+                  )),
                   SizedBox(height: 32.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -84,29 +84,36 @@ class ForgotPasswordOtpScreen extends StatelessWidget {
                   const Spacer(),
                   ProElevatedButton(
                     text: 'Verify',
+                    isLoading: controller.isForgotOtpVerifying.value,
                     gradient: const LinearGradient(
                       colors: [AppColors.secondary, AppColors.secondary],
                     ),
-                    onPressed: controller.verifyOtp,
+                    onPressed: () => controller.verifyOtp(),
                   ),
                   SizedBox(height: 24.h),
                   Center(
-                    child: RichText(
-                      text: TextSpan(
-                        text: "Didn't Receive Any Code? ",
-                        style: AppTextStyle(context).regularTextStyle(
-                          fontSize: AppTextStyle.sm,
-                          color: AppColors.onboardingtext,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Resend Code',
-                            style: AppTextStyle(context).mediumTextStyle(
-                              fontSize: AppTextStyle.sm,
-                              color: AppColors.onboardingtext,
-                            ),
+                    child: GestureDetector(
+                      onTap: controller.forgotOtpCountdown.value == 0 ||
+                              !controller.isForgotOtpResending.value
+                          ? () => controller.resendForgotPasswordOtp()
+                          : null,
+                      child: RichText(
+                        text: TextSpan(
+                          text: "Didn't Receive Any Code? ",
+                          style: AppTextStyle(context).regularTextStyle(
+                            fontSize: AppTextStyle.sm,
+                            color: AppColors.onboardingtext,
                           ),
-                        ],
+                          children: [
+                            TextSpan(
+                              text: 'Resend Code',
+                              style: AppTextStyle(context).mediumTextStyle(
+                                fontSize: AppTextStyle.sm,
+                                color: AppColors.secondary,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
