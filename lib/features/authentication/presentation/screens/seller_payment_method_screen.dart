@@ -87,12 +87,15 @@ class SellerPaymentMethodScreen extends StatelessWidget {
 
                   ProElevatedButton(
                     text: 'Create Account',
+                    isLoading: controller.isRegistering.value,
                     trailingIcon: Icons.arrow_forward_ios,
                     iconSize: 16,
                     gradient: const LinearGradient(
                       colors: [AppColors.secondary, AppColors.secondary],
                     ),
-                    onPressed: () => controller.onSellerSignupComplete(),
+                    onPressed: controller.isRegistering.value
+                        ? null
+                        : () => controller.onSellerSignupComplete(),
                   ),
                   SizedBox(height: 24.h),
                 ],

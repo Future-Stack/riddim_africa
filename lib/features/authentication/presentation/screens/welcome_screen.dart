@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
+import 'package:riddimafrica/features/authentication/presentation/controllers/auth_controller.dart';
 import 'package:riddimafrica/routes/app_routes.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -85,6 +86,9 @@ class WelcomeScreen extends StatelessWidget {
                           showGlow: true,
                           glowColor: AppColors.secondary.withValues(alpha: 0.5),
                           onPressed: () {
+                            if (Get.isRegistered<AuthController>()) {
+                              Get.find<AuthController>().resetLoginForm();
+                            }
                             Get.toNamed(AppRoute.loginScreen);
                           },
                         ),
@@ -100,6 +104,9 @@ class WelcomeScreen extends StatelessWidget {
                             width: 1,
                           ),
                           onPressed: () {
+                            if (Get.isRegistered<AuthController>()) {
+                              Get.find<AuthController>().resetRegistrationForm();
+                            }
                             Get.toNamed(AppRoute.signupScreen);
                           },
                         ),

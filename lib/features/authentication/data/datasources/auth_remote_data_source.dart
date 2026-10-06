@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:riddimafrica/core/services/network/network_caller.dart';
 import 'package:riddimafrica/core/models/response_data.dart';
 import 'package:riddimafrica/core/utils/constants/api_constants.dart';
@@ -14,6 +16,53 @@ class AuthRemoteDataSource {
       'seller' => ApiConstants.registerSeller,
       _ => ApiConstants.registerUser,
     };
+
+    if (role.toLowerCase() == 'seller' || role.toLowerCase() == 'artist') {
+      final formDataMap = <String, dynamic>{};
+      for (final entry in body.entries) {
+        if (entry.value == null) continue;
+        if (entry.key == 'frontSide' || entry.key == 'backSide') {
+          final path = entry.value.toString();
+          if (path.isNotEmpty && File(path).existsSync()) {
+            formDataMap[entry.key] = await MultipartFile.fromFile(
+              path,
+              filename: path.split('/').last,
+            );
+          }
+        } else if (entry.key == 'passportFiles' || entry.key == 'drivingLicenseFiles') {
+          if (entry.value is List) {
+            final files = <MultipartFile>[];
+            for (final p in (entry.value as List)) {
+              final path = p.toString();
+              if (path.isNotEmpty && File(path).existsSync()) {
+                files.add(await MultipartFile.fromFile(
+                  path,
+                  filename: path.split('/').last,
+                ));
+              }
+            }
+            if (files.isNotEmpty) {
+              formDataMap[entry.key] = files;
+            }
+          }
+        } else {
+          formDataMap[entry.key] = entry.value.toString();
+        }
+      }
+
+      final sanitizedLog = Map<String, dynamic>.from(body)
+        ..['password'] = '********'
+        ..['confirmPassword'] = '********';
+      log('[AUTH API] POST ${role.toUpperCase()} Registration (FormData): $endpoint');
+      log('[AUTH API] Payload fields: $sanitizedLog');
+
+      final formData = FormData.fromMap(formDataMap);
+      return await _api.postRequest(
+        endpoint,
+        body: formData,
+      );
+    }
+
     final sanitizedLog = Map<String, dynamic>.from(body)
       ..['password'] = '********'
       ..['confirmPassword'] = '********';

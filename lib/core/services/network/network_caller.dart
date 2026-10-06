@@ -15,7 +15,6 @@ const Duration _kReceiveTimeout = Duration(seconds: 30);
 const String _kDefaultFileField = 'profile_picture';
 
 const String _kJsonContentType = 'application/json';
-const String _kMultipartContentType = 'multipart/form-data';
 
 const Set<String> _kAuthEndpoints = {
   '/auth/login/',
@@ -72,16 +71,22 @@ class NetworkCaller {
 
   Future<ResponseData> postRequest(
     String endpoint, {
-    Map<String, dynamic>? body,
+    dynamic body,
     String? token,
   }) {
-    log('POST   → $endpoint | body: ${jsonEncode(_sanitizeLogBody(body))}');
+    if (body is FormData) {
+      log('POST (FormData) → $endpoint | fields: ${body.fields.map((e) => "${e.key}: ${e.key.toLowerCase().contains("password") ? "********" : e.value}").toList()}');
+    } else if (body is Map<String, dynamic>) {
+      log('POST   → $endpoint | body: ${jsonEncode(_sanitizeLogBody(body))}');
+    } else {
+      log('POST   → $endpoint | body: $body');
+    }
     return _execute(
       endpoint,
       () => _dio.post(
         endpoint,
         data: body,
-        options: _options(token: token),
+        options: _options(token: token, multipart: body is FormData),
       ),
     );
   }
@@ -201,9 +206,10 @@ class NetworkCaller {
   Map<String, dynamic> _buildHeaders({String? token, bool multipart = false}) {
     final activeToken = token ?? StorageService.token;
 
-    final headers = <String, dynamic>{
-      'Content-Type': multipart ? _kMultipartContentType : _kJsonContentType,
-    };
+    final headers = <String, dynamic>{};
+    if (!multipart) {
+      headers['Content-Type'] = _kJsonContentType;
+    }
 
     if (activeToken != null && activeToken.isNotEmpty) {
       headers['Authorization'] = 'Bearer $activeToken';
