@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,6 +28,19 @@ class AuthController extends GetxController {
     required this.forgotPasswordUseCase,
     required this.resetPasswordUseCase,
   });
+
+  static Map<String, dynamic>? decodeJwtPayload(String token) {
+    try {
+      final parts = token.split('.');
+      if (parts.length < 2) return null;
+      var normalized = base64Url.normalize(parts[1]);
+      final payload = utf8.decode(base64Url.decode(normalized));
+      return jsonDecode(payload) as Map<String, dynamic>;
+    } catch (e) {
+      debugPrint('[AUTH JWT ERROR] $e');
+      return null;
+    }
+  }
 
   final isLoading = false.obs;
   final isRegistering = false.obs;
@@ -93,11 +107,27 @@ class AuthController extends GetxController {
         final accessToken = data?['accessToken']?.toString() ?? '';
         final refreshToken = data?['refreshToken']?.toString() ?? '';
 
+        String detectedRole = selectedRole;
+        String? userId;
+
         if (accessToken.isNotEmpty) {
+          final jwtData = decodeJwtPayload(accessToken);
+          if (jwtData != null) {
+            debugPrint('[AUTH JWT] Decoded Token: $jwtData');
+            if (jwtData['role'] != null) {
+              detectedRole = jwtData['role'].toString();
+            }
+            if (jwtData['sub'] != null) {
+              userId = jwtData['sub'].toString();
+            }
+          }
+
           await StorageService.saveAuthData(
             accessToken: accessToken,
             refreshToken: refreshToken,
+            userId: userId,
             email: email,
+            role: detectedRole,
           );
         }
 
@@ -115,10 +145,10 @@ class AuthController extends GetxController {
           duration: const Duration(seconds: 2),
         );
 
-        // Check if there is a role or fallback
-        if (email.toLowerCase().contains('seller')) {
+        final roleLower = detectedRole.toLowerCase();
+        if (roleLower.contains('seller')) {
           Get.offAllNamed(AppRoute.sellerbottomNav);
-        } else if (email.toLowerCase().contains('artist')) {
+        } else if (roleLower.contains('artist')) {
           Get.offAllNamed(AppRoute.artistbottomNav);
         } else {
           Get.offAllNamed(AppRoute.userbottomNav);
@@ -163,6 +193,75 @@ class AuthController extends GetxController {
       isLoading.value = false;
       update();
     }
+  }
+
+  void resetLoginForm() {
+    loginEmailController.clear();
+    loginPasswordController.clear();
+    isLoading.value = false;
+    update();
+  }
+
+  void resetRegistrationForm({String? role}) {
+    selectedRole = role ?? 'User';
+    profileSetupStep = 0;
+    profileSetupSubTab = 0;
+    agreeTerms = false;
+    isRegistering.value = false;
+
+    // Personal info
+    signupNameController.clear();
+    signupUsernameController.clear();
+    signupEmailController.clear();
+    signupPhoneController.clear();
+    signupAddressController.clear();
+    signupCityController.clear();
+    signupStateController.clear();
+    signupCountryController.clear();
+    signupPasswordController.clear();
+    signupConfirmPasswordController.clear();
+    obscureSignupPassword = true;
+    obscureSignupConfirmPassword = true;
+
+    // Verification info
+    selectedVerificationDoc = 0;
+    nationalIdNumberController.clear();
+    passportNumberController.clear();
+    drivingLicenseNumberController.clear();
+    docFirstNameController.clear();
+    docSurnameController.clear();
+    docNumberController.clear();
+    docDobController.clear();
+    docExpiryController.clear();
+    docNationalityController.clear();
+    idFrontImagePath = null;
+    idBackImagePath = null;
+    selfieImagePath = null;
+    passportImages.clear();
+    passportDocPath = null;
+
+    // Business info
+    selectedBusinessType = -1;
+    businessStoreNameController.clear();
+    businessNameController.clear();
+    businessEmailController.clear();
+    businessPhoneController.clear();
+    businessRegNumberController.clear();
+    businessCityController.clear();
+    businessAddressController.clear();
+    businessStateController.clear();
+    businessCountryController.clear();
+    businessWebsiteController.clear();
+    businessDescriptionController.clear();
+
+    // Payment info
+    selectedPaymentMethod = 0;
+    accountHolderNameController.clear();
+    mobileMoneyNumberController.clear();
+    momoPhoneController.clear();
+    airtelPhoneController.clear();
+
+    update();
   }
 
   // --- Profile Setup State ---
@@ -358,12 +457,183 @@ class AuthController extends GetxController {
   int profileSetupStep = 0; // 0=Basic Info, 1=Business Info, 2=Payment
   int profileSetupSubTab = 0; // 0=Personal Info, 1=Verification
 
+  void _showValidationError(String message) {
+    Get.snackbar(
+      'Error',
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.red.withValues(alpha: 0.8),
+      colorText: Colors.white,
+      margin: const EdgeInsets.all(16),
+      borderRadius: 8,
+      duration: const Duration(seconds: 2),
+    );
+  }
+
+  bool validatePersonalInfo({bool showToast = true}) {
+    final fullName = signupNameController.text.trim();
+    final email = signupEmailController.text.trim();
+    final phone = signupPhoneController.text.trim();
+    final country = signupCountryController.text.trim();
+    final city = signupCityController.text.trim();
+    final password = signupPasswordController.text;
+    final confirmPassword = signupConfirmPasswordController.text;
+
+    if (fullName.isEmpty) {
+      if (showToast) _showValidationError('Please enter your full name');
+      return false;
+    }
+    if (email.isEmpty) {
+      if (showToast) _showValidationError('Please enter your email address');
+      return false;
+    }
+    if (!GetUtils.isEmail(email)) {
+      if (showToast) _showValidationError('Please enter a valid email address');
+      return false;
+    }
+    if (phone.isEmpty) {
+      if (showToast) _showValidationError('Please enter your phone number');
+      return false;
+    }
+    if (country.isEmpty) {
+      if (showToast) _showValidationError('Please select your country');
+      return false;
+    }
+    if (city.isEmpty) {
+      if (showToast) _showValidationError('Please select your city');
+      return false;
+    }
+    if (password.isEmpty) {
+      if (showToast) _showValidationError('Please enter your password');
+      return false;
+    }
+    if (password.length < 6) {
+      if (showToast) _showValidationError('Password must be at least 6 characters');
+      return false;
+    }
+    if (confirmPassword.isEmpty) {
+      if (showToast) _showValidationError('Please confirm your password');
+      return false;
+    }
+    if (password != confirmPassword) {
+      if (showToast) _showValidationError('Passwords do not match');
+      return false;
+    }
+    if (!agreeTerms) {
+      if (showToast) _showValidationError('Please agree to terms and conditions');
+      return false;
+    }
+    return true;
+  }
+
+  bool validateVerificationInfo({bool showToast = true}) {
+    if (selectedRole.toLowerCase() == 'user') return true;
+
+    final docNum = selectedVerificationDoc == 0
+        ? nationalIdNumberController.text.trim()
+        : selectedVerificationDoc == 1
+            ? passportNumberController.text.trim()
+            : drivingLicenseNumberController.text.trim();
+
+    if (docNum.isEmpty) {
+      final docName = selectedVerificationDoc == 0
+          ? 'National ID'
+          : selectedVerificationDoc == 1
+              ? 'Passport'
+              : 'Driving License';
+      if (showToast) _showValidationError('Please enter your $docName number');
+      return false;
+    }
+
+    final hasFront = idFrontImagePath != null && idFrontImagePath!.isNotEmpty;
+    final hasBack = idBackImagePath != null && idBackImagePath!.isNotEmpty;
+    final hasPassportDoc = passportDocPath != null && passportDocPath!.isNotEmpty;
+    final hasPassportImgs = passportImages.isNotEmpty;
+
+    if (selectedVerificationDoc == 0 || selectedVerificationDoc == 2) {
+      if (!hasFront) {
+        if (showToast) _showValidationError('Please upload the front side of your document');
+        return false;
+      }
+      if (!hasBack) {
+        if (showToast) _showValidationError('Please upload the back side of your document');
+        return false;
+      }
+    } else {
+      if (!hasFront && !hasPassportDoc && !hasPassportImgs) {
+        if (showToast) _showValidationError('Please upload your passport photo/document');
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  bool validateBusinessInfo({bool showToast = true}) {
+    if (selectedRole.toLowerCase() == 'user') return true;
+
+    if (businessStoreNameController.text.trim().isEmpty) {
+      if (showToast) _showValidationError('Please enter business / store name');
+      return false;
+    }
+    if (selectedBusinessType < 0) {
+      if (showToast) _showValidationError('Please select business type');
+      return false;
+    }
+    if (businessCityController.text.trim().isEmpty) {
+      if (showToast) _showValidationError('Please enter business city');
+      return false;
+    }
+    if (businessAddressController.text.trim().isEmpty) {
+      if (showToast) _showValidationError('Please enter business address');
+      return false;
+    }
+    return true;
+  }
+
+  bool validatePaymentInfo({bool showToast = true}) {
+    if (selectedRole.toLowerCase() == 'user') return true;
+
+    if (selectedPaymentMethod < 0) {
+      if (showToast) _showValidationError('Please select a payment method');
+      return false;
+    }
+    if (accountHolderNameController.text.trim().isEmpty) {
+      if (showToast) _showValidationError('Please enter account holder name');
+      return false;
+    }
+    if (mobileMoneyNumberController.text.trim().isEmpty) {
+      if (showToast) _showValidationError('Please enter mobile money number');
+      return false;
+    }
+    return true;
+  }
+
   void setProfileSetupStep(int step) {
+    if (step < profileSetupStep) {
+      profileSetupStep = step;
+      update();
+      return;
+    }
+    if (step >= 1) {
+      if (!validatePersonalInfo()) return;
+      if (!validateVerificationInfo()) {
+        profileSetupSubTab = 1;
+        update();
+        return;
+      }
+    }
+    if (step >= 2) {
+      if (!validateBusinessInfo()) return;
+    }
     profileSetupStep = step;
     update();
   }
 
   void setProfileSetupSubTab(int tab) {
+    if (tab == 1) {
+      if (!validatePersonalInfo()) return;
+    }
     profileSetupSubTab = tab;
     update();
   }
@@ -384,6 +654,32 @@ class AuthController extends GetxController {
   }
 
   Future<void> registerUser() async {
+    if (isRegistering.value) return;
+    isRegistering.value = true;
+    update();
+
+    try {
+      if (!validatePersonalInfo()) return;
+
+      if (selectedRole.toLowerCase() == 'seller' || selectedRole.toLowerCase() == 'artist') {
+        if (!validateVerificationInfo()) {
+          profileSetupStep = 0;
+          profileSetupSubTab = 1;
+          update();
+          return;
+        }
+        if (!validateBusinessInfo()) {
+          profileSetupStep = 1;
+          update();
+          return;
+        }
+        if (!validatePaymentInfo()) {
+          profileSetupStep = 2;
+          update();
+          return;
+        }
+      }
+
     final email = signupEmailController.text.trim();
     final password = signupPasswordController.text;
     final confirmPassword = signupConfirmPasswordController.text;
@@ -395,37 +691,124 @@ class AuthController extends GetxController {
         ? signupUsernameController.text.trim()
         : (email.contains('@') ? email.split('@').first : fullName.replaceAll(' ', '').toLowerCase());
 
-    if (fullName.isEmpty) {
-      Get.snackbar('Error', 'Please enter your full name');
-      return;
-    }
-    if (email.isEmpty) {
-      Get.snackbar('Error', 'Please enter your email address');
-      return;
-    }
-    if (password.isEmpty) {
-      Get.snackbar('Error', 'Please enter your password');
-      return;
-    }
-    if (password != confirmPassword) {
-      Get.snackbar('Error', 'Passwords do not match');
-      return;
-    }
-    if (!agreeTerms) {
-      Get.snackbar('Error', 'Please agree to terms and conditions');
-      return;
-    }
+    final Map<String, dynamic> payload;
 
-    final payload = {
-      'fullName': fullName,
-      'username': username,
-      'phoneNumber': phone.isNotEmpty ? phone : '+2348012345689',
-      'city': city.isNotEmpty ? city : 'Lagos',
-      'country': country.isNotEmpty ? country : 'Nigeria',
-      'email': email,
-      'password': password,
-      'confirmPassword': confirmPassword,
-    };
+    if (selectedRole.toLowerCase() == 'seller') {
+      final paymentMethodStr = selectedPaymentMethod == 1 ? 'AIRTEL_MOBILE_MONEY' : 'MTN_MOBILE_MONEY';
+      final momoNum = selectedPaymentMethod == 1
+          ? (airtelPhoneController.text.trim().isNotEmpty ? airtelPhoneController.text.trim() : phone)
+          : (momoPhoneController.text.trim().isNotEmpty ? momoPhoneController.text.trim() : phone);
+      final docTypeStr = switch (selectedVerificationDoc) {
+        1 => 'PASSPORT',
+        2 => 'DRIVING_LICENSE',
+        _ => 'NATIONAL_ID',
+      };
+      final docNum = docNumberController.text.trim().isNotEmpty
+          ? docNumberController.text.trim()
+          : (nationalIdNumberController.text.trim().isNotEmpty
+              ? nationalIdNumberController.text.trim()
+              : (passportNumberController.text.trim().isNotEmpty
+                  ? passportNumberController.text.trim()
+                  : (drivingLicenseNumberController.text.trim().isNotEmpty
+                      ? drivingLicenseNumberController.text.trim()
+                      : 'NIN-123456789')));
+
+      payload = {
+        'fullName': fullName,
+        'email': email,
+        'phoneNumber': phone.isNotEmpty ? phone : '+2349087654321',
+        'country': country.isNotEmpty ? country : 'Nigeria',
+        'city': city.isNotEmpty ? city : 'Ikeja',
+        'stateName': businessStateController.text.trim().isNotEmpty ? businessStateController.text.trim() : 'Lagos',
+        'password': password,
+        'confirmPassword': confirmPassword,
+        'storeName': businessStoreNameController.text.trim().isNotEmpty
+            ? businessStoreNameController.text.trim()
+            : (businessNameController.text.trim().isNotEmpty ? businessNameController.text.trim() : '$fullName Store'),
+        'businessTypeId': 'd6878811-a7f6-49ef-933e-1e204bdcc942',
+        if (businessRegNumberController.text.trim().isNotEmpty)
+          'registrationNumber': businessRegNumberController.text.trim(),
+        'businessCity': businessCityController.text.trim().isNotEmpty ? businessCityController.text.trim() : (city.isNotEmpty ? city : 'Ikeja'),
+        'businessAddress': businessAddressController.text.trim().isNotEmpty ? businessAddressController.text.trim() : '123, Market Road',
+        if (businessWebsiteController.text.trim().isNotEmpty)
+          'website': businessWebsiteController.text.trim(),
+        'businessDescription': businessDescriptionController.text.trim().isNotEmpty
+            ? businessDescriptionController.text.trim()
+            : 'We sell authentic African merchandise.',
+        'paymentMethod': paymentMethodStr,
+        'accountHolderName': accountHolderNameController.text.trim().isNotEmpty
+            ? accountHolderNameController.text.trim()
+            : fullName,
+        'mobileMoneyNumber': momoNum.isNotEmpty ? momoNum : '+2349087654321',
+        'documentType': docTypeStr,
+        'documentNumber': docNum,
+        if (idFrontImagePath != null && idFrontImagePath!.isNotEmpty)
+          'frontSide': idFrontImagePath,
+        if (idBackImagePath != null && idBackImagePath!.isNotEmpty)
+          'backSide': idBackImagePath,
+        if (passportImages.isNotEmpty)
+          'passportFiles': passportImages,
+      };
+    } else if (selectedRole.toLowerCase() == 'artist') {
+      final paymentMethodStr = selectedPaymentMethod == 1 ? 'AIRTEL_MOBILE_MONEY' : 'MTN_MOBILE_MONEY';
+      final momoNum = selectedPaymentMethod == 1
+          ? (airtelPhoneController.text.trim().isNotEmpty ? airtelPhoneController.text.trim() : phone)
+          : (momoPhoneController.text.trim().isNotEmpty ? momoPhoneController.text.trim() : phone);
+      final docTypeStr = switch (selectedVerificationDoc) {
+        1 => 'PASSPORT',
+        2 => 'DRIVING_LICENSE',
+        _ => 'NATIONAL_ID',
+      };
+      final docNum = docNumberController.text.trim().isNotEmpty
+          ? docNumberController.text.trim()
+          : (passportNumberController.text.trim().isNotEmpty
+              ? passportNumberController.text.trim()
+              : (nationalIdNumberController.text.trim().isNotEmpty
+                  ? nationalIdNumberController.text.trim()
+                  : (drivingLicenseNumberController.text.trim().isNotEmpty
+                      ? drivingLicenseNumberController.text.trim()
+                      : 'PASS-987654321')));
+      final stageName = signupUsernameController.text.trim().isNotEmpty
+          ? signupUsernameController.text.trim()
+          : (businessStoreNameController.text.trim().isNotEmpty
+              ? businessStoreNameController.text.trim()
+              : fullName);
+
+      payload = {
+        'fullName': fullName,
+        'stageName': stageName,
+        'email': email,
+        'phoneNumber': phone.isNotEmpty ? phone : '+233541234567',
+        'country': country.isNotEmpty ? country : 'Ghana',
+        'city': city.isNotEmpty ? city : 'Accra',
+        'password': password,
+        'confirmPassword': confirmPassword,
+        'paymentMethod': paymentMethodStr,
+        'accountHolderName': accountHolderNameController.text.trim().isNotEmpty
+            ? accountHolderNameController.text.trim()
+            : fullName,
+        'mobileMoneyNumber': momoNum.isNotEmpty ? momoNum : (phone.isNotEmpty ? phone : '+233541234567'),
+        'documentType': docTypeStr,
+        'documentNumber': docNum,
+        if (idFrontImagePath != null && idFrontImagePath!.isNotEmpty)
+          'frontSide': idFrontImagePath,
+        if (idBackImagePath != null && idBackImagePath!.isNotEmpty)
+          'backSide': idBackImagePath,
+        if (passportImages.isNotEmpty)
+          'passportFiles': passportImages,
+      };
+    } else {
+      payload = {
+        'fullName': fullName,
+        'username': username,
+        'phoneNumber': phone.isNotEmpty ? phone : '+2348012345689',
+        'city': city.isNotEmpty ? city : 'Lagos',
+        'country': country.isNotEmpty ? country : 'Nigeria',
+        'email': email,
+        'password': password,
+        'confirmPassword': confirmPassword,
+      };
+    }
 
     final registerUrl = switch (selectedRole.toLowerCase()) {
       'artist' => ApiConstants.registerArtist,
@@ -439,9 +822,6 @@ class AuthController extends GetxController {
       'confirmPassword': '********',
     };
 
-    isRegistering.value = true;
-    update();
-
     debugPrint('====================================');
     debugPrint('[AUTH REGISTER REQUEST]');
     debugPrint('URL: $registerUrl');
@@ -449,11 +829,10 @@ class AuthController extends GetxController {
     debugPrint('Body: $sanitizedPayload');
     debugPrint('====================================');
 
-    try {
-      final ResponseData response = await registerUseCase.execute(
-        payload,
-        role: selectedRole,
-      );
+    final ResponseData response = await registerUseCase.execute(
+      payload,
+      role: selectedRole,
+    );
 
       debugPrint('====================================');
       debugPrint('[AUTH REGISTER RESPONSE]');
@@ -520,6 +899,8 @@ class AuthController extends GetxController {
   }
 
   void onNextFromPersonalInfo() {
+    if (!validatePersonalInfo()) return;
+
     if (selectedRole == 'Seller' || selectedRole == 'Artist') {
       profileSetupSubTab = 1;
       update();
@@ -595,6 +976,7 @@ class AuthController extends GetxController {
     String? role,
     String otpType = 'REGISTRATION',
   }) async {
+    if (isOtpVerifying.value) return;
     final otp = regOtpControllers.map((c) => c.text.trim()).join();
 
     if (otp.length < 4) {
@@ -643,12 +1025,27 @@ class AuthController extends GetxController {
         final accessToken = data?['accessToken']?.toString() ?? '';
         final refreshToken = data?['refreshToken']?.toString() ?? '';
 
+        String detectedRole = role ?? selectedRole;
+        String? userId;
+
         if (accessToken.isNotEmpty) {
+          final jwtData = decodeJwtPayload(accessToken);
+          if (jwtData != null) {
+            debugPrint('[AUTH JWT] Decoded Token: $jwtData');
+            if (jwtData['role'] != null) {
+              detectedRole = jwtData['role'].toString();
+            }
+            if (jwtData['sub'] != null) {
+              userId = jwtData['sub'].toString();
+            }
+          }
+
           await StorageService.saveAuthData(
             accessToken: accessToken,
             refreshToken: refreshToken,
+            userId: userId,
             email: email,
-            role: role ?? selectedRole,
+            role: detectedRole,
           );
         }
 
@@ -666,10 +1063,12 @@ class AuthController extends GetxController {
           duration: const Duration(seconds: 2),
         );
 
-        final targetRole = role ?? selectedRole;
-        if (targetRole == 'Artist') {
+        resetRegistrationForm();
+
+        final targetRoleLower = detectedRole.toLowerCase();
+        if (targetRoleLower.contains('artist')) {
           Get.offAllNamed(AppRoute.artistbottomNav);
-        } else if (targetRole == 'Seller') {
+        } else if (targetRoleLower.contains('seller')) {
           Get.offAllNamed(AppRoute.sellerbottomNav);
         } else {
           Get.offAllNamed(AppRoute.userbottomNav);
@@ -823,16 +1222,56 @@ class AuthController extends GetxController {
   }
 
   void onNextFromVerification() {
+    if (!validatePersonalInfo()) {
+      profileSetupSubTab = 0;
+      update();
+      return;
+    }
+    if (!validateVerificationInfo()) return;
+
     profileSetupStep = 1; // Go to Business Info
     update();
   }
 
   void onNextFromBusinessInfo() {
+    if (!validatePersonalInfo()) {
+      profileSetupStep = 0;
+      profileSetupSubTab = 0;
+      update();
+      return;
+    }
+    if (!validateVerificationInfo()) {
+      profileSetupStep = 0;
+      profileSetupSubTab = 1;
+      update();
+      return;
+    }
+    if (!validateBusinessInfo()) return;
+
     profileSetupStep = 2; // Go to Payment
     update();
   }
 
   void onCompleteSellerSignup() {
+    if (!validatePersonalInfo()) {
+      profileSetupStep = 0;
+      profileSetupSubTab = 0;
+      update();
+      return;
+    }
+    if (!validateVerificationInfo()) {
+      profileSetupStep = 0;
+      profileSetupSubTab = 1;
+      update();
+      return;
+    }
+    if (!validateBusinessInfo()) {
+      profileSetupStep = 1;
+      update();
+      return;
+    }
+    if (!validatePaymentInfo()) return;
+
     registerUser();
   }
 
@@ -911,7 +1350,7 @@ class AuthController extends GetxController {
   }
 
   void onSellerSignupComplete() {
-    registerUser();
+    onCompleteSellerSignup();
   }
 
   // --- Forgot Password State & Actions ---

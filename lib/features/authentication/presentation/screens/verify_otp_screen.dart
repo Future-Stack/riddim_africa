@@ -50,7 +50,11 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
               shape: BoxShape.circle,
               border: Border.all(color: AppColors.cardBorder),
             ),
-            child: const Icon(Icons.arrow_back, color: AppColors.white, size: 18),
+            child: const Icon(
+              Icons.arrow_back,
+              color: AppColors.white,
+              size: 18,
+            ),
           ),
           onPressed: () => Get.back(),
         ),
@@ -162,12 +166,14 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                       gradient: const LinearGradient(
                         colors: [AppColors.secondary, AppColors.secondary],
                       ),
-                      onPressed: () {
-                        controller.verifyRegistrationOtp(
-                          email: email,
-                          role: role,
-                        );
-                      },
+                      onPressed: controller.isOtpVerifying.value
+                          ? null
+                          : () {
+                              controller.verifyRegistrationOtp(
+                                email: email,
+                                role: role,
+                              );
+                            },
                     ),
                   ),
                   SizedBox(height: 20.h),
@@ -205,8 +211,9 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                                       fontSize: AppTextStyle.sm,
                                       color: canResend
                                           ? AppColors.secondary
-                                          : AppColors.onboardingtext
-                                              .withValues(alpha: 0.5),
+                                          : AppColors.onboardingtext.withValues(
+                                              alpha: 0.5,
+                                            ),
                                     ),
                                   ),
                           ),
@@ -232,15 +239,15 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     final hasFocus = controller.regOtpFocusNodes[index].hasFocus;
     return Container(
       width: 64.w,
-      height: 72.h,
+      height: 55.h,
       decoration: BoxDecoration(
         color: AppColors.textfieldcolor.withValues(alpha: 0.35),
         border: Border.all(
           color: hasFocus
               ? AppColors.secondary
               : (controller.regOtpControllers[index].text.isNotEmpty
-                  ? AppColors.bordercolor
-                  : AppColors.onboardingbutton.withValues(alpha: 0.4)),
+                    ? AppColors.bordercolor
+                    : AppColors.onboardingbutton.withValues(alpha: 0.4)),
           width: hasFocus ? 2 : 1.2,
         ),
         borderRadius: BorderRadius.circular(14),

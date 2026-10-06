@@ -103,6 +103,51 @@ class SellerIdPhotoUploadScreen extends StatelessWidget {
                       colors: [AppColors.secondary, AppColors.secondary],
                     ),
                     onPressed: () {
+                      if (isDocumentUpload) {
+                        if (controller.passportDocPath == null || controller.passportDocPath!.isEmpty) {
+                          Get.snackbar(
+                            'Error',
+                            'Please select a document file first',
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.red.withValues(alpha: 0.8),
+                            colorText: Colors.white,
+                            margin: const EdgeInsets.all(16),
+                            borderRadius: 8,
+                            duration: const Duration(seconds: 2),
+                          );
+                          return;
+                        }
+                      } else if (docType == 0 || docType == 2) {
+                        if ((controller.idFrontImagePath == null || controller.idFrontImagePath!.isEmpty) &&
+                            (controller.idBackImagePath == null || controller.idBackImagePath!.isEmpty)) {
+                          Get.snackbar(
+                            'Error',
+                            'Please capture or upload your document photos',
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.red.withValues(alpha: 0.8),
+                            colorText: Colors.white,
+                            margin: const EdgeInsets.all(16),
+                            borderRadius: 8,
+                            duration: const Duration(seconds: 2),
+                          );
+                          return;
+                        }
+                      } else {
+                        if (controller.passportImages.isEmpty &&
+                            (controller.idFrontImagePath == null || controller.idFrontImagePath!.isEmpty)) {
+                          Get.snackbar(
+                            'Error',
+                            'Please capture or upload passport photos',
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.red.withValues(alpha: 0.8),
+                            colorText: Colors.white,
+                            margin: const EdgeInsets.all(16),
+                            borderRadius: 8,
+                            duration: const Duration(seconds: 2),
+                          );
+                          return;
+                        }
+                      }
                       Get.back();
                     },
                   ),

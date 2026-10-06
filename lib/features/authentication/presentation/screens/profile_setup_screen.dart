@@ -6,9 +6,14 @@ import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/features/authentication/presentation/controllers/auth_controller.dart';
 import 'package:riddimafrica/routes/app_routes.dart';
 
-class ProfileSetupScreen extends StatelessWidget {
+class ProfileSetupScreen extends StatefulWidget {
   const ProfileSetupScreen({super.key});
 
+  @override
+  State<ProfileSetupScreen> createState() => _ProfileSetupScreenState();
+}
+
+class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   static const _steps = [
     {'label': 'Basic Info', 'icon': IconPath.basicInfo},
     {'label': 'Business Info', 'icon': IconPath.businessInfo},
@@ -26,6 +31,16 @@ class ProfileSetupScreen extends StatelessWidget {
     'MTN Mobile Money',
     'Airtel Money',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Get.isRegistered<AuthController>()) {
+        Get.find<AuthController>().resetRegistrationForm();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -704,7 +719,28 @@ class ProfileSetupScreen extends StatelessWidget {
       });
     }
 
-    // If nothing uploaded yet, display sample thumbnails matching design
+    if (controller.passportDocPath != null && controller.passportDocPath!.isNotEmpty) {
+      uploadedList.add({
+        'path': controller.passportDocPath!,
+        'onRemove': () {
+          controller.passportDocPath = null;
+          controller.update();
+        },
+      });
+    }
+
+    for (int i = 0; i < controller.passportImages.length; i++) {
+      final imgPath = controller.passportImages[i];
+      final idx = i;
+      uploadedList.add({
+        'path': imgPath,
+        'onRemove': () {
+          controller.removePassportImage(idx);
+        },
+      });
+    }
+
+    // If nothing uploaded yet, display sample placeholder pickers
     if (uploadedList.isEmpty) {
       return Row(
         children: [
@@ -1020,6 +1056,7 @@ class ProfileSetupScreen extends StatelessWidget {
 
         ProElevatedButton(
           text: 'Create Account',
+          isLoading: controller.isRegistering.value,
           trailingIcon: Icons.arrow_forward_ios,
           iconSize: 14,
           height: 52,
@@ -1027,7 +1064,9 @@ class ProfileSetupScreen extends StatelessWidget {
           gradient: const LinearGradient(
             colors: [AppColors.secondary, AppColors.secondary],
           ),
-          onPressed: controller.onCompleteSellerSignup,
+          onPressed: controller.isRegistering.value
+              ? null
+              : controller.onCompleteSellerSignup,
         ),
         SizedBox(height: 28.h),
       ],
