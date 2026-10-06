@@ -25,7 +25,8 @@ class ArtistAccountDeletedDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Auto redirect after 2.5 seconds
-    Future.delayed(const Duration(milliseconds: 2500), () {
+    Future.delayed(const Duration(milliseconds: 2500), () async {
+      await StorageService.logoutUser();
       if (Get.isDialogOpen ?? false) {
         Get.back();
       }

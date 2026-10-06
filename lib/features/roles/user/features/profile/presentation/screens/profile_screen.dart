@@ -289,7 +289,8 @@ class UserProfileScreen extends StatelessWidget {
                   width: 1.5,
                 ),
                 leadingIcon: Icons.logout,
-                onPressed: () {
+                onPressed: () async {
+                  await StorageService.logoutUser();
                   Get.offAllNamed(AppRoute.welcomescreen);
                 },
               ),

@@ -156,12 +156,27 @@ class AuthController extends GetxController {
       } else {
         // Fallback for mock demo accounts
         if (email == 'seller@gmail.com' && password == '1234') {
+          await StorageService.saveAuthData(
+            accessToken: 'mock_seller_access_token',
+            role: 'Seller',
+            email: email,
+          );
           Get.offAllNamed(AppRoute.sellerbottomNav);
           return;
         } else if (email == 'artist@gmail.com' && password == '1234') {
+          await StorageService.saveAuthData(
+            accessToken: 'mock_artist_access_token',
+            role: 'Artist',
+            email: email,
+          );
           Get.offAllNamed(AppRoute.artistbottomNav);
           return;
         } else if (email == 'user@gmail.com' && password == '1234') {
+          await StorageService.saveAuthData(
+            accessToken: 'mock_user_access_token',
+            role: 'User',
+            email: email,
+          );
           Get.offAllNamed(AppRoute.userbottomNav);
           return;
         }
