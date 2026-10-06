@@ -181,8 +181,9 @@ class ArtistProfileScreen extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(context).pop();
+              await StorageService.logoutUser();
               Get.offAllNamed(AppRoute.welcomescreen);
             },
             child: Text(
