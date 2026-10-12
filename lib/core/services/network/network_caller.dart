@@ -17,10 +17,15 @@ const String _kDefaultFileField = 'profile_picture';
 const String _kJsonContentType = 'application/json';
 
 const Set<String> _kAuthEndpoints = {
-  '/auth/login/',
-  '/auth/register/',
-  '/auth/logout/',
-  '/auth/token/refresh/',
+  '/auth/login',
+  '/auth/register',
+  '/auth/logout',
+  '/auth/refresh-token',
+  '/auth/token/refresh',
+  '/auth/verify-otp',
+  '/auth/resend-otp',
+  '/auth/forgot-password',
+  '/auth/reset-password',
 };
 
 // ============================================================================
