@@ -10,5 +10,6 @@ class ApiConstants {
   static String get verifyOtp => "$baseUrl/auth/verify-otp";
   static String get resendOtp => "$baseUrl/auth/resend-otp";
   static String get resetPassword => "$baseUrl/auth/reset-password";
+  static String get refreshToken => "$baseUrl/auth/refresh-token";
   static String get businessTypes => "$baseUrl/admin/business-types";
 }

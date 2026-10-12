@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,12 +34,88 @@ class AuthController extends GetxController {
     try {
       final parts = token.split('.');
       if (parts.length < 2) return null;
-      var normalized = base64Url.normalize(parts[1]);
-      final payload = utf8.decode(base64Url.decode(normalized));
+      String payloadPart = parts[1];
+      while (payloadPart.length % 4 != 0) {
+        payloadPart += '=';
+      }
+      final payload = utf8.decode(base64Url.decode(payloadPart));
       return jsonDecode(payload) as Map<String, dynamic>;
     } catch (e) {
-      debugPrint('[AUTH JWT ERROR] $e');
-      return null;
+      try {
+        final parts = token.split('.');
+        if (parts.length < 2) return null;
+        String payloadPart = parts[1];
+        while (payloadPart.length % 4 != 0) {
+          payloadPart += '=';
+        }
+        final payload = utf8.decode(base64.decode(payloadPart));
+        return jsonDecode(payload) as Map<String, dynamic>;
+      } catch (e2) {
+        debugPrint('[AUTH JWT ERROR] $e2');
+        return null;
+      }
+    }
+  }
+
+  static Future<bool> refreshAccessToken() async {
+    final refreshToken = StorageService.refreshToken;
+    if (refreshToken == null || refreshToken.isEmpty) {
+      return false;
+    }
+
+    try {
+      final dio = Dio(
+        BaseOptions(
+          connectTimeout: const Duration(seconds: 15),
+          receiveTimeout: const Duration(seconds: 15),
+          contentType: 'application/json',
+        ),
+      );
+      final response = await dio.post(
+        ApiConstants.refreshToken,
+        data: {'refreshToken': refreshToken},
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final resData = response.data;
+        final data = resData is Map ? resData['data'] : null;
+        final newAccessToken = (data is Map
+                ? (data['accessToken'] ?? data['token'] ?? data['access_token'])
+                : (resData is Map
+                    ? (resData['accessToken'] ?? resData['token'] ?? resData['access_token'])
+                    : null))
+            ?.toString();
+        final newRefreshToken = (data is Map
+                ? (data['refreshToken'] ?? data['refresh_token'])
+                : (resData is Map
+                    ? (resData['refreshToken'] ?? resData['refresh_token'])
+                    : null))
+            ?.toString();
+
+        if (newAccessToken != null && newAccessToken.isNotEmpty) {
+          String? detectedRole = StorageService.role;
+          final jwtData = decodeJwtPayload(newAccessToken);
+          if (jwtData != null && jwtData['role'] != null) { 
+            detectedRole = jwtData['role'].toString();
+          }
+
+          await StorageService.saveAuthData(
+            accessToken: newAccessToken,
+            refreshToken: (newRefreshToken != null && newRefreshToken.isNotEmpty)
+                ? newRefreshToken
+                : refreshToken,
+            userId: StorageService.userId,
+            email: StorageService.email,
+            role: detectedRole,
+          );
+          debugPrint('[AUTH REFRESH] Access token successfully refreshed');
+          return true;
+        }
+      }
+      return false;
+    } catch (e) {
+      debugPrint('[AUTH REFRESH TOKEN ERROR] $e');
+      return false;
     }
   }
 
@@ -104,11 +181,40 @@ class AuthController extends GetxController {
         final data = response.responseData is Map
             ? response.responseData['data']
             : null;
-        final accessToken = data?['accessToken']?.toString() ?? '';
-        final refreshToken = data?['refreshToken']?.toString() ?? '';
+        final resMap = response.responseData is Map ? response.responseData as Map : null;
+
+        final accessToken = (data is Map
+                ? (data['accessToken'] ?? data['token'] ?? data['access_token'])
+                : (resMap != null
+                    ? (resMap['accessToken'] ?? resMap['token'] ?? resMap['access_token'])
+                    : null))
+            ?.toString() ??
+            '';
+        final refreshToken = (data is Map
+                ? (data['refreshToken'] ?? data['refresh_token'])
+                : (resMap != null
+                    ? (resMap['refreshToken'] ?? resMap['refresh_token'])
+                    : null))
+            ?.toString() ??
+            '';
 
         String detectedRole = selectedRole;
         String? userId;
+
+        if (data is Map) {
+          userId = (data['userId'] ??
+                  data['id'] ??
+                  data['_id'] ??
+                  (data['user'] is Map
+                      ? (data['user']['id'] ?? data['user']['_id'])
+                      : null))
+              ?.toString();
+          if (data['role'] != null) {
+            detectedRole = data['role'].toString();
+          } else if (data['user'] is Map && data['user']['role'] != null) {
+            detectedRole = data['user']['role'].toString();
+          }
+        }
 
         if (accessToken.isNotEmpty) {
           final jwtData = decodeJwtPayload(accessToken);
@@ -124,7 +230,7 @@ class AuthController extends GetxController {
 
           await StorageService.saveAuthData(
             accessToken: accessToken,
-            refreshToken: refreshToken,
+            refreshToken: refreshToken.isNotEmpty ? refreshToken : null,
             userId: userId,
             email: email,
             role: detectedRole,
@@ -1037,11 +1143,40 @@ class AuthController extends GetxController {
         final data = response.responseData is Map
             ? response.responseData['data']
             : null;
-        final accessToken = data?['accessToken']?.toString() ?? '';
-        final refreshToken = data?['refreshToken']?.toString() ?? '';
+        final resMap = response.responseData is Map ? response.responseData as Map : null;
+
+        final accessToken = (data is Map
+                ? (data['accessToken'] ?? data['token'] ?? data['access_token'])
+                : (resMap != null
+                    ? (resMap['accessToken'] ?? resMap['token'] ?? resMap['access_token'])
+                    : null))
+            ?.toString() ??
+            '';
+        final refreshToken = (data is Map
+                ? (data['refreshToken'] ?? data['refresh_token'])
+                : (resMap != null
+                    ? (resMap['refreshToken'] ?? resMap['refresh_token'])
+                    : null))
+            ?.toString() ??
+            '';
 
         String detectedRole = role ?? selectedRole;
         String? userId;
+
+        if (data is Map) {
+          userId = (data['userId'] ??
+                  data['id'] ??
+                  data['_id'] ??
+                  (data['user'] is Map
+                      ? (data['user']['id'] ?? data['user']['_id'])
+                      : null))
+              ?.toString();
+          if (data['role'] != null) {
+            detectedRole = data['role'].toString();
+          } else if (data['user'] is Map && data['user']['role'] != null) {
+            detectedRole = data['user']['role'].toString();
+          }
+        }
 
         if (accessToken.isNotEmpty) {
           final jwtData = decodeJwtPayload(accessToken);
@@ -1057,7 +1192,7 @@ class AuthController extends GetxController {
 
           await StorageService.saveAuthData(
             accessToken: accessToken,
-            refreshToken: refreshToken,
+            refreshToken: refreshToken.isNotEmpty ? refreshToken : null,
             userId: userId,
             email: email,
             role: detectedRole,
