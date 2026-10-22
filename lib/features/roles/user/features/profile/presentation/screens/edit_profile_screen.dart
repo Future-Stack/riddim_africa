@@ -54,46 +54,65 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           // Glowing Save pill button
           Padding(
             padding: const EdgeInsets.only(right: 16, top: 10, bottom: 10),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.secondary,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.secondary.withValues(alpha: 0.4),
-                    blurRadius: 10,
-                    spreadRadius: 1,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: InkWell(
-                onTap: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    controller.saveProfile(
-                      newName: nameCtrl.text.trim(),
-                      newUsername: usernameCtrl.text.trim(),
-                      newEmail: emailCtrl.text.trim(),
-                      newPhone: phoneCtrl.text.trim(),
-                      newCity: cityCtrl.text.trim(),
-                      newCountry: countryCtrl.text.trim(),
-                    );
-                  }
-                },
-                borderRadius: BorderRadius.circular(20),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  child: Center(
-                    child: Text(
-                      'Save',
-                      style: AppTextStyle(
-                        context,
-                      ).boldTextStyle(color: AppColors.white, fontSize: 14),
+            child: Obx(() {
+              final isUpdating = controller.isUpdating.value;
+              return Container(
+                decoration: BoxDecoration(
+                  color: isUpdating
+                      ? AppColors.secondary.withValues(alpha: 0.7)
+                      : AppColors.secondary,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.secondary.withValues(alpha: 0.4),
+                      blurRadius: 10,
+                      spreadRadius: 1,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: InkWell(
+                  onTap: isUpdating
+                      ? null
+                      : () {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            controller.saveProfile(
+                              newName: nameCtrl.text.trim(),
+                              newUsername: usernameCtrl.text.trim(),
+                              newEmail: emailCtrl.text.trim(),
+                              newPhone: phoneCtrl.text.trim(),
+                              newCity: cityCtrl.text.trim(),
+                              newCountry: countryCtrl.text.trim(),
+                            );
+                          }
+                        },
+                  borderRadius: BorderRadius.circular(20),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Center(
+                      child: isUpdating
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.white,
+                              ),
+                            )
+                          : Text(
+                              'Save',
+                              style: AppTextStyle(
+                                context,
+                              ).boldTextStyle(
+                                color: AppColors.white,
+                                fontSize: 14,
+                              ),
+                            ),
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
           ),
         ],
       ),
@@ -112,6 +131,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     children: [
                       Obx(() {
                         final imagePath = controller.profileImagePath.value;
+                        final imageUrl = controller.profileImageUrl.value;
+
+                        ImageProvider imageProvider;
+                        if (imagePath.isNotEmpty) {
+                          imageProvider = FileImage(File(imagePath));
+                        } else if (imageUrl.isNotEmpty) {
+                          final fullUrl = imageUrl.startsWith('http')
+                              ? imageUrl
+                              : 'http://15.240.117.162:5000$imageUrl';
+                          imageProvider = NetworkImage(fullUrl);
+                        } else {
+                          imageProvider = const NetworkImage(
+                            'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500',
+                          );
+                        }
+
                         return Container(
                           width: 100,
                           height: 100,
@@ -122,11 +157,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               width: 3,
                             ),
                             image: DecorationImage(
-                              image: imagePath.isNotEmpty
-                                  ? FileImage(File(imagePath)) as ImageProvider
-                                  : const NetworkImage(
-                                      'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500',
-                                    ),
+                              image: imageProvider,
                               fit: BoxFit.cover,
                             ),
                           ),
