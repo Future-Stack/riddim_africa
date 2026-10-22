@@ -43,6 +43,7 @@ import 'package:riddimafrica/features/roles/user/features/settings/presentation/
 import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/refund_policy_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/cookie_notice_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/community_guidelines_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/delete_account_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/seller_id_verification_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/seller_business_type_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/seller_payment_method_screen.dart';
@@ -276,6 +277,7 @@ class AppRoute {
   static const String refundPolicy = "/refundPolicy";
   static const String cookieNotice = "/cookieNotice";
   static const String communityGuidelines = "/communityGuidelines";
+  static const String deleteAccount = "/deleteAccount";
 
   //ORDERS
   static const String orderList = "/orderList";
@@ -945,6 +947,11 @@ class AppRoute {
     GetPage(
       name: communityGuidelines,
       page: () => const CommunityGuidelinesScreen(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: deleteAccount,
+      page: () => const DeleteAccountScreen(),
       binding: SettingsBinding(),
     ),
   ];
