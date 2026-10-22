@@ -98,16 +98,22 @@ class NetworkCaller {
 
   Future<ResponseData> patchRequest(
     String endpoint, {
-    Map<String, dynamic>? body,
+    dynamic body,
     String? token,
   }) {
-    log('PATCH  → $endpoint | body: ${jsonEncode(_sanitizeLogBody(body))}');
+    if (body is FormData) {
+      log('PATCH (FormData) → $endpoint | fields: ${body.fields.map((e) => "${e.key}: ${e.value}").toList()}');
+    } else if (body is Map<String, dynamic>) {
+      log('PATCH  → $endpoint | body: ${jsonEncode(_sanitizeLogBody(body))}');
+    } else {
+      log('PATCH  → $endpoint | body: $body');
+    }
     return _execute(
       endpoint,
       () => _dio.patch(
         endpoint,
         data: body,
-        options: _options(token: token),
+        options: _options(token: token, multipart: body is FormData),
       ),
     );
   }
