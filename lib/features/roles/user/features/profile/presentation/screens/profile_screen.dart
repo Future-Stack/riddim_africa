@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/routes/app_routes.dart';
@@ -88,67 +89,60 @@ class UserProfileScreen extends StatelessWidget {
 
                   // ─── Profile Photo with Camera Badge ─────────────────────────
                   Center(
-                    child: Stack(
-                      children: [
-                        Obx(() {
-                          final imagePath = controller.profileImagePath.value;
-                          final imageUrl = controller.profileImageUrl.value;
+                    child: Obx(() {
+                      final imagePath = controller.profileImagePath.value;
+                      final imageUrl = controller.profileImageUrl.value;
+                      final bool hasLocal = imagePath.isNotEmpty;
+                      final bool hasRemote = imageUrl.isNotEmpty;
 
-                          ImageProvider imageProvider;
-                          if (imagePath.isNotEmpty) {
-                            imageProvider = FileImage(File(imagePath));
-                          } else if (imageUrl.isNotEmpty) {
-                            final fullUrl = imageUrl.startsWith('http')
-                                ? imageUrl
-                                : 'http://15.240.117.162:5000$imageUrl';
-                            imageProvider = NetworkImage(fullUrl);
-                          } else {
-                            imageProvider = const NetworkImage(
-                              'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500',
-                            );
-                          }
-
-                          return Container(
-                            width: 100.w,
-                            height: 100.w,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppColors.primarytext,
-                                width: 3,
-                              ),
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          );
-                        }),
-                        Positioned(
-                          bottom: 0,
-                          right: 4,
-                          child: GestureDetector(
-                            onTap: controller.pickProfileImage,
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
+                      Widget imageWidget;
+                      if (hasLocal) {
+                        imageWidget = Image.file(
+                          File(imagePath),
+                          width: 100.w,
+                          height: 100.w,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) => _buildDefaultAvatar(),
+                        );
+                      } else if (hasRemote) {
+                        final fullUrl = imageUrl.startsWith('http')
+                            ? imageUrl
+                            : 'http://15.240.117.162:5000$imageUrl';
+                        imageWidget = CachedNetworkImage(
+                          imageUrl: fullUrl,
+                          width: 100.w,
+                          height: 100.w,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container(
+                            color: AppColors.primaryappbrownsecond,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
                                 color: AppColors.secondary,
-                                border: Border.all(
-                                  color: AppColors.primary,
-                                  width: 3,
-                                ),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.camera_alt,
-                                color: AppColors.white,
-                                size: 16,
                               ),
                             ),
                           ),
+                          errorWidget: (context, url, error) =>
+                              _buildDefaultAvatar(),
+                        );
+                      } else {
+                        imageWidget = _buildDefaultAvatar();
+                      }
+
+                      return Container(
+                        width: 100.w,
+                        height: 100.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primaryappbrownsecond,
+                          border: Border.all(
+                            color: AppColors.primarytext,
+                            width: 3,
+                          ),
                         ),
-                      ],
-                    ),
+                        child: ClipOval(child: imageWidget),
+                      );
+                    }),
                   ),
                   const Gap(16),
 
@@ -426,6 +420,19 @@ class UserProfileScreen extends StatelessWidget {
               ),
             );
           }),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDefaultAvatar() {
+    return Container(
+      color: AppColors.primaryappbrownsecond,
+      child: const Center(
+        child: Icon(
+          Icons.person,
+          color: AppColors.primarytext,
+          size: 52,
         ),
       ),
     );

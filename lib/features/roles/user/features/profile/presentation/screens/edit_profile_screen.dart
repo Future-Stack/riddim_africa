@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import '../controllers/profile_controller.dart';
@@ -132,19 +133,41 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       Obx(() {
                         final imagePath = controller.profileImagePath.value;
                         final imageUrl = controller.profileImageUrl.value;
+                        final bool hasLocal = imagePath.isNotEmpty;
+                        final bool hasRemote = imageUrl.isNotEmpty;
 
-                        ImageProvider imageProvider;
-                        if (imagePath.isNotEmpty) {
-                          imageProvider = FileImage(File(imagePath));
-                        } else if (imageUrl.isNotEmpty) {
+                        Widget imageWidget;
+                        if (hasLocal) {
+                          imageWidget = Image.file(
+                            File(imagePath),
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => _buildDefaultAvatar(),
+                          );
+                        } else if (hasRemote) {
                           final fullUrl = imageUrl.startsWith('http')
                               ? imageUrl
                               : 'http://15.240.117.162:5000$imageUrl';
-                          imageProvider = NetworkImage(fullUrl);
-                        } else {
-                          imageProvider = const NetworkImage(
-                            'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500',
+                          imageWidget = CachedNetworkImage(
+                            imageUrl: fullUrl,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                              color: AppColors.primaryappbrownsecond,
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.secondary,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                _buildDefaultAvatar(),
                           );
+                        } else {
+                          imageWidget = _buildDefaultAvatar();
                         }
 
                         return Container(
@@ -152,15 +175,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           height: 100,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
+                            color: AppColors.primaryappbrownsecond,
                             border: Border.all(
                               color: AppColors.primarytext,
                               width: 3,
                             ),
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
                           ),
+                          child: ClipOval(child: imageWidget),
                         );
                       }),
                       Positioned(
@@ -306,6 +327,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDefaultAvatar() {
+    return Container(
+      color: AppColors.primaryappbrownsecond,
+      child: const Center(
+        child: Icon(
+          Icons.person,
+          color: AppColors.primarytext,
+          size: 50,
         ),
       ),
     );

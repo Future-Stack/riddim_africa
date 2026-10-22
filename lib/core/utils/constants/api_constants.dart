@@ -13,4 +13,6 @@ class ApiConstants {
   static String get refreshToken => "$baseUrl/auth/refresh-token";
   static String get businessTypes => "$baseUrl/admin/business-types";
   static String get userProfile => "$baseUrl/user/profile";
+  static String get changePassword => "$baseUrl/auth/change-password";
+  static String get deleteAccount => "$baseUrl/auth/delete-account";
 }

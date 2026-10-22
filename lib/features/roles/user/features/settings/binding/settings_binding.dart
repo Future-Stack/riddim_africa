@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import '../data/datasources/settings_local_data_source.dart';
+import '../data/datasources/settings_remote_data_source.dart';
 import '../data/repositories/settings_repository_impl.dart';
 import '../domain/repositories/settings_repository.dart';
 import '../domain/usecases/get_faqs_usecase.dart';
@@ -9,6 +10,9 @@ import '../presentation/controllers/settings_controller.dart';
 class SettingsBinding extends Bindings {
   @override
   void dependencies() {
+    if (!Get.isRegistered<SettingsRemoteDataSource>()) {
+      Get.lazyPut<SettingsRemoteDataSource>(() => SettingsRemoteDataSource());
+    }
     Get.lazyPut<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl());
     Get.lazyPut<SettingsRepository>(() => SettingsRepositoryImpl(Get.find<SettingsLocalDataSource>()));
     Get.lazyPut(() => GetFaqsUseCase(Get.find<SettingsRepository>()));
@@ -17,6 +21,7 @@ class SettingsBinding extends Bindings {
     Get.lazyPut<SettingsController>(() => SettingsController(
       getFaqsUseCase: Get.find<GetFaqsUseCase>(),
       getPolicyUseCase: Get.find<GetPolicyUseCase>(),
+      remoteDataSource: Get.find<SettingsRemoteDataSource>(),
     ));
   }
 }
