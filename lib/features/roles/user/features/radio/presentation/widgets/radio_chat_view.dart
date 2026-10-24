@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:riddimafrica/core/core.dart';
 import '../controllers/radio_controller.dart';
+import '../../bindings/radio_binding.dart';
 import '../../domain/entities/chat_message_entity.dart';
 import 'radio_player_view.dart';
 import 'radio_user_action_popup.dart';
@@ -126,6 +127,7 @@ class _RadioChatViewState extends State<RadioChatView> {
 
   @override
   Widget build(BuildContext context) {
+    RadioBinding().dependencies();
     final controller = Get.find<RadioController>();
 
     return Column(

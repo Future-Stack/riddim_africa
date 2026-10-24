@@ -15,4 +15,6 @@ class ApiConstants {
   static String get userProfile => "$baseUrl/user/profile";
   static String get changePassword => "$baseUrl/auth/change-password";
   static String get deleteAccount => "$baseUrl/auth/delete-account";
+  static String get userProducts => "$baseUrl/user/products";
+  static String userProductDetails(String productId) => "$baseUrl/user/products/$productId";
 }

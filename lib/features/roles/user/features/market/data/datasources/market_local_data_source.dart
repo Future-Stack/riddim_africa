@@ -156,7 +156,7 @@ class MarketLocalDataSourceImpl implements MarketLocalDataSource {
       MarketProductModel(
         id: 'artist_p2',
         imageUrl:
-            'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?q=80&w=500&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=500&auto=format&fit=crop',
         title: 'People Power Cap',
         sellerName: 'Bobi Wine',
         rating: 4.7,

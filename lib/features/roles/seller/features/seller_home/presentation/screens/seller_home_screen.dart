@@ -23,9 +23,7 @@ class SellerHomeScreen extends GetView<SellerHomeController> {
       appBar: const SellerHomeAppBar(),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.secondary),
-          );
+          return const HomeScreenShimmer();
         }
 
         if (controller.stats.value == null) {

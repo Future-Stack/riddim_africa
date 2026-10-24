@@ -6,7 +6,21 @@ class GetMarketProductsUseCase {
 
   GetMarketProductsUseCase(this.repository);
 
-  Future<List<MarketProductEntity>> execute() {
-    return repository.getMarketProducts();
+  Future<List<MarketProductEntity>> execute({
+    int page = 1,
+    int limit = 10,
+    String? search,
+    String? categoryId,
+    String? collectionId,
+    String? collectionTitle,
+  }) {
+    return repository.getMarketProducts(
+      page: page,
+      limit: limit,
+      search: search,
+      categoryId: categoryId,
+      collectionId: collectionId,
+      collectionTitle: collectionTitle,
+    );
   }
 }

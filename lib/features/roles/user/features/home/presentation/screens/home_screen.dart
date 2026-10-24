@@ -20,9 +20,7 @@ class UserHomeScreen extends GetView<UserHomeController> {
       appBar: const HomeAppBar(),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.onboardingbutton),
-          );
+          return const HomeScreenShimmer();
         }
 
         return SingleChildScrollView(

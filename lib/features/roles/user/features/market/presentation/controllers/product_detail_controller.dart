@@ -34,14 +34,26 @@ class ProductDetailController extends GetxController {
 
   Future<void> _loadProductDetail(String productId) async {
     isLoading.value = true;
+    selectedImageIndex.value = 0;
+    selectedColorIndex.value = 0;
+    selectedSizeIndex.value = 0;
+    quantity.value = 1;
+
     try {
-      final results = await Future.wait([
-        _getProductDetailUseCase.execute(productId),
-        _getRelatedProductsUseCase.execute(productId),
-      ]);
-      product.value = results[0] as MarketProductEntity;
-      relatedProducts.value =
-          (results[1] as List).cast<MarketProductEntity>();
+      final productDetail = await _getProductDetailUseCase.execute(productId);
+      product.value = productDetail;
+      isFavorite.value = productDetail.isWishlisted;
+
+      if (productDetail.relatedProducts.isNotEmpty) {
+        relatedProducts.value = productDetail.relatedProducts;
+      } else {
+        try {
+          final rel = await _getRelatedProductsUseCase.execute(productId);
+          relatedProducts.value = rel;
+        } catch (_) {
+          relatedProducts.value = [];
+        }
+      }
     } catch (e) {
       Get.snackbar('Error', 'Failed to load product details');
     } finally {

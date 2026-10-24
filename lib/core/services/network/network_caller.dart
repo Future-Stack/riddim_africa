@@ -66,11 +66,19 @@ class NetworkCaller {
   // Public HTTP API
   // --------------------------------------------------------------------------
 
-  Future<ResponseData> getRequest(String endpoint, {String? token}) {
-    log('GET    → $endpoint');
+  Future<ResponseData> getRequest(
+    String endpoint, {
+    Map<String, dynamic>? queryParameters,
+    String? token,
+  }) {
+    log('GET    → $endpoint${queryParameters != null ? " | query: $queryParameters" : ""}');
     return _execute(
       endpoint,
-      () => _dio.get(endpoint, options: _options(token: token)),
+      () => _dio.get(
+        endpoint,
+        queryParameters: queryParameters,
+        options: _options(token: token),
+      ),
     );
   }
 
@@ -365,6 +373,7 @@ class NetworkCaller {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.receiveTimeout:
       case DioExceptionType.sendTimeout:
+      case DioExceptionType.transformTimeout:
         return _errorResponse(408, 'Request timed out. Please try again.');
 
       case DioExceptionType.connectionError:

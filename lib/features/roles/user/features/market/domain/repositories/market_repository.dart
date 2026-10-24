@@ -8,5 +8,12 @@ abstract class MarketRepository {
   Future<List<CartItemEntity>> getCartItems();
   Future<List<DeliveryAddressEntity>> getDeliveryAddresses();
   Future<List<MarketProductEntity>> getArtistProducts(String artistName);
-  Future<List<MarketProductEntity>> getMarketProducts();
+  Future<List<MarketProductEntity>> getMarketProducts({
+    int page = 1,
+    int limit = 10,
+    String? search,
+    String? categoryId,
+    String? collectionId,
+    String? collectionTitle,
+  });
 }

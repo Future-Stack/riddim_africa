@@ -26,11 +26,7 @@ class UserProfileScreen extends StatelessWidget {
           backgroundColor: AppColors.primaryappbrown,
           child: Obx(() {
             if (controller.isLoading.value && controller.profile.value == null) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.secondary,
-                ),
-              );
+              return const ProfileScreenShimmer();
             }
 
             if (controller.errorMessage.value.isNotEmpty &&
