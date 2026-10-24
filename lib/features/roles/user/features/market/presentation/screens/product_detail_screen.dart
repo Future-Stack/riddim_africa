@@ -22,9 +22,7 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
       backgroundColor: AppColors.primary,
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.onboardingbutton),
-          );
+          return const SafeArea(child: ProductDetailShimmer());
         }
 
         final product = controller.product.value;
@@ -175,30 +173,41 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
                             const SizedBox(height: 20),
 
                             // Color & Size Selectors Row
-                            Row(
-                              children: [
-                                Obx(
-                                  () => ProductSpecDropdown(
-                                    label: 'Color:',
-                                    items: product.availableColors,
-                                    selectedIndex:
-                                        controller.selectedColorIndex.value,
-                                    onSelected: controller.selectColor,
-                                  ),
-                                ),
-                                const SizedBox(width: 24),
-                                Obx(
-                                  () => ProductSpecDropdown(
-                                    label: 'Size:',
-                                    items: product.availableSizes,
-                                    selectedIndex:
-                                        controller.selectedSizeIndex.value,
-                                    onSelected: controller.selectSize,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 24),
+                            if (product.availableColors.isNotEmpty ||
+                                product.availableSizes.isNotEmpty) ...[
+                              Row(
+                                children: [
+                                  if (product.availableColors.isNotEmpty)
+                                    Expanded(
+                                      child: Obx(
+                                        () => ProductSpecDropdown(
+                                          label: 'Color:',
+                                          items: product.availableColors,
+                                          selectedIndex:
+                                              controller.selectedColorIndex.value,
+                                          onSelected: controller.selectColor,
+                                        ),
+                                      ),
+                                    ),
+                                  if (product.availableColors.isNotEmpty &&
+                                      product.availableSizes.isNotEmpty)
+                                    const SizedBox(width: 16),
+                                  if (product.availableSizes.isNotEmpty)
+                                    Expanded(
+                                      child: Obx(
+                                        () => ProductSpecDropdown(
+                                          label: 'Size:',
+                                          items: product.availableSizes,
+                                          selectedIndex:
+                                              controller.selectedSizeIndex.value,
+                                          onSelected: controller.selectSize,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              const SizedBox(height: 24),
+                            ],
 
                             // Customer Reviews Section
                             Text(
@@ -229,43 +238,51 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
                             ),
                             const SizedBox(height: 24),
 
-                            // Related Products Header
-                            Text(
-                              'Related Products',
-                              style: AppTextStyle(context).boldTextStyle(
-                                color: AppColors.white,
-                                fontSize: 18,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-
-                            // Related Products List
-                            SizedBox(
-                              height: 170,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: controller.relatedProducts.length,
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(width: 16),
-                                itemBuilder: (context, index) {
-                                  final related =
-                                      controller.relatedProducts[index];
-                                  return RelatedProductCard(
-                                    imageUrl: related.imageUrl,
-                                    title: related.title,
-                                    price: related.price,
-                                    onTap: () {
-                                      // Reload product details for this related product
-                                      Get.offNamed(
-                                        '/marketProductDetail',
-                                        arguments: related.id,
-                                        preventDuplicates: false,
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
+                            // Related Products Section
+                            Obx(() {
+                              if (controller.relatedProducts.isEmpty) {
+                                return const SizedBox.shrink();
+                              }
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Related Products',
+                                    style: AppTextStyle(context).boldTextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  SizedBox(
+                                    height: 170,
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount:
+                                          controller.relatedProducts.length,
+                                      separatorBuilder: (context, index) =>
+                                          const SizedBox(width: 16),
+                                      itemBuilder: (context, index) {
+                                        final related =
+                                            controller.relatedProducts[index];
+                                        return RelatedProductCard(
+                                          imageUrl: related.imageUrl,
+                                          title: related.title,
+                                          price: related.price,
+                                          onTap: () {
+                                            Get.offNamed(
+                                              AppRoute.marketProductDetail,
+                                              arguments: related.id,
+                                              preventDuplicates: false,
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
                           ],
                         ),
                       ),

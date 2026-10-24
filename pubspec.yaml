@@ -54,6 +54,7 @@ dependencies:
   iconsax: ^0.0.8
   flutter_launcher_icons: ^0.14.4
   cached_network_image: ^3.4.1
+  shimmer: ^4.0.0
  
 
 

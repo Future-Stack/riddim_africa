@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import '../controllers/radio_controller.dart';
+import '../../bindings/radio_binding.dart';
 
 class RadioPlayerView extends StatelessWidget {
   const RadioPlayerView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    RadioBinding().dependencies();
     final controller = Get.find<RadioController>();
 
     return Column(

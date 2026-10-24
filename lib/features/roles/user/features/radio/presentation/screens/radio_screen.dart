@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:riddimafrica/core/core.dart';
+import '../../bindings/radio_binding.dart';
 import '../widgets/radio_chat_view.dart';
 
 class RadioScreen extends StatelessWidget {
@@ -7,6 +8,7 @@ class RadioScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    RadioBinding().dependencies();
     return const Scaffold(
       backgroundColor: AppColors.primary,
       body: SafeArea(child: RadioChatView()),

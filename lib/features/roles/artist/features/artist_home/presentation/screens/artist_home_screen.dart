@@ -23,9 +23,7 @@ class ArtistHomeScreen extends GetView<ArtistHomeController> {
       appBar: const ArtistHomeAppBar(),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.secondary),
-          );
+          return const HomeScreenShimmer();
         }
 
         if (controller.stats.value == null) {

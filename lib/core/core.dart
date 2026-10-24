@@ -22,6 +22,7 @@ export 'common/common_button/common_button.dart';
 export 'common/common_text_field/pro_text_field.dart';
 export 'common/widgets/global_app_bar.dart';
 export 'common/widgets/success_badge_check_icon.dart';
+export 'common/widgets/shimmer_loading.dart';
 export 'bindings/controller_binder.dart';
 export 'services/firebase/fcm_handler.dart';
 export 'services/firebase/firebase_service.dart';

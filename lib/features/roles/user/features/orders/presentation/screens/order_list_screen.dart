@@ -92,9 +92,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
   Widget _buildOrdersList(BuildContext context, OrderListController ctrl) {
     return Obx(() {
       if (ctrl.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(color: AppColors.onboardingbutton),
-        );
+        return const OrderListShimmer(count: 4);
       }
 
       if (ctrl.filteredOrders.isEmpty) {

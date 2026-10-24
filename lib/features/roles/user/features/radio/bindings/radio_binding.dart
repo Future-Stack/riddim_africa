@@ -12,21 +12,34 @@ class RadioBinding extends Bindings {
   void dependencies() {
     // Only register if not already registered
     if (!Get.isRegistered<RadioLocalDataSource>()) {
-      Get.lazyPut<RadioLocalDataSource>(() => RadioLocalDataSourceImpl());
+      Get.lazyPut<RadioLocalDataSource>(
+        () => RadioLocalDataSourceImpl(),
+        fenix: true,
+      );
     }
     if (!Get.isRegistered<RadioRepository>()) {
       Get.lazyPut<RadioRepository>(
         () => RadioRepositoryImpl(Get.find<RadioLocalDataSource>()),
+        fenix: true,
       );
     }
     if (!Get.isRegistered<GetRadioStateUseCase>()) {
-      Get.lazyPut(() => GetRadioStateUseCase(Get.find<RadioRepository>()));
+      Get.lazyPut(
+        () => GetRadioStateUseCase(Get.find<RadioRepository>()),
+        fenix: true,
+      );
     }
     if (!Get.isRegistered<GetChatMessagesUseCase>()) {
-      Get.lazyPut(() => GetChatMessagesUseCase(Get.find<RadioRepository>()));
+      Get.lazyPut(
+        () => GetChatMessagesUseCase(Get.find<RadioRepository>()),
+        fenix: true,
+      );
     }
     if (!Get.isRegistered<SendChatMessageUseCase>()) {
-      Get.lazyPut(() => SendChatMessageUseCase(Get.find<RadioRepository>()));
+      Get.lazyPut(
+        () => SendChatMessageUseCase(Get.find<RadioRepository>()),
+        fenix: true,
+      );
     }
     if (!Get.isRegistered<RadioController>()) {
       Get.lazyPut(
@@ -35,6 +48,7 @@ class RadioBinding extends Bindings {
           Get.find<GetChatMessagesUseCase>(),
           Get.find<SendChatMessageUseCase>(),
         ),
+        fenix: true,
       );
     }
   }

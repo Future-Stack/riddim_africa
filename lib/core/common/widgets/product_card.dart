@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:riddimafrica/core/core.dart';
 
 class ProductCard extends StatelessWidget {
@@ -69,20 +70,36 @@ class ProductCard extends StatelessWidget {
                         topLeft: Radius.circular(16.0),
                         topRight: Radius.circular(16.0),
                       ),
-                      child: Image.network(
-                        imageUrl,
-                        width: double.infinity,
-                        height: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          color: AppColors.primaryappbrown,
-                          width: double.infinity,
-                          child: const Icon(
-                            Iconsax.image,
-                            color: AppColors.primarytext,
-                          ),
-                        ),
-                      ),
+                      child: imageUrl.isEmpty
+                          ? Container(
+                              color: AppColors.primaryappbrown,
+                              width: double.infinity,
+                              child: const Icon(
+                                Iconsax.image,
+                                color: AppColors.primarytext,
+                              ),
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: imageUrl,
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const AppShimmer(
+                                child: ShimmerBox(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  borderRadius: 0,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: AppColors.primaryappbrown,
+                                width: double.infinity,
+                                child: const Icon(
+                                  Iconsax.image,
+                                  color: AppColors.primarytext,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                   // Rank Circle Badge

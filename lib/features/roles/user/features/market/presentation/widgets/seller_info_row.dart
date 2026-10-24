@@ -76,7 +76,7 @@ class SellerInfoRow extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Verified Seller • $rating ★ • $salesCount sales',
+                    '${isVerified ? "Verified Seller" : "Seller"} • $rating ★ • $salesCount sales',
                     style: AppTextStyle(context).regularTextStyle(
                       color: AppColors.primarytext,
                       fontSize: AppTextStyle.sm,
