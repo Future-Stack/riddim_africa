@@ -15,13 +15,17 @@ const Duration _kReceiveTimeout = Duration(seconds: 30);
 const String _kDefaultFileField = 'profile_picture';
 
 const String _kJsonContentType = 'application/json';
-const String _kMultipartContentType = 'multipart/form-data';
 
 const Set<String> _kAuthEndpoints = {
-  '/auth/login/',
-  '/auth/register/',
-  '/auth/logout/',
-  '/auth/token/refresh/',
+  '/auth/login',
+  '/auth/register',
+  '/auth/logout',
+  '/auth/refresh-token',
+  '/auth/token/refresh',
+  '/auth/verify-otp',
+  '/auth/resend-otp',
+  '/auth/forgot-password',
+  '/auth/reset-password',
 };
 
 // ============================================================================
@@ -62,42 +66,62 @@ class NetworkCaller {
   // Public HTTP API
   // --------------------------------------------------------------------------
 
-  Future<ResponseData> getRequest(String endpoint, {String? token}) {
-    log('GET    → $endpoint');
+  Future<ResponseData> getRequest(
+    String endpoint, {
+    Map<String, dynamic>? queryParameters,
+    String? token,
+  }) {
+    log('GET    → $endpoint${queryParameters != null ? " | query: $queryParameters" : ""}');
     return _execute(
       endpoint,
-      () => _dio.get(endpoint, options: _options(token: token)),
+      () => _dio.get(
+        endpoint,
+        queryParameters: queryParameters,
+        options: _options(token: token),
+      ),
     );
   }
 
   Future<ResponseData> postRequest(
     String endpoint, {
-    Map<String, dynamic>? body,
+    dynamic body,
     String? token,
   }) {
-    log('POST   → $endpoint | body: ${jsonEncode(body)}');
+    if (body is FormData) {
+      log('POST (FormData) → $endpoint | fields: ${body.fields.map((e) => "${e.key}: ${e.key.toLowerCase().contains("password") ? "********" : e.value}").toList()}');
+    } else if (body is Map<String, dynamic>) {
+      log('POST   → $endpoint | body: ${jsonEncode(_sanitizeLogBody(body))}');
+    } else {
+      log('POST   → $endpoint | body: $body');
+    }
     return _execute(
       endpoint,
       () => _dio.post(
         endpoint,
         data: body,
-        options: _options(token: token),
+        options: _options(token: token, multipart: body is FormData),
       ),
     );
   }
 
   Future<ResponseData> patchRequest(
     String endpoint, {
-    Map<String, dynamic>? body,
+    dynamic body,
     String? token,
   }) {
-    log('PATCH  → $endpoint');
+    if (body is FormData) {
+      log('PATCH (FormData) → $endpoint | fields: ${body.fields.map((e) => "${e.key}: ${e.value}").toList()}');
+    } else if (body is Map<String, dynamic>) {
+      log('PATCH  → $endpoint | body: ${jsonEncode(_sanitizeLogBody(body))}');
+    } else {
+      log('PATCH  → $endpoint | body: $body');
+    }
     return _execute(
       endpoint,
       () => _dio.patch(
         endpoint,
         data: body,
-        options: _options(token: token),
+        options: _options(token: token, multipart: body is FormData),
       ),
     );
   }
@@ -107,7 +131,7 @@ class NetworkCaller {
     Map<String, dynamic>? body,
     String? token,
   }) {
-    log('PUT    → $endpoint');
+    log('PUT    → $endpoint | body: ${jsonEncode(_sanitizeLogBody(body))}');
     return _execute(
       endpoint,
       () => _dio.put(
@@ -201,9 +225,10 @@ class NetworkCaller {
   Map<String, dynamic> _buildHeaders({String? token, bool multipart = false}) {
     final activeToken = token ?? StorageService.token;
 
-    final headers = <String, dynamic>{
-      'Content-Type': multipart ? _kMultipartContentType : _kJsonContentType,
-    };
+    final headers = <String, dynamic>{};
+    if (!multipart) {
+      headers['Content-Type'] = _kJsonContentType;
+    }
 
     if (activeToken != null && activeToken.isNotEmpty) {
       headers['Authorization'] = 'Bearer $activeToken';
@@ -348,6 +373,7 @@ class NetworkCaller {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.receiveTimeout:
       case DioExceptionType.sendTimeout:
+      case DioExceptionType.transformTimeout:
         return _errorResponse(408, 'Request timed out. Please try again.');
 
       case DioExceptionType.connectionError:
@@ -370,13 +396,22 @@ class NetworkCaller {
 
   ResponseData _badResponseError(DioException error) {
     final status = error.response?.statusCode ?? 500;
-    final body = error.response?.data;
+    dynamic body = error.response?.data;
+    if (body is String) {
+      try {
+        body = jsonDecode(body);
+      } catch (_) {}
+    }
 
     final message = switch (status) {
-      401 => 'Session expired. Please log in again.',
-      403 => 'Access denied. You lack permission for this resource.',
-      _ =>
+      401 =>
         (body is Map ? (body['message'] ?? body['detail']) : null) ??
+            'Invalid credentials or session expired.',
+      403 =>
+        (body is Map ? (body['message'] ?? body['detail']) : null) ??
+            'Access denied. You lack permission for this resource.',
+      _ =>
+        (body is Map ? (body['message'] ?? body['detail'] ?? (body['errorSources'] is List ? _joinErrorSources(body['errorSources']) : null)) : null) ??
             'Server returned an error.',
     };
 
@@ -387,7 +422,7 @@ class NetworkCaller {
       isSuccess: false,
       statusCode: status,
       responseData: body ?? '',
-      errorMessage: message,
+      errorMessage: message.toString(),
     );
   }
 
@@ -413,5 +448,23 @@ class NetworkCaller {
       'gif' => 'image/gif',
       _ => throw ArgumentError('Unsupported image format: .$ext'),
     };
+  }
+
+  Map<String, dynamic>? _sanitizeLogBody(Map<String, dynamic>? body) {
+    if (body == null) return null;
+    final sanitized = Map<String, dynamic>.from(body);
+    const sensitiveKeys = {
+      'password',
+      'confirmPassword',
+      'oldPassword',
+      'newPassword',
+      'confirmNewPassword',
+    };
+    for (final key in sensitiveKeys) {
+      if (sanitized.containsKey(key)) {
+        sanitized[key] = '********';
+      }
+    }
+    return sanitized;
   }
 }

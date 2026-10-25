@@ -16,6 +16,12 @@ class MarketProductEntity {
   final String? description;
   final List<String> availableColors;
   final List<String> availableSizes;
+  final String? productCode;
+  final int stockQuantity;
+  final bool isWishlisted;
+  final String? collectionTitle;
+  final num? rawPrice;
+  final List<MarketProductEntity> relatedProducts;
 
   const MarketProductEntity({
     required this.id,
@@ -35,5 +41,11 @@ class MarketProductEntity {
     this.description,
     this.availableColors = const [],
     this.availableSizes = const [],
+    this.productCode,
+    this.stockQuantity = 0,
+    this.isWishlisted = false,
+    this.collectionTitle,
+    this.rawPrice,
+    this.relatedProducts = const [],
   });
 }

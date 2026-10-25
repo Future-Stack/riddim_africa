@@ -18,6 +18,7 @@ import 'package:riddimafrica/features/authentication/presentation/screens/login_
 import 'package:riddimafrica/features/authentication/presentation/screens/profile_setup_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/forgot_password_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/forgot_password_otp_screen.dart';
+import 'package:riddimafrica/features/authentication/presentation/screens/verify_otp_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/create_new_password_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/market/binding/market_binding.dart';
 import 'package:riddimafrica/features/roles/user/features/market/presentation/screens/product_detail_screen.dart';
@@ -42,6 +43,7 @@ import 'package:riddimafrica/features/roles/user/features/settings/presentation/
 import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/refund_policy_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/cookie_notice_screen.dart';
 import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/community_guidelines_screen.dart';
+import 'package:riddimafrica/features/roles/user/features/settings/presentation/screens/delete_account_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/seller_id_verification_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/seller_business_type_screen.dart';
 import 'package:riddimafrica/features/authentication/presentation/screens/seller_payment_method_screen.dart';
@@ -141,6 +143,7 @@ class AppRoute {
   static const String signupScreen = "/signupScreen";
   static const String forgotPasswordScreen = "/forgotPasswordScreen";
   static const String forgotPasswordOtpScreen = "/forgotPasswordOtpScreen";
+  static const String verifyOtpScreen = "/verifyOtpScreen";
   static const String createNewPasswordScreen = "/createNewPasswordScreen";
 
   //bottom navs
@@ -274,6 +277,7 @@ class AppRoute {
   static const String refundPolicy = "/refundPolicy";
   static const String cookieNotice = "/cookieNotice";
   static const String communityGuidelines = "/communityGuidelines";
+  static const String deleteAccount = "/deleteAccount";
 
   //ORDERS
   static const String orderList = "/orderList";
@@ -330,6 +334,11 @@ class AppRoute {
     GetPage(
       name: forgotPasswordOtpScreen,
       page: () => const ForgotPasswordOtpScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: verifyOtpScreen,
+      page: () => const VerifyOtpScreen(),
       binding: AuthBinding(),
     ),
     GetPage(
@@ -938,6 +947,11 @@ class AppRoute {
     GetPage(
       name: communityGuidelines,
       page: () => const CommunityGuidelinesScreen(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: deleteAccount,
+      page: () => const DeleteAccountScreen(),
       binding: SettingsBinding(),
     ),
   ];

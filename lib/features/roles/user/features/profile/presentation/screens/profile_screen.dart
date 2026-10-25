@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
 import 'package:riddimafrica/routes/app_routes.dart';
@@ -12,290 +13,422 @@ class UserProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // If the controller isn't registered, initialize it.
-    final controller = Get.put(ProfileController());
+    final controller = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController());
 
     return Scaffold(
       backgroundColor: AppColors.primary,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Gap(16),
+        child: RefreshIndicator(
+          onRefresh: controller.fetchProfile,
+          color: AppColors.secondary,
+          backgroundColor: AppColors.primaryappbrown,
+          child: Obx(() {
+            if (controller.isLoading.value && controller.profile.value == null) {
+              return const ProfileScreenShimmer();
+            }
 
-              // ─── Profile Photo with Camera Badge ─────────────────────────
-              Center(
-                child: Stack(
-                  children: [
-                    Obx(() {
+            if (controller.errorMessage.value.isNotEmpty &&
+                controller.profile.value == null) {
+              return SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            color: AppColors.secondary,
+                            size: 48,
+                          ),
+                          const Gap(16),
+                          Text(
+                            controller.errorMessage.value,
+                            textAlign: TextAlign.center,
+                            style: AppTextStyle(context).mediumTextStyle(
+                              color: AppColors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const Gap(16),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.secondary,
+                              foregroundColor: AppColors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            onPressed: controller.fetchProfile,
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
+
+            return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Gap(16),
+
+                  // ─── Profile Photo with Camera Badge ─────────────────────────
+                  Center(
+                    child: Obx(() {
                       final imagePath = controller.profileImagePath.value;
+                      final imageUrl = controller.profileImageUrl.value;
+                      final bool hasLocal = imagePath.isNotEmpty;
+                      final bool hasRemote = imageUrl.isNotEmpty;
+
+                      Widget imageWidget;
+                      if (hasLocal) {
+                        imageWidget = Image.file(
+                          File(imagePath),
+                          width: 100.w,
+                          height: 100.w,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) => _buildDefaultAvatar(),
+                        );
+                      } else if (hasRemote) {
+                        final fullUrl = imageUrl.startsWith('http')
+                            ? imageUrl
+                            : 'http://15.240.117.162:5000$imageUrl';
+                        imageWidget = CachedNetworkImage(
+                          imageUrl: fullUrl,
+                          width: 100.w,
+                          height: 100.w,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container(
+                            color: AppColors.primaryappbrownsecond,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.secondary,
+                              ),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              _buildDefaultAvatar(),
+                        );
+                      } else {
+                        imageWidget = _buildDefaultAvatar();
+                      }
+
                       return Container(
                         width: 100.w,
                         height: 100.w,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
+                          color: AppColors.primaryappbrownsecond,
                           border: Border.all(
                             color: AppColors.primarytext,
                             width: 3,
                           ),
-                          image: DecorationImage(
-                            image: imagePath.isNotEmpty
-                                ? FileImage(File(imagePath)) as ImageProvider
-                                : const NetworkImage(
-                                    'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500',
-                                  ),
-                            fit: BoxFit.cover,
-                          ),
                         ),
+                        child: ClipOval(child: imageWidget),
                       );
                     }),
-                    Positioned(
-                      bottom: 0,
-                      right: 4,
-                      child: GestureDetector(
-                        onTap: controller.pickProfileImage,
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.secondary,
-                            border: Border.all(
-                              color: AppColors.primary,
-                              width: 3,
-                            ),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.camera_alt,
-                            color: AppColors.white,
-                            size: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Gap(16),
-
-              // ─── Name, Email & Phone ─────────────────────────────────────
-              Obx(
-                () => Text(
-                  controller.name.value,
-                  style: AppTextStyle(
-                    context,
-                  ).boldTextStyle(color: AppColors.white, fontSize: 22),
-                ),
-              ),
-              const Gap(4),
-              Obx(
-                () => Text(
-                  controller.email.value,
-                  style: AppTextStyle(
-                    context,
-                  ).mediumTextStyle(color: AppColors.primarytext, fontSize: 14),
-                ),
-              ),
-              const Gap(4),
-              Obx(
-                () => Text(
-                  '${controller.phoneNumber.value} • ${controller.city.value}, ${controller.country.value}',
-                  style: AppTextStyle(
-                    context,
-                  ).mediumTextStyle(color: AppColors.primarytext, fontSize: 13),
-                ),
-              ),
-              const Gap(24),
-
-              // ─── Stats Card ──────────────────────────────────────────────
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryappbrown,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: AppColors.primarytext.withValues(alpha: 0.3),
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildStatItem(
-                      context,
-                      icon: Iconsax.bag_2,
-                      value: '12',
-                      label: 'Orders',
-                    ),
-                    _buildDivider(),
-                    Obx(
-                      () => _buildStatItem(
-                        context,
-                        icon: Iconsax.heart,
-                        value: controller.wishlist.length.toString(),
-                        label: 'Wishlist',
-                      ),
-                    ),
-                    _buildDivider(),
-                    _buildStatItem(
-                      context,
-                      icon: Iconsax.star,
-                      value: '5',
-                      label: 'Artist',
-                    ),
-                  ],
-                ),
-              ),
-              const Gap(16),
+                  const Gap(16),
 
-              // ─── Riddim Africa Member Card ───────────────────────────────
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryappbrownsecond,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: AppColors.primarytext.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(ImagePath.logo1, width: 56, height: 56),
-                    const Gap.h(16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  // ─── Name & Verified Badge ───────────────────────────────────
+                  Obx(
+                    () {
+                      final displayName = controller.name.value.isNotEmpty
+                          ? controller.name.value
+                          : (controller.username.value.isNotEmpty
+                              ? controller.username.value
+                              : 'User');
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Riddim Africa Member',
-                            style: AppTextStyle(context).mediumTextStyle(
-                              color: AppColors.onboardingbutton,
-                              fontSize: 14,
+                          Flexible(
+                            child: Text(
+                              displayName,
+                              style: AppTextStyle(context).boldTextStyle(
+                                color: AppColors.white,
+                                fontSize: 22,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          const Gap(2),
-                          Text(
-                            'Supporter since January 2024',
-                            style: AppTextStyle(context).regularTextStyle(
-                              color: AppColors.primarytext,
-                              fontSize: 12,
+                          if (controller.isVerified.value) ...[
+                            const Gap.h(6),
+                            const Icon(
+                              Icons.verified,
+                              color: AppColors.onboardingbutton,
+                              size: 20,
                             ),
+                          ],
+                        ],
+                      );
+                    },
+                  ),
+                  const Gap(4),
+
+                  // ─── Email ──────────────────────────────────────────────────
+                  Obx(() {
+                    if (controller.email.value.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+                    return Text(
+                      controller.email.value,
+                      style: AppTextStyle(context).mediumTextStyle(
+                        color: AppColors.primarytext,
+                        fontSize: 14,
+                      ),
+                    );
+                  }),
+                  const Gap(4),
+
+                  // ─── Phone & Location ───────────────────────────────────────
+                  Obx(() {
+                    final phone = controller.phoneNumber.value;
+                    final loc = controller.location.value.isNotEmpty
+                        ? controller.location.value
+                        : [controller.city.value, controller.country.value]
+                            .where((e) => e.isNotEmpty)
+                            .join(', ');
+
+                    final parts = [phone, loc].where((e) => e.isNotEmpty).toList();
+                    if (parts.isEmpty) return const SizedBox.shrink();
+
+                    return Text(
+                      parts.join(' • '),
+                      style: AppTextStyle(context).mediumTextStyle(
+                        color: AppColors.primarytext,
+                        fontSize: 13,
+                      ),
+                    );
+                  }),
+                  const Gap(24),
+
+                  // ─── Stats Card ──────────────────────────────────────────────
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryappbrown,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: AppColors.primarytext.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Obx(
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildStatItem(
+                            context,
+                            icon: Iconsax.bag_2,
+                            value: controller.ordersCount.value.toString(),
+                            label: 'Orders',
+                          ),
+                          _buildDivider(),
+                          _buildStatItem(
+                            context,
+                            icon: Iconsax.heart,
+                            value: controller.wishlistCount.value.toString(),
+                            label: 'Wishlist',
+                          ),
+                          _buildDivider(),
+                          _buildStatItem(
+                            context,
+                            icon: Iconsax.star,
+                            value: controller.artistCount.value.toString(),
+                            label: 'Artist',
                           ),
                         ],
                       ),
                     ),
-                    Container(
+                  ),
+                  const Gap(16),
+
+                  // ─── Riddim Africa Member Card ───────────────────────────────
+                  Obx(() {
+                    final memberSubtitle = controller.memberSince.value.isNotEmpty
+                        ? 'Supporter since ${controller.memberSince.value}'
+                        : 'Supporter';
+                    final badgeRole = controller.role.value.isNotEmpty
+                        ? controller.role.value.toUpperCase()
+                        : 'MEMBER';
+
+                    return Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
+                        horizontal: 16,
+                        vertical: 16,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.onboardingbutton.withValues(
-                          alpha: 0.11,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
+                        color: AppColors.primaryappbrownsecond,
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: AppColors.onboardingbutton.withValues(
-                            alpha: 0.4,
+                          color: AppColors.primarytext.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Image.asset(ImagePath.logo1, width: 56, height: 56),
+                          const Gap.h(16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Riddim Africa Member',
+                                  style: AppTextStyle(context).mediumTextStyle(
+                                    color: AppColors.onboardingbutton,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const Gap(2),
+                                Text(
+                                  memberSubtitle,
+                                  style: AppTextStyle(context).regularTextStyle(
+                                    color: AppColors.primarytext,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          width: 1.2,
-                        ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.onboardingbutton.withValues(
+                                alpha: 0.11,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: AppColors.onboardingbutton.withValues(
+                                  alpha: 0.4,
+                                ),
+                                width: 1.2,
+                              ),
+                            ),
+                            child: Text(
+                              badgeRole,
+                              style: AppTextStyle(context).boldTextStyle(
+                                color: AppColors.onboardingbutton,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      child: Text(
-                        'Member',
-                        style: AppTextStyle(context).boldTextStyle(
-                          color: AppColors.onboardingbutton,
-                          fontSize: 11,
-                        ),
+                    );
+                  }),
+                  const Gap(16),
+
+                  // ─── Navigation Menu List Card ───────────────────────────────
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryappbrown,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: AppColors.primarytext.withValues(alpha: 0.3),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const Gap(16),
-
-              // ─── Navigation Menu List Card ───────────────────────────────
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.primaryappbrown,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: AppColors.primarytext.withValues(alpha: 0.3),
+                    child: Column(
+                      children: [
+                        _buildMenuItem(
+                          context,
+                          icon: Iconsax.edit_2,
+                          iconBg: const Color(0xFFE6B650).withValues(alpha: 0.1),
+                          iconColor: const Color(0xFFE6B650),
+                          title: 'Edit Profile',
+                          onTap: () => Get.toNamed(AppRoute.editProfile),
+                        ),
+                        _buildMenuDivider(),
+                        _buildMenuItem(
+                          context,
+                          icon: Iconsax.box,
+                          iconBg: const Color(0xFF377A7D).withValues(alpha: 0.1),
+                          iconColor: const Color(0xFF377A7D),
+                          title: 'My Orders',
+                          onTap: () => Get.toNamed('/orderList'),
+                        ),
+                        _buildMenuDivider(),
+                        _buildMenuItem(
+                          context,
+                          icon: Iconsax.heart,
+                          iconBg: const Color(0xFFBB483D).withValues(alpha: 0.1),
+                          iconColor: const Color(0xFFBB483D),
+                          title: 'Wishlist',
+                          onTap: () => Get.toNamed(AppRoute.wishlist),
+                        ),
+                        _buildMenuDivider(),
+                        _buildMenuItem(
+                          context,
+                          icon: Iconsax.notification,
+                          iconBg: const Color(0xFFE6B650).withValues(alpha: 0.1),
+                          iconColor: const Color(0xFFE6B650),
+                          title: 'Notifications',
+                          onTap: () => Get.toNamed('/notifications'),
+                        ),
+                        _buildMenuDivider(),
+                        _buildMenuItem(
+                          context,
+                          icon: Iconsax.setting_2,
+                          iconBg: const Color(0xFFB1A290).withValues(alpha: 0.1),
+                          iconColor: const Color(0xFFB1A290),
+                          title: 'Settings',
+                          onTap: () => Get.toNamed(AppRoute.settings),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                child: Column(
-                  children: [
-                    _buildMenuItem(
-                      context,
-                      icon: Iconsax.edit_2,
-                      iconBg: const Color(0xFFE6B650).withValues(alpha: 0.1),
-                      iconColor: const Color(0xFFE6B650),
-                      title: 'Edit Profile',
-                      onTap: () => Get.toNamed(AppRoute.editProfile),
-                    ),
-                    _buildMenuDivider(),
-                    _buildMenuItem(
-                      context,
-                      icon: Iconsax.box,
-                      iconBg: const Color(0xFF377A7D).withValues(alpha: 0.1),
-                      iconColor: const Color(0xFF377A7D),
-                      title: 'My Orders',
-                      onTap: () => Get.toNamed('/orderList'),
-                    ),
-                    _buildMenuDivider(),
-                    _buildMenuItem(
-                      context,
-                      icon: Iconsax.heart,
-                      iconBg: const Color(0xFFBB483D).withValues(alpha: 0.1),
-                      iconColor: const Color(0xFFBB483D),
-                      title: 'Wishlist',
-                      onTap: () => Get.toNamed(AppRoute.wishlist),
-                    ),
-                    _buildMenuDivider(),
-                    _buildMenuItem(
-                      context,
-                      icon: Iconsax.notification,
-                      iconBg: const Color(0xFFE6B650).withValues(alpha: 0.1),
-                      iconColor: const Color(0xFFE6B650),
-                      title: 'Notifications',
-                      onTap: () => Get.toNamed('/notifications'),
-                    ),
-                    _buildMenuDivider(),
-                    _buildMenuItem(
-                      context,
-                      icon: Iconsax.setting_2,
-                      iconBg: const Color(0xFFB1A290).withValues(alpha: 0.1),
-                      iconColor: const Color(0xFFB1A290),
-                      title: 'Settings',
-                      onTap: () => Get.toNamed(AppRoute.settings),
-                    ),
-                  ],
-                ),
-              ),
-              const Gap(24),
+                  const Gap(24),
 
-              // ─── Logout Button ───────────────────────────────────────────
-              ProElevatedButton(
-                text: 'Logout',
-                textColor: AppColors.secondary,
-                backgroundColor: Colors.transparent,
-                border: const BorderSide(
-                  color: AppColors.secondary,
-                  width: 1.5,
-                ),
-                leadingIcon: Icons.logout,
-                onPressed: () {
-                  Get.offAllNamed(AppRoute.welcomescreen);
-                },
+                  // ─── Logout Button ───────────────────────────────────────────
+                  ProElevatedButton(
+                    text: 'Logout',
+                    textColor: AppColors.secondary,
+                    backgroundColor: Colors.transparent,
+                    border: const BorderSide(
+                      color: AppColors.secondary,
+                      width: 1.5,
+                    ),
+                    leadingIcon: Icons.logout,
+                    onPressed: () async {
+                      await StorageService.logoutUser();
+                      Get.offAllNamed(AppRoute.welcomescreen);
+                    },
+                  ),
+                  const Gap(16),
+                ],
               ),
-              const Gap(16),
-            ],
-          ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDefaultAvatar() {
+    return Container(
+      color: AppColors.primaryappbrownsecond,
+      child: const Center(
+        child: Icon(
+          Icons.person,
+          color: AppColors.primarytext,
+          size: 52,
         ),
       ),
     );

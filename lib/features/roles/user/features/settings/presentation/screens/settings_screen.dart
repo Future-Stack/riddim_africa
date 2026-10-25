@@ -40,13 +40,27 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: _buildActionRow(
-                  context,
-                  icon: Iconsax.lock,
-                  iconBg: const Color(0xFFE6B650).withValues(alpha: 0.1),
-                  iconColor: const Color(0xFFE6B650),
-                  title: 'Change Password',
-                  onTap: () => Get.toNamed(AppRoute.changePassword),
+                child: Column(
+                  children: [
+                    _buildActionRow(
+                      context,
+                      icon: Iconsax.lock,
+                      iconBg: const Color(0xFFE6B650).withValues(alpha: 0.1),
+                      iconColor: const Color(0xFFE6B650),
+                      title: 'Change Password',
+                      onTap: () => Get.toNamed(AppRoute.changePassword),
+                    ),
+                    _buildDivider(),
+                    _buildActionRow(
+                      context,
+                      icon: Iconsax.trash,
+                      iconBg: const Color(0xFFE53935).withValues(alpha: 0.12),
+                      iconColor: const Color(0xFFE53935),
+                      title: 'Delete Account',
+                      titleColor: const Color(0xFFFF6B6B),
+                      onTap: () => Get.toNamed(AppRoute.deleteAccount),
+                    ),
+                  ],
                 ),
               ),
               const Gap(20),
@@ -212,6 +226,7 @@ class SettingsScreen extends StatelessWidget {
     required Color iconBg,
     required Color iconColor,
     required String title,
+    Color? titleColor,
     required VoidCallback onTap,
   }) {
     return Material(
@@ -227,11 +242,11 @@ class SettingsScreen extends StatelessWidget {
           title,
           style: AppTextStyle(
             context,
-          ).mediumTextStyle(color: AppColors.white, fontSize: 16),
+          ).mediumTextStyle(color: titleColor ?? AppColors.white, fontSize: 16),
         ),
-        trailing: const Icon(
+        trailing: Icon(
           Icons.chevron_right,
-          color: AppColors.primarytext,
+          color: titleColor ?? AppColors.primarytext,
           size: 20,
         ),
         onTap: onTap,

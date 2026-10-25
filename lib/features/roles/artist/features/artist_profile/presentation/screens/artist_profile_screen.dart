@@ -27,9 +27,7 @@ class ArtistProfileScreen extends StatelessWidget {
       body: SafeArea(
         child: Obx(() {
           if (controller.isLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.secondary),
-            );
+            return const ProfileScreenShimmer();
           }
 
           final profile = controller.profile.value;
@@ -181,8 +179,9 @@ class ArtistProfileScreen extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(context).pop();
+              await StorageService.logoutUser();
               Get.offAllNamed(AppRoute.welcomescreen);
             },
             child: Text(

@@ -55,7 +55,7 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
         id: 'ord_3',
         orderNumber: 'RA-2026-62400',
         imageUrl:
-            'https://images.unsplash.com/photo-1588850561407-d208edebf8b7?q=80&w=500&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=500&auto=format&fit=crop',
         title: 'Kente Cap Premium',
         sellerName: 'AfroStyle KLA',
         orderDate: DateTime(2026, 6, 12),

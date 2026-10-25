@@ -160,7 +160,7 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
       ProductModel(
         id: 'merch_2',
         imageUrl:
-            'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?q=80&w=500&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=500&auto=format&fit=crop',
         title: 'Eddy Kenzo Cap',
         subtitle: 'Eddy Kenzo Merch',
         rating: 4.7,

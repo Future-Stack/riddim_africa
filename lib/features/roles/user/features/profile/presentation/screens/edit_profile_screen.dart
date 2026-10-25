@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:riddimafrica/core/core.dart';
 import '../controllers/profile_controller.dart';
@@ -54,46 +55,65 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           // Glowing Save pill button
           Padding(
             padding: const EdgeInsets.only(right: 16, top: 10, bottom: 10),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.secondary,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.secondary.withValues(alpha: 0.4),
-                    blurRadius: 10,
-                    spreadRadius: 1,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: InkWell(
-                onTap: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    controller.saveProfile(
-                      newName: nameCtrl.text.trim(),
-                      newUsername: usernameCtrl.text.trim(),
-                      newEmail: emailCtrl.text.trim(),
-                      newPhone: phoneCtrl.text.trim(),
-                      newCity: cityCtrl.text.trim(),
-                      newCountry: countryCtrl.text.trim(),
-                    );
-                  }
-                },
-                borderRadius: BorderRadius.circular(20),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  child: Center(
-                    child: Text(
-                      'Save',
-                      style: AppTextStyle(
-                        context,
-                      ).boldTextStyle(color: AppColors.white, fontSize: 14),
+            child: Obx(() {
+              final isUpdating = controller.isUpdating.value;
+              return Container(
+                decoration: BoxDecoration(
+                  color: isUpdating
+                      ? AppColors.secondary.withValues(alpha: 0.7)
+                      : AppColors.secondary,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.secondary.withValues(alpha: 0.4),
+                      blurRadius: 10,
+                      spreadRadius: 1,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: InkWell(
+                  onTap: isUpdating
+                      ? null
+                      : () {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            controller.saveProfile(
+                              newName: nameCtrl.text.trim(),
+                              newUsername: usernameCtrl.text.trim(),
+                              newEmail: emailCtrl.text.trim(),
+                              newPhone: phoneCtrl.text.trim(),
+                              newCity: cityCtrl.text.trim(),
+                              newCountry: countryCtrl.text.trim(),
+                            );
+                          }
+                        },
+                  borderRadius: BorderRadius.circular(20),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Center(
+                      child: isUpdating
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.white,
+                              ),
+                            )
+                          : Text(
+                              'Save',
+                              style: AppTextStyle(
+                                context,
+                              ).boldTextStyle(
+                                color: AppColors.white,
+                                fontSize: 14,
+                              ),
+                            ),
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
           ),
         ],
       ),
@@ -112,24 +132,56 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     children: [
                       Obx(() {
                         final imagePath = controller.profileImagePath.value;
+                        final imageUrl = controller.profileImageUrl.value;
+                        final bool hasLocal = imagePath.isNotEmpty;
+                        final bool hasRemote = imageUrl.isNotEmpty;
+
+                        Widget imageWidget;
+                        if (hasLocal) {
+                          imageWidget = Image.file(
+                            File(imagePath),
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => _buildDefaultAvatar(),
+                          );
+                        } else if (hasRemote) {
+                          final fullUrl = imageUrl.startsWith('http')
+                              ? imageUrl
+                              : 'http://15.240.117.162:5000$imageUrl';
+                          imageWidget = CachedNetworkImage(
+                            imageUrl: fullUrl,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                              color: AppColors.primaryappbrownsecond,
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.secondary,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                _buildDefaultAvatar(),
+                          );
+                        } else {
+                          imageWidget = _buildDefaultAvatar();
+                        }
+
                         return Container(
                           width: 100,
                           height: 100,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
+                            color: AppColors.primaryappbrownsecond,
                             border: Border.all(
                               color: AppColors.primarytext,
                               width: 3,
                             ),
-                            image: DecorationImage(
-                              image: imagePath.isNotEmpty
-                                  ? FileImage(File(imagePath)) as ImageProvider
-                                  : const NetworkImage(
-                                      'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500',
-                                    ),
-                              fit: BoxFit.cover,
-                            ),
                           ),
+                          child: ClipOval(child: imageWidget),
                         );
                       }),
                       Positioned(
@@ -275,6 +327,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDefaultAvatar() {
+    return Container(
+      color: AppColors.primaryappbrownsecond,
+      child: const Center(
+        child: Icon(
+          Icons.person,
+          color: AppColors.primarytext,
+          size: 50,
         ),
       ),
     );

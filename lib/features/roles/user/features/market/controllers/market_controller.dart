@@ -13,33 +13,61 @@ class MarketController extends GetxController {
   final RxBool isLoading = false.obs;
 
   // Products
+  List<MarketProductEntity> _allFetchedProducts = [];
   final RxList<MarketProductEntity> productsList = <MarketProductEntity>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    _loadProducts();
+    loadProducts();
   }
 
-  Future<void> _loadProducts() async {
-    isLoading.value = true;
+  Future<void> loadProducts({bool showLoading = true}) async {
+    if (showLoading) isLoading.value = true;
     try {
-      final products = await _getMarketProductsUseCase.execute();
-      productsList.value = products;
+      final String? collection = selectedMainCategory.value.isNotEmpty
+          ? selectedMainCategory.value
+          : null;
+
+      final products = await _getMarketProductsUseCase.execute(
+        collectionTitle: collection,
+      );
+      _allFetchedProducts = products;
+      _applyFilters();
     } catch (e) {
       Get.snackbar('Error', 'Failed to load products');
     } finally {
-      isLoading.value = false;
+      if (showLoading) isLoading.value = false;
     }
   }
 
+  Future<void> refreshProducts() async {
+    await loadProducts(showLoading: false);
+  }
+
   void selectMainCategory(String category) {
+    if (selectedMainCategory.value == category) return;
     selectedMainCategory.value = category;
-    // Filter products if needed
+    loadProducts(showLoading: true);
   }
 
   void selectSubCategory(String category) {
     selectedSubCategory.value = category;
-    // Filter products if needed
+    _applyFilters();
+  }
+
+  void _applyFilters() {
+    if (selectedSubCategory.value == 'All') {
+      productsList.value = _allFetchedProducts;
+      return;
+    }
+
+    final query = selectedSubCategory.value.toLowerCase().replaceAll(' ', '');
+    final filtered = _allFetchedProducts.where((p) {
+      final cat = p.category.toLowerCase().replaceAll(' ', '');
+      return cat.contains(query) || query.contains(cat);
+    }).toList();
+
+    productsList.value = filtered;
   }
 }

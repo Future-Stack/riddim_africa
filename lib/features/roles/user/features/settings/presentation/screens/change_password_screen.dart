@@ -132,19 +132,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 const Gap(32),
 
                 // ─── Confirm Button ────────────────────────────────────────
-                ProElevatedButton(
-                  text: 'Confirm',
-                  backgroundColor: AppColors.secondary,
-                  textColor: AppColors.white,
-                  onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      controller.updatePassword(
-                        currentPassword: currentPasswordCtrl.text,
-                        newPassword: newPasswordCtrl.text,
-                        confirmPassword: confirmPasswordCtrl.text,
-                      );
-                    }
-                  },
+                Obx(
+                  () => ProElevatedButton(
+                    text: 'Confirm',
+                    isLoading: controller.isLoadingChangePassword.value,
+                    backgroundColor: AppColors.secondary,
+                    textColor: AppColors.white,
+                    onPressed: controller.isLoadingChangePassword.value
+                        ? null
+                        : () {
+                            if (_formKey.currentState?.validate() ?? false) {
+                              controller.updatePassword(
+                                currentPassword: currentPasswordCtrl.text.trim(),
+                                newPassword: newPasswordCtrl.text.trim(),
+                                confirmPassword: confirmPasswordCtrl.text.trim(),
+                              );
+                            }
+                          },
+                  ),
                 ),
               ],
             ),

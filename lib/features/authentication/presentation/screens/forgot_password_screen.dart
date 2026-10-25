@@ -70,6 +70,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   const Spacer(),
                   ProElevatedButton(
                     text: 'Send',
+                    isLoading: controller.isForgotPasswordLoading.value,
                     gradient: const LinearGradient(
                       colors: [AppColors.secondary, AppColors.secondary],
                     ),

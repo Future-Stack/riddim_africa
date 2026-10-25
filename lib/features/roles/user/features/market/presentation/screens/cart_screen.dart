@@ -17,9 +17,7 @@ class CartScreen extends GetView<CartController> {
       appBar: const GlobalAppBar(title: 'My Cart', showBackButton: false),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.onboardingbutton),
-          );
+          return const CartListShimmer(count: 3);
         }
 
         if (controller.cartItems.isEmpty) {

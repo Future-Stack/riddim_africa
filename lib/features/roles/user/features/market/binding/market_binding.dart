@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import '../data/datasources/market_local_data_source.dart';
+import '../data/datasources/market_remote_data_source.dart';
 import '../data/repositories/market_repository_impl.dart';
 import '../domain/repositories/market_repository.dart';
 import '../domain/usecases/get_cart_items_usecase.dart';
@@ -17,12 +18,16 @@ import '../controllers/market_controller.dart';
 class MarketBinding extends Bindings {
   @override
   void dependencies() {
-    // Data Source
+    // Data Sources
     Get.lazyPut<MarketLocalDataSource>(() => MarketLocalDataSourceImpl());
+    Get.lazyPut<MarketRemoteDataSource>(() => MarketRemoteDataSourceImpl());
 
     // Repository
     Get.lazyPut<MarketRepository>(
-      () => MarketRepositoryImpl(Get.find<MarketLocalDataSource>()),
+      () => MarketRepositoryImpl(
+        Get.find<MarketLocalDataSource>(),
+        remoteDataSource: Get.find<MarketRemoteDataSource>(),
+      ),
     );
 
     // Use Cases

@@ -62,10 +62,9 @@ class GlobalSearchScreen extends GetView<GlobalSearchController> {
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.onboardingbutton,
-                    ),
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: ProductGridShimmer(itemCount: 4),
                   );
                 }
 
