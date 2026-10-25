@@ -1,14 +1,5 @@
-{
+﻿{
   "version": "2.0.0",
-  "configurations": [
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Run My Project",
-      "console": "",
-      "internalConsoleOptions": "openOnSessionStart"
-    }
-  ],
   "tasks": [
     {
       "label": "eslint-check",
@@ -28,6 +19,6 @@
       "runOptions": {
         "runOn": "folderOpen"
       }
-    },
+    }
   ]
 }
