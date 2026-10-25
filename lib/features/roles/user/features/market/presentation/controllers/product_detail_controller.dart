@@ -1,19 +1,26 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:riddimafrica/core/core.dart';
+import 'package:riddimafrica/routes/app_routes.dart';
 import '../../domain/entities/market_product_entity.dart';
 import '../../domain/usecases/get_product_detail_usecase.dart';
 import '../../domain/usecases/get_related_products_usecase.dart';
+import '../../domain/usecases/add_to_cart_usecase.dart';
 
 class ProductDetailController extends GetxController {
   final GetProductDetailUseCase _getProductDetailUseCase;
   final GetRelatedProductsUseCase _getRelatedProductsUseCase;
+  final AddToCartUseCase _addToCartUseCase;
 
   ProductDetailController(
     this._getProductDetailUseCase,
     this._getRelatedProductsUseCase,
+    this._addToCartUseCase,
   );
 
   // State
   final RxBool isLoading = true.obs;
+  final RxBool isAddingToCart = false.obs;
   final RxBool isFavorite = false.obs;
   final RxInt selectedImageIndex = 0.obs;
   final RxInt selectedColorIndex = 0.obs;
@@ -87,11 +94,80 @@ class ProductDetailController extends GetxController {
     }
   }
 
-  void addToCart() {
-    Get.snackbar('Success', '${product.value?.title} added to cart');
+  Future<void> addToCart() async {
+    final currentProduct = product.value;
+    if (currentProduct == null) return;
+
+    isAddingToCart.value = true;
+    try {
+      final String? selectedColor = currentProduct.availableColors.isNotEmpty &&
+              selectedColorIndex.value < currentProduct.availableColors.length
+          ? currentProduct.availableColors[selectedColorIndex.value]
+          : null;
+      final String? selectedSize = currentProduct.availableSizes.isNotEmpty &&
+              selectedSizeIndex.value < currentProduct.availableSizes.length
+          ? currentProduct.availableSizes[selectedSizeIndex.value]
+          : null;
+
+      final success = await _addToCartUseCase.execute(
+        productId: currentProduct.id,
+        quantity: quantity.value,
+        color: selectedColor,
+        size: selectedSize,
+      );
+
+      if (success) {
+        Get.snackbar(
+          'Added to Cart',
+          '${currentProduct.title} added to cart successfully',
+          backgroundColor: AppColors.onboardingbutton.withValues(alpha: 0.95),
+          colorText: AppColors.primary,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.BOTTOM,
+          margin: const EdgeInsets.all(16),
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Cart',
+        e.toString().replaceAll('Exception: ', ''),
+        backgroundColor: Colors.red.withValues(alpha: 0.8),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+      );
+    } finally {
+      isAddingToCart.value = false;
+    }
   }
 
   void buyNow() {
-    Get.toNamed('/marketCart');
+    final currentProduct = product.value;
+    if (currentProduct == null) return;
+
+    final String? selectedColor = currentProduct.availableColors.isNotEmpty &&
+            selectedColorIndex.value < currentProduct.availableColors.length
+        ? currentProduct.availableColors[selectedColorIndex.value]
+        : null;
+    final String? selectedSize = currentProduct.availableSizes.isNotEmpty &&
+            selectedSizeIndex.value < currentProduct.availableSizes.length
+        ? currentProduct.availableSizes[selectedSizeIndex.value]
+        : null;
+
+    Get.toNamed(
+      AppRoute.marketCheckout,
+      arguments: {
+        'checkoutType': 'DIRECT',
+        'product': currentProduct,
+        'productId': currentProduct.id,
+        'title': currentProduct.title,
+        'imageUrl': currentProduct.imageUrl,
+        'price': currentProduct.price,
+        'rawPrice': currentProduct.rawPrice,
+        'quantity': quantity.value,
+        'color': selectedColor,
+        'size': selectedSize,
+      },
+    );
   }
 }

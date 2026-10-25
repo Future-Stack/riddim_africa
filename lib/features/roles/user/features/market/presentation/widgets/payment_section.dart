@@ -33,7 +33,8 @@ class PaymentSection extends StatelessWidget {
           methodName: 'MTN Mobile Money',
           logoColor: AppColors.primaryappbrownsecond,
           imagepath: ImagePath.momo,
-          isSelected: controller.selectedPaymentMethod.value == 'MTN Mobile Money',
+          isSelected:
+              controller.selectedPaymentMethod.value == 'MTN Mobile Money',
           onTap: () => controller.selectPaymentMethod('MTN Mobile Money'),
         ),
         const SizedBox(height: 12),
@@ -65,7 +66,7 @@ class PaymentSection extends StatelessWidget {
                 ).boldTextStyle(color: AppColors.white, fontSize: 16),
               ),
               Text(
-                'UGX 81,500',
+                controller.totalAmountFormatted,
                 style: AppTextStyle(context).boldTextStyle(
                   color: AppColors.onboardingbutton,
                   fontSize: 20,
@@ -78,10 +79,12 @@ class PaymentSection extends StatelessWidget {
 
         // Big Red Bottom Button inside view
         ProElevatedButton(
-          onPressed: () {
-            controller.nextStep();
-          },
-          text: 'Pay UGX 81,500 via ${controller.selectedPaymentMethod.value}',
+          onPressed: controller.isProcessingCheckout.value
+              ? null
+              : controller.processOrderPayment,
+          text: controller.isProcessingCheckout.value
+              ? 'Processing Payment...'
+              : 'Pay ${controller.totalAmountFormatted} via ${controller.selectedPaymentMethod.value}',
           backgroundColor: AppColors.secondary,
           textColor: AppColors.white,
           fontSize: 16,

@@ -24,12 +24,15 @@ class OrderListController extends GetxController {
     loadOrders();
   }
 
-  Future<void> loadOrders() async {
+  Future<void> loadOrders([String? status]) async {
     isLoading.value = true;
+    final filter = status ?? selectedFilter.value;
     try {
-      orders.value = await _getOrdersUseCase.execute();
-      stats.value = await _getOrderStatsUseCase.execute();
+      orders.value = await _getOrdersUseCase.execute(status: filter);
       applyFilter();
+      try {
+        stats.value = await _getOrderStatsUseCase.execute();
+      } catch (_) {}
     } catch (_) {
       Get.snackbar('Error', 'Failed to load orders');
     } finally {
@@ -38,8 +41,9 @@ class OrderListController extends GetxController {
   }
 
   void setFilter(String filter) {
+    if (selectedFilter.value == filter && !isLoading.value) return;
     selectedFilter.value = filter;
-    applyFilter();
+    loadOrders(filter);
   }
 
   void applyFilter() {
@@ -47,22 +51,30 @@ class OrderListController extends GetxController {
     if (filter == 'all') {
       filteredOrders.value = orders;
     } else if (filter == 'active') {
-      filteredOrders.value = orders
+      final activeList = orders
           .where((o) =>
               o.statusLabel.toLowerCase() != 'delivered' &&
               o.statusLabel.toLowerCase() != 'cancelled' &&
               o.statusLabel.toLowerCase() != 'canceled')
           .toList();
+      filteredOrders.value = activeList.isNotEmpty ? activeList : orders;
     } else if (filter == 'cancelled') {
-      filteredOrders.value = orders
+      final cancelledList = orders
           .where((o) =>
               o.statusLabel.toLowerCase() == 'cancelled' ||
               o.statusLabel.toLowerCase() == 'canceled')
           .toList();
+      filteredOrders.value = cancelledList.isNotEmpty ? cancelledList : orders;
+    } else if (filter == 'delivered') {
+      final deliveredList = orders
+          .where((o) => o.statusLabel.toLowerCase() == 'delivered')
+          .toList();
+      filteredOrders.value = deliveredList.isNotEmpty ? deliveredList : orders;
     } else {
-      filteredOrders.value = orders
+      final matchedList = orders
           .where((o) => o.statusLabel.toLowerCase() == filter)
           .toList();
+      filteredOrders.value = matchedList.isNotEmpty ? matchedList : orders;
     }
   }
 }

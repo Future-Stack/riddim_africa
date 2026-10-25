@@ -38,10 +38,10 @@ class CartController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadCartItems();
+    loadCartItems();
   }
 
-  Future<void> _loadCartItems() async {
+  Future<void> loadCartItems() async {
     isLoading.value = true;
     try {
       final items = await _getCartItemsUseCase.execute();
@@ -70,7 +70,13 @@ class CartController extends GetxController {
   }
 
   void proceedToCheckout() {
-    Get.toNamed('/marketCheckout');
+    Get.toNamed(
+      '/marketCheckout',
+      arguments: {
+        'checkoutType': 'CART',
+        'cartItems': cartItems.toList(),
+      },
+    );
   }
 
   // ─── Helpers ──────────────────────────────────────────────

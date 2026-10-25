@@ -6,5 +6,6 @@ class GetOrdersUseCase {
 
   GetOrdersUseCase(this._repository);
 
-  Future<List<OrderEntity>> execute() => _repository.getOrders();
+  Future<List<OrderEntity>> execute({String status = 'All'}) =>
+      _repository.getOrders(status: status);
 }

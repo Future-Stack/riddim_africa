@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/utils/constants/colors.dart';
+import 'package:riddimafrica/routes/app_routes.dart';
 
 class ProductImageGallery extends StatelessWidget {
   final String mainImageUrl;
@@ -72,24 +74,45 @@ class ProductImageGallery extends StatelessWidget {
             ),
           ),
 
-          // Favorite Button
+          // Action Buttons: Cart and Favorite
           Positioned(
             top: 16,
             right: 16,
-            child: GestureDetector(
-              onTap: onFavoritePressed,
-              child: Container(
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.7),
-                  shape: BoxShape.circle,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: () => Get.toNamed(AppRoute.marketCart),
+                  child: Container(
+                    padding: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.7),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Iconsax.shopping_cart,
+                      color: AppColors.white,
+                      size: 22,
+                    ),
+                  ),
                 ),
-                child: Icon(
-                  isFavorite ? Iconsax.heart5 : Iconsax.heart,
-                  color: isFavorite ? AppColors.secondary : AppColors.white,
-                  size: 22,
+                const SizedBox(width: 8),
+                GestureDetector(
+                  onTap: onFavoritePressed,
+                  child: Container(
+                    padding: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.7),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      isFavorite ? Iconsax.heart5 : Iconsax.heart,
+                      color: isFavorite ? AppColors.secondary : AppColors.white,
+                      size: 22,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
 
