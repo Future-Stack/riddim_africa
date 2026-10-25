@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
-import 'package:riddimafrica/routes/app_routes.dart';
 import '../controllers/cart_controller.dart';
 import '../widgets/cart_item_card.dart';
 import '../widgets/cart_summary_section.dart';
@@ -14,7 +13,10 @@ class CartScreen extends GetView<CartController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: const GlobalAppBar(title: 'My Cart', showBackButton: false),
+      appBar: GlobalAppBar(
+        title: 'My Cart',
+        showBackButton: Navigator.canPop(context),
+      ),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const CartListShimmer(count: 3);
@@ -121,7 +123,7 @@ class CartScreen extends GetView<CartController> {
 
                     // Proceed to Checkout button
                     ProElevatedButton(
-                      onPressed: () => Get.toNamed(AppRoute.marketCheckout),
+                      onPressed: controller.proceedToCheckout,
                       text: "Proceed to Checkout",
                       showGlow: true,
                       backgroundColor: AppColors.secondary,

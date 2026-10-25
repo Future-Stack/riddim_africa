@@ -17,4 +17,9 @@ class ApiConstants {
   static String get deleteAccount => "$baseUrl/auth/delete-account";
   static String get userProducts => "$baseUrl/user/products";
   static String userProductDetails(String productId) => "$baseUrl/user/products/$productId";
+  static String get userCart => "$baseUrl/user/cart";
+  static String get userShippingInfo => "$baseUrl/user/shipping-info";
+  static String userShippingInfoDetail(String id) => "$baseUrl/user/shipping-info/$id";
+  static String get userCheckoutProcess => "$baseUrl/user/checkout/process";
+  static String get userOrders => "$baseUrl/user/order";
 }

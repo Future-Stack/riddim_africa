@@ -15,72 +15,180 @@ class ReviewSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Shipping Information',
+          'Order Summary',
           style: AppTextStyle(
             context,
           ).boldTextStyle(color: AppColors.white, fontSize: 18),
         ),
         const SizedBox(height: 16),
 
-        // Product Summary Item Card
-        Container(
-          padding: const EdgeInsets.all(12.0),
-          decoration: BoxDecoration(
-            color: AppColors.primaryappbrownsecond,
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
-                child: SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: Image.network(
-                    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=500&auto=format&fit=crop',
-                    fit: BoxFit.cover,
+        // Product Summary Item Card(s)
+        if (controller.checkoutType.value == 'DIRECT')
+          Container(
+            padding: const EdgeInsets.all(12.0),
+            decoration: BoxDecoration(
+              color: AppColors.primaryappbrownsecond,
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: controller.directProductImage.value.isNotEmpty
+                        ? Image.network(
+                            controller.directProductImage.value,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(
+                              Iconsax.box,
+                              color: AppColors.primarytext,
+                            ),
+                          )
+                        : const Icon(
+                            Iconsax.box,
+                            color: AppColors.primarytext,
+                          ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.directProductTitle.value.isNotEmpty
+                            ? controller.directProductTitle.value
+                            : 'Product',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle(
+                          context,
+                        ).semiBoldTextStyle(color: AppColors.white, fontSize: 16),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Qty: ${controller.directQuantity.value}',
+                        style: AppTextStyle(context).regularTextStyle(
+                          color: AppColors.primarytext,
+                          fontSize: 12,
+                        ),
+                      ),
+                      if (controller.directColor.value.isNotEmpty ||
+                          controller.directSize.value.isNotEmpty)
+                        Text(
+                          [
+                            if (controller.directColor.value.isNotEmpty)
+                              'Color: ${controller.directColor.value}',
+                            if (controller.directSize.value.isNotEmpty)
+                              'Size: ${controller.directSize.value}',
+                          ].join('    '),
+                          style: AppTextStyle(context).regularTextStyle(
+                            color: AppColors.primarytext,
+                            fontSize: 12,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                Text(
+                  controller.directProductPrice.value.isNotEmpty
+                      ? controller.directProductPrice.value
+                      : controller.subtotalFormatted,
+                  style: AppTextStyle(context).boldTextStyle(
+                    color: AppColors.onboardingbutton,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          )
+        else
+          Column(
+            children: controller.checkoutCartItems.map((item) {
+              return Container(
+                margin: const EdgeInsets.only(bottom: 8.0),
+                padding: const EdgeInsets.all(12.0),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryappbrownsecond,
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Row(
                   children: [
-                    Text(
-                      'Ankara Print Hoodie',
-                      style: AppTextStyle(
-                        context,
-                      ).semiBoldTextStyle(color: AppColors.white, fontSize: 16),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: item.imageUrl.isNotEmpty
+                            ? Image.network(
+                                item.imageUrl,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Icon(
+                                  Iconsax.box,
+                                  color: AppColors.primarytext,
+                                ),
+                              )
+                            : const Icon(
+                                Iconsax.box,
+                                color: AppColors.primarytext,
+                              ),
+                      ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Qty: 1',
-                      style: AppTextStyle(context).regularTextStyle(
-                        color: AppColors.primarytext,
-                        fontSize: 12,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyle(context).semiBoldTextStyle(
+                              color: AppColors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Qty: ${item.quantity}',
+                            style: AppTextStyle(context).regularTextStyle(
+                              color: AppColors.primarytext,
+                              fontSize: 12,
+                            ),
+                          ),
+                          if (item.selectedColor.isNotEmpty ||
+                              item.selectedSize.isNotEmpty)
+                            Text(
+                              [
+                                if (item.selectedColor.isNotEmpty)
+                                  'Color: ${item.selectedColor}',
+                                if (item.selectedSize.isNotEmpty)
+                                  'Size: ${item.selectedSize}',
+                              ].join('    '),
+                              style: AppTextStyle(context).regularTextStyle(
+                                color: AppColors.primarytext,
+                                fontSize: 12,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                     Text(
-                      'Color: Green    Size: XL',
-                      style: AppTextStyle(context).regularTextStyle(
-                        color: AppColors.primarytext,
-                        fontSize: 12,
+                      item.price,
+                      style: AppTextStyle(context).boldTextStyle(
+                        color: AppColors.onboardingbutton,
+                        fontSize: 16,
                       ),
                     ),
                   ],
                 ),
-              ),
-              Text(
-                'UGX 78,000',
-                style: AppTextStyle(context).boldTextStyle(
-                  color: AppColors.onboardingbutton,
-                  fontSize: 16,
-                ),
-              ),
-            ],
+              );
+            }).toList(),
           ),
-        ),
         const SizedBox(height: 16),
 
         // Stats card Box
@@ -107,7 +215,7 @@ class ReviewSection extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'UGX 78,000',
+                    controller.subtotalFormatted,
                     style: AppTextStyle(
                       context,
                     ).semiBoldTextStyle(color: AppColors.white, fontSize: 14),
@@ -126,7 +234,7 @@ class ReviewSection extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'UGX 5,500',
+                    controller.deliveryFeeFormatted,
                     style: AppTextStyle(
                       context,
                     ).semiBoldTextStyle(color: AppColors.white, fontSize: 14),
@@ -147,7 +255,7 @@ class ReviewSection extends StatelessWidget {
                     ).boldTextStyle(color: AppColors.white, fontSize: 16),
                   ),
                   Text(
-                    'UGX 83,500',
+                    controller.totalAmountFormatted,
                     style: AppTextStyle(context).boldTextStyle(
                       color: AppColors.onboardingbutton,
                       fontSize: 20,
@@ -179,27 +287,28 @@ class ReviewSection extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                controller.fullNameController.text,
+                controller.fullNameController.text.isNotEmpty
+                    ? controller.fullNameController.text
+                    : 'John Doe',
                 style: AppTextStyle(
                   context,
                 ).boldTextStyle(color: AppColors.white, fontSize: 16),
               ),
               const SizedBox(height: 4),
               Text(
-                controller.addresses.isNotEmpty &&
-                        controller.selectedAddressIndex.value <
-                            controller.addresses.length
-                    ? controller
-                          .addresses[controller.selectedAddressIndex.value]
-                          .address
-                    : 'Plot 12, Buganda Road, Kampala',
+                controller.selectedAddress?.address ??
+                    (controller.streetAddressController.text.isNotEmpty
+                        ? '${controller.streetAddressController.text}, ${controller.cityController.text}'
+                        : 'Plot 12, Buganda Road, Kampala'),
                 style: AppTextStyle(
                   context,
                 ).regularTextStyle(color: AppColors.onboardingtext, fontSize: 14),
               ),
               const SizedBox(height: 4),
               Text(
-                controller.phoneController.text,
+                controller.phoneController.text.isNotEmpty
+                    ? controller.phoneController.text
+                    : '+256700000000',
                 style: AppTextStyle(
                   context,
                 ).regularTextStyle(color: AppColors.onboardingtext, fontSize: 14),

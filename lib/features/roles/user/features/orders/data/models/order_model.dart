@@ -1,3 +1,4 @@
+import 'package:riddimafrica/core/utils/constants/enums.dart';
 import '../../domain/entities/order_entity.dart';
 
 class OrderModel extends OrderEntity {
@@ -24,25 +25,109 @@ class OrderModel extends OrderEntity {
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
+    final productData = json['product'] is Map<String, dynamic>
+        ? json['product'] as Map<String, dynamic>
+        : null;
+
+    final title = productData?['name']?.toString() ??
+        json['title']?.toString() ??
+        'Product';
+
+    String imageUrl = '';
+    if (productData != null &&
+        productData['files'] is List &&
+        (productData['files'] as List).isNotEmpty) {
+      imageUrl = productData['files'][0]?.toString() ?? '';
+    } else {
+      imageUrl = json['imageUrl']?.toString() ?? '';
+    }
+
+    final paymentData = json['payment'] is Map<String, dynamic>
+        ? json['payment'] as Map<String, dynamic>
+        : null;
+
+    num? paymentAmount;
+    if (paymentData != null && paymentData['amount'] != null) {
+      paymentAmount = num.tryParse(paymentData['amount'].toString());
+    } else if (json['price'] != null && json['price'] is num) {
+      paymentAmount = json['price'] as num;
+    }
+
+    String formatUgx(num val) {
+      return 'UGX ${val.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}';
+    }
+
+    final String formattedPrice = paymentAmount != null
+        ? formatUgx(paymentAmount)
+        : (json['price']?.toString() ?? 'UGX 0');
+
+    final String formattedTotal = paymentAmount != null
+        ? formatUgx(paymentAmount)
+        : (json['totalPrice']?.toString() ?? formattedPrice);
+
+    final rawStatus = (json['status']?.toString() ?? 'PROCESSING').toUpperCase();
+    OrderStatus orderStatus;
+    String defaultStatusLabel;
+
+    switch (rawStatus) {
+      case 'DELIVERED':
+        orderStatus = OrderStatus.delivered;
+        defaultStatusLabel = 'Delivered';
+        break;
+      case 'CANCELLED':
+      case 'CANCELED':
+        orderStatus = OrderStatus.cancelled;
+        defaultStatusLabel = 'Cancelled';
+        break;
+      case 'SHIPPED':
+        orderStatus = OrderStatus.shipped;
+        defaultStatusLabel = 'Shipped';
+        break;
+      case 'PROCESSING':
+      case 'ACTIVE':
+      default:
+        orderStatus = OrderStatus.processing;
+        defaultStatusLabel = 'Processing';
+        break;
+    }
+
+    final String statusLabel = json['statusLabel'] as String? ?? defaultStatusLabel;
+
+    DateTime date = DateTime.now();
+    if (json['createdAt'] != null) {
+      date = DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now();
+    } else if (json['orderDate'] != null) {
+      date = DateTime.tryParse(json['orderDate'].toString()) ?? DateTime.now();
+    }
+
+    final orderTimelineStatus = json['orderTimelineStatus']?.toString();
+    final bool isPaid = orderTimelineStatus == 'PAYMENT_CONFIRMED' ||
+        (json['isPaid'] as bool? ?? false);
+
+    final int qty = json['quantity'] is int
+        ? json['quantity'] as int
+        : (int.tryParse(json['quantity']?.toString() ?? '') ?? 1);
+
     return OrderModel(
-      id: json['id'] as String,
-      orderNumber: json['orderNumber'] as String,
-      imageUrl: json['imageUrl'] as String,
-      title: json['title'] as String,
-      sellerName: json['sellerName'] as String,
-      price: json['price'] as String,
-      quantity: json['quantity'] as int? ?? 1,
-      selectedColor: json['selectedColor'] as String?,
-      selectedSize: json['selectedSize'] as String?,
-      statusLabel: json['statusLabel'] as String? ?? 'Processing',
-      expectedDelivery: json['expectedDelivery'] as String? ?? '3-5 Business Days',
-      estimatedDate: json['estimatedDate'] as String? ?? '',
-      orderDate: DateTime.parse(json['orderDate'] as String),
-      shippingAddress: json['shippingAddress'] as String? ?? '',
-      paymentMethod: json['paymentMethod'] as String? ?? '',
-      isPaid: json['isPaid'] as bool? ?? false,
-      deliveryFee: json['deliveryFee'] as String? ?? 'UGX 0',
-      totalPrice: json['totalPrice'] as String? ?? json['price'] as String,
+      id: json['orderId']?.toString() ?? json['id']?.toString() ?? '',
+      orderNumber: json['showOrderId']?.toString() ?? json['orderNumber']?.toString() ?? '',
+      imageUrl: imageUrl,
+      title: title,
+      sellerName: json['sellerName']?.toString() ?? 'Seller',
+      price: formattedPrice,
+      quantity: qty,
+      selectedColor: json['color']?.toString() ?? json['selectedColor']?.toString(),
+      selectedSize: json['size']?.toString() ?? json['selectedSize']?.toString(),
+      status: orderStatus,
+      statusLabel: statusLabel,
+      expectedDelivery: json['expectedDelivery']?.toString() ?? '3-5 Business Days',
+      estimatedDate: json['estimatedDate']?.toString() ?? '',
+      orderDate: date,
+      shippingAddress: json['shippingAddress']?.toString() ?? '',
+      paymentMethod: json['paymentMethod']?.toString() ?? 'Mobile Money',
+      isPaid: isPaid,
+      deliveryFee: json['deliveryFee']?.toString() ?? 'UGX 0',
+      totalPrice: formattedTotal,
     );
   }
 

@@ -55,6 +55,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.4
   cached_network_image: ^3.4.1
   shimmer: ^4.0.0
+  skeletonizer: ^3.0.0
  
 
 

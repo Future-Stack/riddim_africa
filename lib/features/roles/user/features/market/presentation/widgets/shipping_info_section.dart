@@ -98,26 +98,28 @@ class ShippingInfoSection extends StatelessWidget {
         const SizedBox(height: 16),
 
         // Saved Addresses Chips
-        Row(
-          children: List.generate(controller.addresses.length, (index) {
-            final address = controller.addresses[index];
-            return Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  right: index < controller.addresses.length - 1 ? 12.0 : 0.0,
-                ),
-                child: DeliveryAddressChip(
-                  label: address.label,
-                  address: address.address,
-                  isSelected: controller.selectedAddressIndex.value == index,
-                  onTap: () => controller.selectAddress(index),
-                  onRemove: () => controller.addresses.removeAt(index),
-                ),
-              ),
-            );
-          }),
-        ),
-        const SizedBox(height: 24),
+        if (controller.addresses.isNotEmpty) ...[
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(controller.addresses.length, (index) {
+                final address = controller.addresses[index];
+                return Padding(
+                  padding: const EdgeInsets.only(right: 12.0),
+                  child: DeliveryAddressChip(
+                    label: address.label,
+                    address: address.address,
+                    isSelected:
+                        controller.selectedAddressIndex.value == index,
+                    onTap: () => controller.selectAddress(index),
+                    onRemove: () => controller.addresses.removeAt(index),
+                  ),
+                );
+              }),
+            ),
+          ),
+          const SizedBox(height: 24),
+        ],
 
         // Map Dotted Route Card
         const MapRouteCard(),

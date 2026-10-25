@@ -8,6 +8,8 @@ class CartItemEntity {
   final String selectedSize;
   final String price;
   final int quantity;
+  final num? rawPrice;
+  final num? totalItemPrice;
 
   const CartItemEntity({
     required this.id,
@@ -19,6 +21,8 @@ class CartItemEntity {
     this.selectedSize = '',
     required this.price,
     this.quantity = 1,
+    this.rawPrice,
+    this.totalItemPrice,
   });
 
   CartItemEntity copyWith({
@@ -31,6 +35,8 @@ class CartItemEntity {
     String? selectedSize,
     String? price,
     int? quantity,
+    num? rawPrice,
+    num? totalItemPrice,
   }) {
     return CartItemEntity(
       id: id ?? this.id,
@@ -42,6 +48,8 @@ class CartItemEntity {
       selectedSize: selectedSize ?? this.selectedSize,
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
+      rawPrice: rawPrice ?? this.rawPrice,
+      totalItemPrice: totalItemPrice ?? this.totalItemPrice,
     );
   }
 }

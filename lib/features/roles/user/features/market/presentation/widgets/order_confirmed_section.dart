@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
+import '../controllers/checkout_controller.dart';
 import 'order_info_row.dart';
 
 class OrderConfirmedSection extends StatelessWidget {
-  const OrderConfirmedSection({super.key});
+  final CheckoutController? controller;
+
+  const OrderConfirmedSection({super.key, this.controller});
 
   @override
   Widget build(BuildContext context) {
+    final activeController = controller ?? (Get.isRegistered<CheckoutController>() ? Get.find<CheckoutController>() : null);
+    final orderNumber = activeController?.showOrderId.value.isNotEmpty == true
+        ? activeController!.showOrderId.value
+        : 'RA-2026-78095';
+
     return Column(
       children: [
         const SizedBox(height: 24),
@@ -48,9 +56,9 @@ class OrderConfirmedSection extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const OrderInfoRow(
+              OrderInfoRow(
                 label: 'Order Number',
-                value: 'RA-2026-62619',
+                value: orderNumber,
                 icon: Iconsax.box,
               ),
               const Divider(color: AppColors.primaryappbrown, height: 24),
