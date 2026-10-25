@@ -101,14 +101,19 @@ class AddNewAddressForm extends StatelessWidget {
                   const SizedBox(width: 16),
                   Expanded(
                     child: ProElevatedButton(
-                      onPressed: controller.saveAddress,
-                      text: 'Save Address',
+                      onPressed: controller.isSavingAddress.value
+                          ? null
+                          : controller.saveAddress,
+                      text: controller.isSavingAddress.value
+                          ? 'Saving...'
+                          : 'Save Address',
                       backgroundColor: AppColors.onboardingbutton,
                       textColor: AppColors.primary,
                       fontSize: 14,
                       borderRadius: 24,
                       showGlow: true,
-                      glowColor: AppColors.onboardingbutton.withValues(alpha: 0.4),
+                      glowColor:
+                          AppColors.onboardingbutton.withValues(alpha: 0.4),
                     ),
                   ),
                 ],

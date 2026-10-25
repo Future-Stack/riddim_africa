@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import '../data/datasources/order_local_data_source.dart';
 import '../data/datasources/order_local_data_source_impl.dart';
+import '../data/datasources/order_remote_data_source.dart';
 import '../data/repositories/order_repository_impl.dart';
 import '../domain/repositories/order_repository.dart';
 import '../domain/usecases/get_orders_usecase.dart';
@@ -16,9 +17,13 @@ class OrderBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<OrderLocalDataSource>(() => OrderLocalDataSourceImpl());
+    Get.lazyPut<OrderRemoteDataSource>(() => OrderRemoteDataSourceImpl());
 
     Get.lazyPut<OrderRepository>(
-      () => OrderRepositoryImpl(Get.find<OrderLocalDataSource>()),
+      () => OrderRepositoryImpl(
+        Get.find<OrderLocalDataSource>(),
+        Get.find<OrderRemoteDataSource>(),
+      ),
     );
 
     Get.lazyPut(() => GetOrdersUseCase(Get.find<OrderRepository>()));

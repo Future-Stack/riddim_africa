@@ -307,13 +307,21 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
                   children: [
                     // Add To Cart Button
                     Expanded(
-                      child: ProElevatedButton(
-                        leadingIcon: Iconsax.shopping_cart,
-                        onPressed: controller.addToCart,
-                        backgroundColor: AppColors.onboardingbutton,
-                        text: "Add to Cart",
-                        textColor: AppColors.black,
-                        showGlow: true,
+                      child: Obx(
+                        () => ProElevatedButton(
+                          leadingIcon: controller.isAddingToCart.value
+                              ? null
+                              : Iconsax.shopping_cart,
+                          onPressed: controller.isAddingToCart.value
+                              ? null
+                              : controller.addToCart,
+                          backgroundColor: AppColors.onboardingbutton,
+                          text: controller.isAddingToCart.value
+                              ? "Adding..."
+                              : "Add to Cart",
+                          textColor: AppColors.black,
+                          showGlow: true,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 12),

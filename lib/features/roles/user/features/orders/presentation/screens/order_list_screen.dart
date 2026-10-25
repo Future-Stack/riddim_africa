@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:riddimafrica/core/core.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import '../../bindings/order_binding.dart';
+import '../../domain/entities/order_entity.dart';
 import '../controllers/order_list_controller.dart';
 import '../widgets/order_card.dart';
 import '../widgets/orders_app_bar.dart';
@@ -20,6 +22,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
     super.initState();
     if (!Get.isRegistered<OrderListController>()) {
       OrderBinding().dependencies();
+    } else {
+      Get.find<OrderListController>().loadOrders();
     }
   }
 
@@ -91,44 +95,80 @@ class _OrderListScreenState extends State<OrderListScreen> {
 
   Widget _buildOrdersList(BuildContext context, OrderListController ctrl) {
     return Obx(() {
-      if (ctrl.isLoading.value) {
-        return const OrderListShimmer(count: 4);
-      }
+      final isLoading = ctrl.isLoading.value;
 
-      if (ctrl.filteredOrders.isEmpty) {
-        return Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Iconsax.box, size: 64, color: AppColors.primarytext),
-              const SizedBox(height: 16),
-              Text(
-                'No orders found',
-                style: AppTextStyle(context).semiBoldTextStyle(
-                  color: AppColors.primarytext,
-                  fontSize: AppTextStyle.lg,
+      if (!isLoading && ctrl.filteredOrders.isEmpty) {
+        return RefreshIndicator(
+          onRefresh: ctrl.loadOrders,
+          child: LayoutBuilder(
+            builder: (context, constraints) => SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Iconsax.box, size: 64, color: AppColors.primarytext),
+                      const SizedBox(height: 16),
+                      Text(
+                        'No orders found',
+                        style: AppTextStyle(context).semiBoldTextStyle(
+                          color: AppColors.primarytext,
+                          fontSize: AppTextStyle.lg,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ],
+            ),
           ),
         );
       }
 
-      return RefreshIndicator(
-        onRefresh: ctrl.loadOrders,
-        child: ListView.separated(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          itemCount: ctrl.filteredOrders.length,
-          separatorBuilder: (_, _) => const SizedBox(height: 12),
-          itemBuilder: (context, index) {
-            final order = ctrl.filteredOrders[index];
-            return OrderCard(
-              order: order,
-              onTap: () {
-                Get.toNamed('/orderDetail', arguments: order.id);
-              },
-            );
-          },
+      final ordersToDisplay = isLoading
+          ? List.generate(
+              5,
+              (index) => OrderEntity(
+                id: 'shimmer_$index',
+                orderNumber: 'RA-2026-00000',
+                imageUrl: '',
+                title: 'African Rhythm Drum Loop',
+                sellerName: 'Riddim Seller',
+                price: 'UGX 150,000',
+                quantity: 1,
+                statusLabel: 'Processing',
+                orderDate: DateTime.now(),
+                totalPrice: 'UGX 150,000',
+              ),
+            )
+          : ctrl.filteredOrders;
+
+      return Skeletonizer(
+        enabled: isLoading,
+        effect: ShimmerEffect(
+          baseColor: AppColors.primaryappbrownsecond.withValues(alpha: 0.6),
+          highlightColor: AppColors.secondary.withValues(alpha: 0.25),
+        ),
+        child: RefreshIndicator(
+          onRefresh: ctrl.loadOrders,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            itemCount: ordersToDisplay.length,
+            separatorBuilder: (_, _) => const SizedBox(height: 12),
+            itemBuilder: (context, index) {
+              final order = ordersToDisplay[index];
+              return OrderCard(
+                order: order,
+                onTap: isLoading
+                    ? null
+                    : () {
+                        Get.toNamed('/orderDetail', arguments: order.id);
+                      },
+              );
+            },
+          ),
         ),
       );
     });

@@ -21,7 +21,14 @@ class CheckoutScreen extends GetView<CheckoutController> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.white),
-          onPressed: () => Get.back(),
+          onPressed: () {
+            if (controller.currentStep.value > 0 &&
+                controller.currentStep.value < 3) {
+              controller.previousStep();
+            } else {
+              Get.back();
+            }
+          },
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,15 +101,15 @@ class CheckoutScreen extends GetView<CheckoutController> {
 
                       // STEP 4: PROCESSING / ORDER CONFIRMED
                       if (controller.currentStep.value == 3) ...[
-                        const OrderConfirmedSection(),
+                        OrderConfirmedSection(controller: controller),
                       ],
                     ],
                   ),
                 ),
               ),
 
-              // Bottom Button Bar (Only shown for steps 1, 2, 3)
-              if (controller.currentStep.value < 3 &&
+              // Bottom Button Bar (Only shown for steps 0 and 1)
+              if (controller.currentStep.value < 2 &&
                   !controller.isAddingNewAddress.value)
                 Container(
                   padding: const EdgeInsets.all(16.0),
