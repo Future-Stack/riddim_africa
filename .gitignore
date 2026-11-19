@@ -40,7 +40,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-temp_auto_push.bat
 
 # iOS/Xcode related
 **/ios/**/*.mode1v3
@@ -83,4 +82,3 @@ temp_auto_push.bat
 *.env
 secrets.dart
 .gitignore
-branch_structure.json
